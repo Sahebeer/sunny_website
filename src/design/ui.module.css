@@ -1,0 +1,159 @@
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-thin);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.badgeCobalt {
+  background: var(--accent-cobalt-soft);
+  color: var(--accent-cobalt-deep);
+  border-color: var(--accent-cobalt);
+}
+
+[data-theme='night'] .badgeCobalt {
+  color: #a8beff;
+}
+
+.badgeYellow {
+  background: var(--accent-yellow);
+  color: #17191e;
+}
+
+.badgeTeal {
+  background: var(--accent-teal-soft);
+  color: var(--accent-teal-deep);
+  border-color: var(--accent-teal);
+}
+
+[data-theme='night'] .badgeTeal {
+  color: #8ee0da;
+}
+
+.badgePass {
+  background: var(--signal-pass-soft);
+  color: var(--signal-pass);
+  border-color: var(--signal-pass);
+}
+
+.badgeLimit {
+  background: var(--signal-red-soft);
+  color: var(--signal-red);
+  border-color: var(--signal-red);
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-label);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.7rem;
+  border: 2.5px dashed currentColor;
+  border-radius: 4px;
+  transform: rotate(-3deg);
+  user-select: none;
+}
+
+.stampPassed {
+  color: var(--signal-pass);
+  background: var(--signal-pass-soft);
+}
+
+.stampRejected {
+  color: var(--signal-red);
+  background: var(--signal-red-soft);
+}
+
+.stampPending {
+  color: var(--accent-teal);
+  background: var(--accent-teal-soft);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-ink);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-hard);
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+.button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-hard-lg);
+}
+
+.button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--ink-outline);
+}
+
+.buttonPrimary {
+  background: var(--accent-active);
+  color: #ffffff;
+}
+
+.buttonYellow {
+  background: var(--accent-yellow);
+  color: #17191e;
+}
+
+.card {
+  background: var(--bg-surface);
+  border: var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+  padding: var(--space-5);
+}
+
+.limitBox {
+  background: var(--signal-red-soft);
+  border: 2.5px solid var(--signal-red);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  color: var(--text-primary);
+  box-shadow: 4px 4px 0px var(--signal-red);
+}
+
+.checkEngineIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--signal-red);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
