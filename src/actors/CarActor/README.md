@@ -23,3 +23,4 @@ None directly (accepts props from parent feature).
 
 ## What It Must Not Touch
 Must never import from `src/features/*`.
+

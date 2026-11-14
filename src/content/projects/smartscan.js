@@ -70,3 +70,4 @@ export const smartscan = {
   whatsNext:
     'Build the baseline open-loop sweep simulator and measure the four planned figures of merit against a closed-loop RL scheduler.',
 };
+

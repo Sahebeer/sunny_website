@@ -374,3 +374,4 @@ export function LabPage() {
 }
 
 export default LabPage;
+

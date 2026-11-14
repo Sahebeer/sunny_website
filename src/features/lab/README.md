@@ -10,3 +10,4 @@ The `/lab` route ("Test Track & Cast Dyno Lab"), showcasing all three original c
 
 ## What It Must Not Touch
 Imports only from `src/actors/CarActor`, `src/design/ui`, `src/lib`, and `src/content/site`. Never imports from other feature folders.
+

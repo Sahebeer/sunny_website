@@ -81,3 +81,4 @@ export const ecosnap = {
   whatsNext:
     'Evaluate the waste detector and anti-fraud gates on labeled TACO/TrashNet splits and measure false-rejection rates on genuine low-light phone photos.',
 };
+

@@ -14,3 +14,4 @@ export const optionalProjects = [
     oneLiner: 'Heuristic pattern signal (not an AI detector).',
   },
 ];
+

@@ -44,3 +44,4 @@ export function useInView(ref, options = { threshold: 0.05, rootMargin: '80px' }
 
   return inViewport && tabVisible;
 }
+

@@ -65,3 +65,4 @@ export const videopipeline = {
   whatsNext:
     'Test Hugging Face ZeroGPU for text-to-video segments while keeping compute within free-tier runner budgets.',
 };
+

@@ -13,3 +13,4 @@ export function getProjectBySlug(slug) {
 }
 
 export { agrinexus, ecosnap, smartscan, videopipeline, optionalProjects };
+

@@ -8,3 +8,4 @@ export {
   playHorn,
   playIndicatorTick,
 } from './audio';
+

@@ -21,3 +21,4 @@ export function hasContent(source, path) {
   const val = safeGet(source, path, null);
   return val !== null && val !== '[PLACEHOLDER]' && val !== '';
 }
+

@@ -1454,3 +1454,4 @@ export function CarActor({
 }
 
 export default CarActor;
+
