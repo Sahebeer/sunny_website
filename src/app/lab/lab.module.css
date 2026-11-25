@@ -1,0 +1,596 @@
+.labHeader {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  border-bottom: 1px solid rgba(240, 238, 231, 0.16);
+  background: rgba(12, 16, 16, 0.94);
+  color: #f0eee7;
+  backdrop-filter: blur(10px);
+}
+
+.headerInner,
+.labFooter {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  width: min(100% - 3rem, 88rem);
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.wordmark,
+.headerHint,
+.labHeader p,
+.labFooter,
+.directionKicker,
+.directionDescriptor,
+.panelLabel,
+.blockHeading,
+.sectionNo,
+.heroEyebrow,
+.heroMeta,
+.statusLine,
+.projectCode,
+.projectStatus,
+.projectPlate small,
+.tokenRow,
+.specSheet,
+.uniqueNote {
+  font-family: var(--direction-detail, var(--font-mono));
+}
+
+.wordmark,
+.headerHint {
+  color: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.headerHint {
+  justify-self: end;
+}
+
+.labHeader p {
+  margin: 0;
+  color: #8a928d;
+  font-size: 0.72rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.labBody {
+  overflow: hidden;
+}
+
+.direction {
+  position: relative;
+  overflow: hidden;
+  background: var(--direction-bg);
+  color: var(--direction-ink);
+  font-family: var(--direction-text);
+}
+
+.direction.concours {
+  --direction-display: var(--font-fraunces);
+  --direction-text: var(--font-dm-sans);
+  --direction-detail: var(--font-ibm-mono);
+}
+
+.direction.telemetry {
+  --direction-display: var(--font-space-grotesk);
+  --direction-text: var(--font-space-grotesk);
+  --direction-detail: var(--font-ibm-mono);
+  background-image: linear-gradient(to right, rgba(240, 238, 231, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(240, 238, 231, 0.04) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}
+
+.direction.atelier {
+  --direction-display: var(--font-manrope);
+  --direction-text: var(--font-manrope);
+  --direction-detail: var(--font-ibm-mono);
+  background-image: linear-gradient(to right, rgba(23, 50, 58, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(23, 50, 58, 0.08) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+}
+
+.directionGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0 1.5rem;
+  width: min(100% - 3rem, 88rem);
+  margin: 0 auto;
+  padding: clamp(4rem, 9vw, 9rem) 0 clamp(5rem, 10vw, 10rem);
+}
+
+.directionMasthead {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(2rem, 1fr) minmax(0, 5fr) minmax(12rem, 3fr);
+  gap: 1.5rem;
+  align-items: flex-start;
+  min-height: 4rem;
+  border-top: 1px solid var(--direction-line);
+  padding-top: 0.8rem;
+}
+
+.sectionNo {
+  color: var(--direction-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+.directionKicker,
+.directionDescriptor,
+.directionMasthead h2,
+.studioNote,
+.heroEyebrow,
+.hero h1,
+.heroBody,
+.heroMeta,
+.panelLabel,
+.tokenRow,
+.statusLine,
+.blockHeading,
+.projectCode,
+.projectSheet h3,
+.projectSummary,
+.uniqueNote {
+  margin: 0;
+}
+
+.directionKicker,
+.heroEyebrow,
+.panelLabel,
+.blockHeading,
+.projectCode,
+.projectStatus {
+  color: var(--direction-accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.directionMasthead h2 {
+  margin-top: 0.25rem;
+  font-family: var(--direction-display);
+  font-size: clamp(1.3rem, 2.4vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.directionDescriptor,
+.studioNote {
+  color: var(--direction-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.studioNote {
+  max-width: 22rem;
+  justify-self: end;
+}
+
+.hero {
+  grid-column: 1 / span 8;
+  margin-top: clamp(4rem, 10vw, 10rem);
+}
+
+.hero h1 {
+  max-width: 9ch;
+  margin-top: 1rem;
+  font-family: var(--direction-display);
+  font-size: clamp(4.5rem, 10vw, 10.5rem);
+  font-weight: 500;
+  letter-spacing: -0.085em;
+  line-height: 0.82;
+}
+
+.telemetry .hero h1 {
+  max-width: 8ch;
+  font-size: clamp(4rem, 9vw, 9.5rem);
+  font-weight: 650;
+  letter-spacing: -0.09em;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+.atelier .hero h1 {
+  max-width: 8ch;
+  font-weight: 500;
+  letter-spacing: -0.08em;
+}
+
+.heroBody {
+  max-width: 34rem;
+  margin-top: clamp(2rem, 4vw, 4rem);
+  color: var(--direction-muted);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  line-height: 1.45;
+}
+
+.heroMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-top: 2.5rem;
+  color: var(--direction-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.heroMeta span:first-child {
+  color: var(--direction-ink);
+}
+
+.tokenPanel {
+  grid-column: 10 / -1;
+  align-self: end;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--direction-line);
+}
+
+.panelLabel {
+  margin-bottom: 1rem;
+}
+
+.tokenPanel dl,
+.specSheet {
+  margin: 0;
+}
+
+.tokenRow {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--direction-line);
+  color: var(--direction-muted);
+  font-size: 0.7rem;
+}
+
+.tokenRow dt,
+.tokenRow dd {
+  margin: 0;
+}
+
+.tokenRow dd {
+  color: var(--direction-ink);
+  overflow-wrap: anywhere;
+}
+
+.tokenRow i {
+  display: inline-block;
+  width: 0.58rem;
+  height: 0.58rem;
+  margin-right: 0.4rem;
+  border: 1px solid var(--direction-line);
+  vertical-align: -0.05rem;
+}
+
+.statusLine {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: clamp(5rem, 12vw, 12rem);
+  padding: 0.8rem 0;
+  border-block: 1px solid var(--direction-line);
+  color: var(--direction-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.statusLine span:first-child {
+  color: var(--direction-accent);
+}
+
+.projectBlock,
+.prototypeBlock {
+  grid-column: 2 / -1;
+  margin-top: clamp(4rem, 8vw, 8rem);
+}
+
+.prototypeBlock {
+  grid-column: 1 / -1;
+  margin-top: clamp(5rem, 10vw, 10rem);
+}
+
+.blockHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: var(--direction-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.blockHeading p,
+.blockHeading span {
+  margin: 0;
+}
+
+.projectSheet {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.85fr) minmax(0, 1.15fr);
+  border-top: 1px solid var(--direction-line);
+  border-bottom: 1px solid var(--direction-line);
+}
+
+.projectPlate {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 26rem;
+  padding: 1.5rem;
+  background: #b9afa0;
+  color: #f8f5ee;
+}
+
+.plate-ledgerline {
+  background: #9c8a73;
+}
+
+.projectPlate span,
+.projectPlate small {
+  font-family: var(--direction-detail);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+
+.projectPlate strong {
+  max-width: 6ch;
+  font-family: var(--direction-display);
+  font-size: clamp(3rem, 5vw, 6rem);
+  font-weight: 500;
+  letter-spacing: -0.08em;
+  line-height: 0.82;
+}
+
+.telemetry .projectPlate {
+  background: #252c2a;
+  color: var(--direction-accent);
+}
+
+.telemetry .projectPlate strong {
+  font-family: var(--direction-text);
+  font-size: clamp(3rem, 5vw, 6rem);
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.atelier .projectPlate {
+  position: relative;
+  background: #becdd0;
+  color: var(--direction-ink);
+}
+
+.atelier .projectPlate::before,
+.atelier .projectPlate::after {
+  position: absolute;
+  color: var(--direction-accent);
+  font-family: var(--direction-detail);
+  font-size: 0.65rem;
+}
+
+.atelier .projectPlate::before {
+  top: 1.5rem;
+  right: 1.5rem;
+  content: "x 04.20 / y 02.80";
+}
+
+.atelier .projectPlate::after {
+  right: 1.5rem;
+  bottom: 1.5rem;
+  content: "DATUM A — A3";
+}
+
+.projectInfo {
+  padding: clamp(1.25rem, 3vw, 3rem);
+}
+
+.projectTitleLine {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.projectSheet h3 {
+  margin-top: 0.3rem;
+  font-family: var(--direction-display);
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 0.9;
+}
+
+.telemetry .projectSheet h3 {
+  font-family: var(--direction-text);
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.projectStatus {
+  white-space: nowrap;
+}
+
+.projectSummary {
+  max-width: 30rem;
+  margin-top: clamp(2rem, 5vw, 5rem);
+  color: var(--direction-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.specSheet {
+  margin-top: clamp(2rem, 4vw, 4rem);
+  border-top: 1px solid var(--direction-line);
+}
+
+.specSheet > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--direction-line);
+  font-size: 0.72rem;
+}
+
+.specSheet dt {
+  color: var(--direction-muted);
+}
+
+.specSheet dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.uniqueNote {
+  grid-column: 2 / span 6;
+  max-width: 38rem;
+  margin-top: clamp(4rem, 8vw, 8rem);
+  color: var(--direction-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.labFooter {
+  background: #0c1010;
+  color: #8a928d;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.labFooter span:last-child {
+  grid-column: 3;
+  justify-self: end;
+}
+
+@media (max-width: 900px) {
+  .directionGrid {
+    gap: 0;
+  }
+
+  .directionMasthead {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .studioNote {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 1rem;
+  }
+
+  .hero {
+    grid-column: 1 / -1;
+  }
+
+  .tokenPanel {
+    grid-column: 1 / -1;
+    max-width: 32rem;
+    margin-top: 3rem;
+  }
+
+  .projectBlock,
+  .prototypeBlock,
+  .uniqueNote {
+    grid-column: 1 / -1;
+  }
+
+  .uniqueNote {
+    max-width: 38rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .headerInner,
+  .labFooter,
+  .directionGrid {
+    width: min(100% - 2rem, 88rem);
+  }
+
+  .headerInner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .labHeader p {
+    display: none;
+  }
+
+  .headerHint {
+    justify-self: end;
+  }
+
+  .directionGrid {
+    padding-top: 3rem;
+  }
+
+  .directionMasthead {
+    grid-template-columns: 2rem minmax(0, 1fr);
+  }
+
+  .hero {
+    margin-top: 5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(4rem, 19vw, 7rem);
+  }
+
+  .heroBody {
+    margin-top: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .heroMeta {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .statusLine {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 5rem;
+  }
+
+  .projectSheet {
+    grid-template-columns: 1fr;
+  }
+
+  .projectPlate {
+    min-height: 15rem;
+  }
+
+  .projectInfo {
+    padding: 1.5rem 0;
+  }
+
+  .projectTitleLine {
+    display: grid;
+  }
+
+  .projectStatus {
+    white-space: normal;
+  }
+
+  .blockHeading {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .labFooter {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .labFooter span:last-child {
+    grid-column: 2;
+  }
+}
+

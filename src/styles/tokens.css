@@ -1,0 +1,59 @@
+:root {
+  --font-sans: var(--font-dm-sans), "Helvetica Neue", sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-mono: var(--font-ibm-mono), "SFMono-Regular", Consolas, monospace;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 200ms;
+  --duration-slow: 600ms;
+}
+
+.directionConcours {
+  --direction-bg: #f1eee7;
+  --direction-ink: #1d1b17;
+  --direction-muted: #706b63;
+  --direction-line: rgba(29, 27, 23, 0.18);
+  --direction-accent: #b8523e;
+  --direction-panel: #e8e3d9;
+  --direction-display: var(--font-display);
+  --direction-text: var(--font-sans);
+  --direction-detail: var(--font-mono);
+  --direction-radius: 0;
+}
+
+.directionTelemetry {
+  --direction-bg: #0c1010;
+  --direction-ink: #f0eee7;
+  --direction-muted: #8a928d;
+  --direction-line: rgba(240, 238, 231, 0.22);
+  --direction-accent: #ff6338;
+  --direction-panel: #151b1b;
+  --direction-display: "Space Grotesk", "Helvetica Neue", sans-serif;
+  --direction-text: "Space Grotesk", "Helvetica Neue", sans-serif;
+  --direction-detail: var(--font-mono);
+  --direction-radius: 0.1rem;
+}
+
+.directionAtelier {
+  --direction-bg: #dfe5e8;
+  --direction-ink: #17323a;
+  --direction-muted: #5c7077;
+  --direction-line: rgba(23, 50, 58, 0.28);
+  --direction-accent: #b15d4d;
+  --direction-panel: rgba(247, 249, 249, 0.48);
+  --direction-display: "Manrope", "Helvetica Neue", sans-serif;
+  --direction-text: "Manrope", "Helvetica Neue", sans-serif;
+  --direction-detail: var(--font-mono);
+  --direction-radius: 0.15rem;
+}

@@ -1,0 +1,226 @@
+.prototypeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.4vw, 2.5rem);
+}
+
+.prototypeGrid.concours {
+  --prototype-bg: #f5f1e9;
+  --prototype-line: rgba(29, 27, 23, 0.2);
+  --prototype-muted: #716b63;
+  --prototype-accent: #b8523e;
+}
+
+.prototypeGrid.telemetry {
+  --prototype-bg: #111717;
+  --prototype-line: rgba(240, 238, 231, 0.25);
+  --prototype-muted: #8a928d;
+  --prototype-accent: #ff6338;
+}
+
+.prototypeGrid.atelier {
+  --prototype-bg: rgba(247, 249, 249, 0.5);
+  --prototype-line: rgba(23, 50, 58, 0.3);
+  --prototype-muted: #5c7077;
+  --prototype-accent: #b15d4d;
+}
+
+.prototype {
+  min-width: 0;
+  min-height: 19rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: var(--prototype-bg);
+  border: 1px solid var(--prototype-line);
+}
+
+.prototypeHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  border-bottom: 1px solid var(--prototype-line);
+  padding-bottom: 0.8rem;
+}
+
+.prototypeIndex,
+.prototype p,
+.specRow,
+.revReadout,
+.unitTicks,
+.garageLineup {
+  font-family: var(--direction-detail);
+}
+
+.prototypeIndex {
+  color: var(--prototype-accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.prototype h3 {
+  margin: 0;
+  font-family: var(--direction-text);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.prototype p {
+  min-height: 2.7rem;
+  margin: 1rem 0 1.25rem;
+  color: var(--prototype-muted);
+  font-size: 0.74rem;
+  line-height: 1.55;
+}
+
+.specRows {
+  border-top: 1px solid var(--prototype-line);
+}
+
+.specRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr);
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--prototype-line);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.72rem;
+}
+
+.specRow > span:first-child {
+  color: var(--prototype-muted);
+}
+
+.specRule {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--prototype-accent);
+  transform-origin: left center;
+}
+
+.revReadout {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 2rem;
+  color: var(--prototype-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.revReadout strong {
+  color: inherit;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.revTrack {
+  position: relative;
+  height: 1px;
+  margin-top: 0.75rem;
+  background: var(--prototype-line);
+}
+
+.revFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  background: var(--prototype-accent);
+}
+
+.revInput {
+  width: 100%;
+  height: 1rem;
+  margin: -0.45rem 0 0;
+  cursor: ew-resize;
+  opacity: 0;
+}
+
+.unitTicks {
+  display: flex;
+  justify-content: space-between;
+  color: var(--prototype-muted);
+  font-size: 0.68rem;
+}
+
+.unitTicks .active,
+.garageLineup .active {
+  color: var(--prototype-accent);
+}
+
+.garageStage {
+  display: grid;
+  min-height: 5.7rem;
+  place-items: center start;
+  margin-top: 1.75rem;
+  overflow: hidden;
+  border-block: 1px solid var(--prototype-line);
+}
+
+.garageSelected {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 0;
+}
+
+.garageSelected span,
+.garageLineup span:first-child {
+  color: var(--prototype-accent);
+  font-family: var(--direction-detail);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.garageSelected strong {
+  font-family: var(--direction-text);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 600;
+}
+
+.garageLineup {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.garageLineup button {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.55rem 0;
+  border: 0;
+  border-top: 1px solid transparent;
+  background: transparent;
+  color: var(--prototype-muted);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.68rem;
+}
+
+.garageLineup button:hover,
+.garageLineup button:focus-visible {
+  color: inherit;
+}
+
+.garageLineup button.active {
+  border-top-color: var(--prototype-accent);
+}
+
+@media (max-width: 900px) {
+  .prototypeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .prototype {
+    min-height: 0;
+  }
+}
