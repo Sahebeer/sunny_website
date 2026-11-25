@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/tokens.css";
 import "./globals.css";
-import { site } from "@/content/site";
+import { site } from "@site";
 
 const bodyFont = localFont({
   src: [

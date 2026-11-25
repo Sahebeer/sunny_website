@@ -2,8 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
-import type { Direction } from "@/content/site";
-import { site } from "@/content/site";
+import type { Direction } from "@site";
+import { site } from "@site";
 import styles from "./interaction-prototypes.module.css";
 
 type PrototypeProps = {

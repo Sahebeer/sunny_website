@@ -1,4 +1,4 @@
-import { site, featuredProject, type Direction } from "@/content/site";
+import { site, featuredProject, type Direction } from "@site";
 import { InteractionPrototypes } from "@/components/interaction-prototypes";
 import styles from "./lab.module.css";
 
