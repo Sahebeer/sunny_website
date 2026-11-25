@@ -1,0 +1,3353 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bendeshah Road Tests — Sahebjot Bendeshah · ML Systems & Applied AI</title>
+  <meta name="description"
+    content="Bendeshah Road Tests: Engineering portfolio of Sahebjot Bendeshah, Final-year B.Tech IT student building ML systems, privacy-aware tools, and applied AI. I build things that can be checked." />
+  <style>
+    :root {
+      /* Enthusiast Road-Test Manual Palette (Light Mode) */
+      --bg-paper: #F7F5F0;
+      --bg-card: #FFFFFF;
+      --bg-bay: #EFECE4;
+      --bg-asphalt: #E5E1D6;
+      --ink-primary: #141619;
+      --ink-secondary: #434750;
+      --ink-muted: #6C717D;
+      --rule-light: #DCD8CC;
+      --rule-heavy: #B8B2A2;
+
+      /* Primary Accent & Car Paint (Cobalt Blue default, Amber/Lime options) */
+      --accent: #1E40AF;
+      --accent-bright: #2563EB;
+      --accent-tint: rgba(37, 99, 235, 0.09);
+      --car-paint: #2563EB;
+      --car-paint-shadow: #1D4ED8;
+      --car-glass: #DBEAFE;
+      --car-trim: #F59E0B;
+      --headlight-beam: rgba(251, 191, 36, 0);
+
+      /* Semantic Status Colours */
+      --pass-green: #15803D;
+      --pass-bg: #DCFCE7;
+      --amber-work: #B45309;
+      --amber-bg: #FEF3C7;
+
+      /* Signal Red strictly reserved for known limitations, warnings & failed checks */
+      --signal-red: #DC2626;
+      --signal-red-bg: #FEF2F2;
+      --signal-red-border: #FCA5A5;
+
+      /* Typography */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+      /* Layout & Geometry */
+      --container-w: 1100px;
+      --section-pad: 5rem;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --car-ease: 450ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Instrument-Panel Dark Mode (Car Headlights Turn On Automatically) */
+    [data-theme="dark"] {
+      --bg-paper: #0E1116;
+      --bg-card: #161A22;
+      --bg-bay: #1C222D;
+      --bg-asphalt: #252C3A;
+      --ink-primary: #F3F4F6;
+      --ink-secondary: #B9C0CC;
+      --ink-muted: #858E9E;
+      --rule-light: #262D3B;
+      --rule-heavy: #3B4559;
+
+      --accent: #60A5FA;
+      --accent-bright: #3B82F6;
+      --accent-tint: rgba(96, 165, 250, 0.14);
+      --car-paint: #3B82F6;
+      --car-paint-shadow: #1D4ED8;
+      --car-glass: #1E3A8A;
+      --car-trim: #FBBF24;
+      --headlight-beam: rgba(253, 224, 71, 0.34);
+
+      --pass-green: #4ADE80;
+      --pass-bg: rgba(21, 128, 61, 0.24);
+      --amber-work: #FBBF24;
+      --amber-bg: rgba(180, 83, 9, 0.24);
+
+      --signal-red: #F87171;
+      --signal-red-bg: rgba(220, 38, 38, 0.15);
+      --signal-red-border: rgba(248, 113, 113, 0.45);
+    }
+
+    /* Accent Overrides from Tweak Panel */
+    [data-accent="amber"] {
+      --accent: #B45309;
+      --accent-bright: #D97706;
+      --accent-tint: rgba(217, 119, 6, 0.11);
+      --car-paint: #F59E0B;
+      --car-paint-shadow: #B45309;
+      --car-glass: #FEF3C7;
+      --car-trim: #1D4ED8;
+    }
+
+    [data-theme="dark"][data-accent="amber"] {
+      --accent: #FBBF24;
+      --accent-bright: #F59E0B;
+      --car-paint: #F59E0B;
+      --car-glass: #78350F;
+      --car-trim: #60A5FA;
+    }
+
+    [data-accent="lime"] {
+      --accent: #3F6212;
+      --accent-bright: #65A30D;
+      --accent-tint: rgba(101, 163, 13, 0.11);
+      --car-paint: #65A30D;
+      --car-paint-shadow: #4D7C0F;
+      --car-glass: #ECFCCB;
+      --car-trim: #1E40AF;
+    }
+
+    [data-theme="dark"][data-accent="lime"] {
+      --accent: #A3E635;
+      --accent-bright: #84CC16;
+      --car-paint: #84CC16;
+      --car-glass: #365314;
+      --car-trim: #FBBF24;
+    }
+
+    [data-density="compact"] {
+      --section-pad: 3.25rem;
+    }
+
+    [data-mascot="hidden"] .car-mascot-figure,
+    [data-mascot="hidden"] .route-car-token,
+    [data-mascot="hidden"] .footer-return-car {
+      display: none !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    [data-motion="reduced"] *,
+    [data-motion="reduced"] *::before,
+    [data-motion="reduced"] *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    body {
+      background-color: var(--bg-paper);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 1rem;
+      background: var(--ink-primary);
+      color: var(--bg-paper);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      z-index: 9999;
+      border-radius: var(--radius-sm);
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+    }
+
+    /* ==========================================================================
+       ORIGINAL CAR MASCOT ("COUPE-04") EXPRESSIVE SVG STATES
+       ========================================================================== */
+    .coupe-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .coupe-svg .car-body-rig {
+      transition: transform 0.28s ease;
+      transform-origin: 120px 85px;
+    }
+
+    .coupe-svg .eye-lid {
+      transition: transform 0.22s ease;
+      transform-origin: center;
+    }
+
+    .coupe-svg .eye-iris {
+      transition: transform 0.22s ease;
+    }
+
+    .coupe-svg .headlight-cone {
+      fill: var(--headlight-beam);
+      transition: fill 0.25s ease, opacity 0.25s ease;
+    }
+
+    .coupe-svg .roof-pod-light {
+      transition: fill 0.2s ease;
+    }
+
+    .coupe-svg .badge-pass,
+    .coupe-svg .badge-question,
+    .coupe-svg .badge-check-engine {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    /* State: inspecting (forward stance, bright sensor beam) */
+    [data-car-mood="inspecting"] .car-body-rig {
+      transform: rotate(1.2deg) translateY(-1px);
+    }
+
+    [data-car-mood="inspecting"] .eye-iris {
+      transform: translate(2px, 0);
+    }
+
+    [data-car-mood="inspecting"] .headlight-cone {
+      fill: rgba(251, 191, 36, 0.28);
+    }
+
+    /* State: verified / passed */
+    [data-car-mood="passed"] .car-body-rig {
+      transform: translateY(-2.5px);
+    }
+
+    [data-car-mood="passed"] .badge-pass {
+      opacity: 1;
+    }
+
+    /* State: curious / confused */
+    [data-car-mood="confused"] .car-body-rig {
+      transform: rotate(-1.8deg);
+    }
+
+    [data-car-mood="confused"] .eye-iris {
+      transform: translate(-1.5px, -1.5px);
+    }
+
+    [data-car-mood="confused"] .badge-question {
+      opacity: 1;
+    }
+
+    /* State: limitation / check engine warning */
+    [data-car-mood="warning"] .car-body-rig {
+      transform: translateX(-3px);
+    }
+
+    [data-car-mood="warning"] .roof-pod-light {
+      fill: var(--signal-red);
+    }
+
+    [data-car-mood="warning"] .badge-check-engine {
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       1. COLD-START CINEMATIC LOADING SCREEN (ONCE PER SESSION, SKIPPABLE)
+       ========================================================================== */
+    .cold-start-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: #101318;
+      color: #F3F4F6;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      transition: opacity 0.32s ease, visibility 0.32s ease;
+    }
+
+    .cold-start-loader.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-cluster {
+      width: 100%;
+      max-width: 540px;
+      background: #181C24;
+      border: 1px solid #2E3646;
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .loader-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: #9CA3AF;
+      letter-spacing: 0.06em;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid #283040;
+      margin-bottom: 1.25rem;
+    }
+
+    .loader-stage-bay {
+      position: relative;
+      height: 92px;
+      background: #12151C;
+      border: 1px solid #262D3D;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.15rem;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 10px;
+    }
+
+    .loader-road-stripes {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background: repeating-linear-gradient(to right, #4B5563 0, #4B5563 14px, transparent 14px, transparent 26px);
+    }
+
+    .loader-start-line {
+      position: absolute;
+      right: 26px;
+      bottom: 8px;
+      width: 3px;
+      height: 28px;
+      background: #F59E0B;
+    }
+
+    .loader-car-actor {
+      position: relative;
+      width: 150px;
+      height: 68px;
+      margin-left: 14px;
+      transform: translateX(0);
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .loader-gauges {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .loader-rpm-bar {
+      height: 6px;
+      background: #262D3D;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loader-rpm-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, #3B82F6, #F59E0B);
+      transition: width 0.22s ease;
+    }
+
+    .loader-step-readout {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #FBBF24;
+      letter-spacing: 0.04em;
+    }
+
+    .loader-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .loader-sub-caption {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #9CA3AF;
+    }
+
+    .skip-warmup-btn {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      background: #262D3D;
+      color: #F3F4F6;
+      border: 1px solid #4B5563;
+      border-radius: var(--radius-sm);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .skip-warmup-btn:hover {
+      background: #374151;
+      border-color: #FBBF24;
+    }
+
+    /* ==========================================================================
+       2. HEADER, NAVIGATION & INSTRUMENT SCROLL STRIP
+       ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--bg-paper);
+      border-bottom: 1px solid var(--rule-light);
+    }
+
+    .header-inner {
+      max-width: var(--container-w);
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-emblem {
+      width: 44px;
+      height: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .brand-channel {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .brand-owner {
+      font-weight: 800;
+      font-size: 0.96rem;
+      letter-spacing: -0.015em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-item-link {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.3rem;
+      padding: 0.4rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      transition: background-color 0.15s ease, color 0.15s ease;
+      position: relative;
+    }
+
+    .nav-item-link .nav-plain {
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+    }
+
+    .nav-item-link:hover {
+      background: var(--bg-bay);
+      color: var(--ink-primary);
+    }
+
+    .nav-item-link.is-active {
+      background: var(--accent-tint);
+      color: var(--ink-primary);
+    }
+
+    .nav-item-link.is-active::after {
+      content: "";
+      position: absolute;
+      bottom: 2px;
+      left: 0.65rem;
+      right: 0.65rem;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* Turn Signal Indicator + Header Utility Controls */
+    .header-utilities {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .turn-signal-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-light);
+      color: var(--ink-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .turn-signal-pill.is-blinking {
+      color: #D97706;
+      border-color: #F59E0B;
+      background: var(--amber-bg);
+    }
+
+    .ctrl-btn {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.4rem 0.65rem;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-sm);
+      color: var(--ink-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--rule-heavy);
+      color: var(--ink-primary);
+    }
+
+    /* Unobtrusive Tweak Panel Popover */
+    .tweak-menu-wrap {
+      position: relative;
+    }
+
+    .tweak-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 260px;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      display: none;
+      z-index: 250;
+    }
+
+    .tweak-panel.is-open {
+      display: block;
+    }
+
+    .tweak-row {
+      margin-bottom: 0.8rem;
+    }
+
+    .tweak-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .tweak-row-title {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .tweak-btn-group {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .tweak-choice {
+      flex: 1;
+      padding: 0.3rem 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-sm);
+      background: var(--bg-bay);
+      color: var(--ink-secondary);
+    }
+
+    .tweak-choice[aria-pressed="true"] {
+      background: var(--accent-tint);
+      border-color: var(--accent);
+      color: var(--ink-primary);
+      font-weight: 700;
+    }
+
+    /* Compact Instrument Road-Progress Strip along bottom of Header */
+    .instrument-progress-strip {
+      position: relative;
+      height: 4px;
+      background: var(--bg-asphalt);
+      overflow: hidden;
+    }
+
+    .instrument-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--car-trim));
+      transition: width 0.1s linear;
+    }
+
+    /* ==========================================================================
+       MAIN LAYOUT & ROAD-LINE SECTION DIVIDERS
+       ========================================================================== */
+    main {
+      max-width: var(--container-w);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      padding: var(--section-pad) 0;
+      position: relative;
+    }
+
+    .road-divider {
+      height: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .road-divider::before {
+      content: "";
+      width: 100%;
+      height: 2px;
+      background: repeating-linear-gradient(to right,
+          var(--rule-heavy) 0,
+          var(--rule-heavy) 16px,
+          transparent 16px,
+          transparent 28px);
+    }
+
+    .road-milepost {
+      background: var(--bg-paper);
+      padding: 0 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      margin-bottom: 2.25rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+    }
+
+    .section-tag::before {
+      content: "■";
+      font-size: 0.6rem;
+      color: var(--car-trim);
+    }
+
+    .section-heading {
+      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-desc {
+      color: var(--ink-secondary);
+      max-width: 66ch;
+      font-size: 1.02rem;
+    }
+
+    /* ==========================================================================
+       3. HERO SECTION: COLD START
+       ========================================================================== */
+    .hero-cold-start {
+      padding-top: 3.5rem;
+      padding-bottom: 4.25rem;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      padding: 0.3rem 0.65rem;
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-sm);
+      color: var(--ink-secondary);
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.35rem, 5vw, 3.65rem);
+      font-weight: 850;
+      letter-spacing: -0.035em;
+      line-height: 1.06;
+      margin-bottom: 1.15rem;
+    }
+
+    .hero-lead {
+      font-size: 1.12rem;
+      color: var(--ink-secondary);
+      max-width: 55ch;
+      margin-bottom: 1.85rem;
+    }
+
+    .hero-lead strong {
+      color: var(--ink-primary);
+      font-weight: 650;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-roadtest {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: var(--ink-primary);
+      color: var(--bg-paper);
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.75rem 1.35rem;
+      border-radius: var(--radius-sm);
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-roadtest:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.72rem 1.05rem;
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink-primary);
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-bay);
+      border-color: var(--ink-primary);
+    }
+
+    /* Dashboard Telemetry Strip in Hero */
+    .dashboard-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+    }
+
+    .dash-cell {
+      border-right: 1px solid var(--rule-light);
+      padding-right: 0.65rem;
+    }
+
+    .dash-cell:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .dash-label {
+      display: block;
+      color: var(--ink-muted);
+      font-size: 0.66rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .dash-value {
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    /* Hero Studio Inspection Bay (Original Car Scene + Technical Annotations) */
+    .studio-bay-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .studio-light-rig {
+      height: 6px;
+      width: 65%;
+      margin: 0 auto 1rem;
+      background: linear-gradient(90deg, transparent, var(--car-trim), transparent);
+      border-radius: 3px;
+    }
+
+    .studio-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.65rem;
+    }
+
+    .check-engine-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 0.68rem;
+      background: var(--pass-bg);
+      color: var(--pass-green);
+    }
+
+    .check-engine-badge[data-alert="true"] {
+      background: var(--signal-red-bg);
+      color: var(--signal-red);
+      border: 1px solid var(--signal-red-border);
+    }
+
+    .studio-car-stage {
+      position: relative;
+      height: 175px;
+      background: radial-gradient(ellipse at center 75%, var(--bg-bay) 0%, transparent 70%);
+      border-bottom: 2px solid var(--rule-heavy);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 12px;
+      margin-bottom: 0.9rem;
+    }
+
+    /* Measurement Callout Annotations */
+    .tech-annotation {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      background: var(--bg-paper);
+      border: 1px solid var(--rule-light);
+      padding: 0.18rem 0.45rem;
+      border-radius: 3px;
+      color: var(--ink-secondary);
+      pointer-events: none;
+    }
+
+    .tech-annotation.ann-top-left {
+      top: 8px;
+      left: 8px;
+    }
+
+    .tech-annotation.ann-top-right {
+      top: 8px;
+      right: 8px;
+    }
+
+    .hero-car-interactive {
+      width: 250px;
+      height: 118px;
+      cursor: pointer;
+      transition: transform var(--car-ease);
+    }
+
+    .hero-car-interactive:hover {
+      transform: translateX(6px);
+    }
+
+    .studio-narrator-box {
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-sm);
+      padding: 0.65rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .studio-footnote {
+      margin-top: 0.55rem;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      color: var(--ink-muted);
+    }
+
+    /* ==========================================================================
+       4. WORK SECTION: ROAD TESTS (BUILD SHEETS & PROVING TRACK)
+       ========================================================================== */
+    .road-tests-wrapper {
+      position: relative;
+      padding-left: 3.5rem;
+    }
+
+    .proving-track-rail {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2.5rem;
+      pointer-events: none;
+    }
+
+    .proving-track-line {
+      position: absolute;
+      left: 50%;
+      top: 1.5rem;
+      bottom: 1.5rem;
+      width: 2px;
+      background: repeating-linear-gradient(to bottom,
+          var(--rule-heavy) 0,
+          var(--rule-heavy) 8px,
+          transparent 8px,
+          transparent 15px);
+      transform: translateX(-50%);
+    }
+
+    .rail-car-follower {
+      position: absolute;
+      left: 50%;
+      top: 1.25rem;
+      transform: translate(-50%, 0);
+      width: 54px;
+      height: 32px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+      transition: transform var(--car-ease), border-color 0.2s ease;
+      z-index: 5;
+    }
+
+    .rail-car-follower.is-warning {
+      border-color: var(--signal-red);
+    }
+
+    .road-test-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .build-sheet-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-md);
+      padding: 1.65rem 1.85rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .build-sheet-card:hover,
+    .build-sheet-card:focus-within {
+      border-color: var(--rule-heavy);
+    }
+
+    .build-sheet-card.is-selected-build {
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .build-sheet-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid var(--rule-light);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .build-id-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .build-num {
+      font-weight: 800;
+      color: var(--ink-primary);
+    }
+
+    .car-class-tag {
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-light);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      color: var(--ink-secondary);
+      font-weight: 600;
+    }
+
+    .build-status-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .check-indicator {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 3px;
+      background: var(--bg-bay);
+      color: var(--ink-muted);
+      font-weight: 700;
+    }
+
+    .build-sheet-card.is-selected-build .check-indicator {
+      background: var(--accent-tint);
+      color: var(--accent);
+    }
+
+    .status-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+    }
+
+    .status-pill.pass {
+      background: var(--pass-bg);
+      color: var(--pass-green);
+    }
+
+    .status-pill.work {
+      background: var(--amber-bg);
+      color: var(--amber-work);
+    }
+
+    .status-pill.warn {
+      background: var(--signal-red-bg);
+      color: var(--signal-red);
+      border: 1px solid var(--signal-red-border);
+    }
+
+    .status-pill.compact {
+      background: var(--bg-bay);
+      color: var(--ink-secondary);
+    }
+
+    .build-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.45rem;
+    }
+
+    .build-summary {
+      color: var(--ink-secondary);
+      max-width: 66ch;
+      margin-bottom: 1.15rem;
+    }
+
+    /* Telemetry Spec Strip inside Build Card */
+    .telemetry-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .telemetry-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .telemetry-val {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .telemetry-val.is-external-benchmark {
+      color: var(--signal-red);
+    }
+
+    .build-sheet-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-inspect-build {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      background: var(--accent-tint);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-inspect-build:hover {
+      background: var(--accent);
+      color: #FFFFFF;
+      transform: translateX(2px);
+    }
+
+    .reviewer-verdict {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+    }
+
+    /* Walkaround Drawer for Projects 02, 03, 04 */
+    .walkaround-sheet {
+      display: none;
+      margin-top: 1.15rem;
+      padding-top: 1.1rem;
+      border-top: 1px dashed var(--rule-heavy);
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+    }
+
+    .walkaround-sheet.is-open {
+      display: block;
+    }
+
+    .walkaround-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    .walkaround-cols h4 {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    /* Project 04 Compact Styling */
+    .build-sheet-card.is-compact-build {
+      padding: 1.25rem 1.5rem;
+      background: var(--bg-bay);
+    }
+
+    .build-sheet-card.is-compact-build .build-title {
+      font-size: 1.18rem;
+    }
+
+    /* ==========================================================================
+       5. AGRINEXUS DETAILED VIEW: TECHNICAL ROAD TEST
+       ========================================================================== */
+    .technical-road-test {
+      margin-top: 2.75rem;
+      background: var(--bg-card);
+      border: 2px solid var(--rule-heavy);
+      border-radius: var(--radius-md);
+      padding: 2.25rem;
+    }
+
+    .road-test-banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid var(--rule-light);
+    }
+
+    .road-test-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.25rem;
+    }
+
+    .road-test-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .review-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .review-panel h4 {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+    }
+
+    .review-panel p {
+      color: var(--ink-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Interactive Dual-Gate Test Route */
+    .test-route-container {
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .test-route-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .test-route-heading {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .route-run-triggers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .run-trigger-btn {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      color: var(--ink-secondary);
+      transition: all 0.15s ease;
+    }
+
+    .run-trigger-btn:hover {
+      border-color: var(--ink-primary);
+      color: var(--ink-primary);
+    }
+
+    .run-trigger-btn[aria-pressed="true"] {
+      background: var(--ink-primary);
+      color: var(--bg-paper);
+      border-color: var(--ink-primary);
+    }
+
+    .route-checkpoints-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      padding-top: 3.1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .route-asphalt-line {
+      position: absolute;
+      top: 2.1rem;
+      left: 5%;
+      right: 5%;
+      height: 3px;
+      background: var(--rule-heavy);
+      z-index: 1;
+    }
+
+    .route-car-token {
+      position: absolute;
+      top: 0.1rem;
+      left: 76%;
+      width: 74px;
+      height: 36px;
+      z-index: 3;
+      transition: left var(--car-ease);
+    }
+
+    .checkpoint-box {
+      position: relative;
+      z-index: 2;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem;
+    }
+
+    .checkpoint-box.is-active-gate {
+      border-color: var(--accent);
+    }
+
+    .checkpoint-box.is-halted-gate {
+      border-color: var(--signal-red);
+      background: var(--signal-red-bg);
+    }
+
+    .cp-num {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .cp-title {
+      font-weight: 700;
+      font-size: 0.86rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .cp-text {
+      font-size: 0.76rem;
+      color: var(--ink-secondary);
+      line-height: 1.35;
+    }
+
+    .route-readout-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.79rem;
+    }
+
+    /* Results (Road-Test Data Table) & Known Limits */
+    .results-limits-split {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .data-table-header {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .road-test-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-light);
+    }
+
+    .road-test-table th,
+    .road-test-table td {
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--rule-light);
+    }
+
+    .road-test-table th {
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      text-transform: uppercase;
+      background: var(--bg-bay);
+      color: var(--ink-muted);
+    }
+
+    .road-test-table td.mono-figure {
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .road-test-table tr.limit-row td.mono-figure {
+      color: var(--signal-red);
+    }
+
+    .known-limits-panel {
+      background: var(--signal-red-bg);
+      border: 1.5px solid var(--signal-red-border);
+      border-radius: var(--radius-sm);
+      padding: 1.2rem;
+    }
+
+    .known-limits-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--signal-red);
+      margin-bottom: 0.55rem;
+    }
+
+    .known-limits-panel p {
+      font-size: 0.88rem;
+      color: var(--ink-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .known-limits-panel p:last-child {
+      margin-bottom: 0;
+      font-size: 0.83rem;
+      color: var(--ink-secondary);
+    }
+
+    /* ==========================================================================
+       6. ABOUT SECTION: SPEC SHEET (OWNER'S MANUAL FORMAT)
+       ========================================================================== */
+    .spec-sheet-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .spec-table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .spec-card-header {
+      background: var(--bg-bay);
+      padding: 0.75rem 1.15rem;
+      border-bottom: 1px solid var(--rule-light);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .spec-rows {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spec-row {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 1rem;
+      padding: 0.85rem 1.15rem;
+      border-bottom: 1px solid var(--rule-light);
+      font-size: 0.92rem;
+    }
+
+    .spec-row:last-child {
+      border-bottom: none;
+    }
+
+    .spec-key {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    .spec-val {
+      color: var(--ink-primary);
+      font-weight: 500;
+    }
+
+    .owner-manual-notes {
+      background: var(--bg-card);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+    }
+
+    .owner-manual-notes p {
+      color: var(--ink-secondary);
+      margin-bottom: 1.1rem;
+      font-size: 0.98rem;
+    }
+
+    .equipment-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.75rem;
+    }
+
+    .equip-tag {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      background: var(--bg-bay);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-sm);
+      color: var(--ink-primary);
+    }
+
+    /* ==========================================================================
+       7. GARAGE / CARS SECTION (HONEST ENTHUSIAST PLACEHOLDERS + LIFT TEASER)
+       ========================================================================== */
+    .garage-bays-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .garage-slot-card {
+      background: var(--bg-card);
+      border: 1px dashed var(--rule-heavy);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 155px;
+    }
+
+    .slot-label {
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .slot-placeholder {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-tint);
+      padding: 0.45rem 0.65rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.65rem;
+    }
+
+    .slot-note {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+    }
+
+    .garage-bottom-split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.25rem;
+    }
+
+    .photo-bay-placeholder,
+    .hydraulic-lift-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+    }
+
+    .lift-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      background: var(--amber-bg);
+      color: var(--amber-work);
+      border-radius: 3px;
+      margin-bottom: 0.35rem;
+    }
+
+    /* ==========================================================================
+       8. NOTES SECTION: BUILD LOG
+       ========================================================================== */
+    .build-log-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .log-entry-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule-light);
+      border-radius: var(--radius-md);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .log-entry-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+    }
+
+    .log-category-badge {
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: var(--bg-bay);
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .log-category-badge.is-warn {
+      background: var(--signal-red-bg);
+      color: var(--signal-red);
+    }
+
+    .log-entry-title {
+      font-size: 1.06rem;
+      font-weight: 750;
+      margin-bottom: 0.45rem;
+    }
+
+    .log-entry-body {
+      font-size: 0.91rem;
+      color: var(--ink-secondary);
+    }
+
+    /* ==========================================================================
+       9. CONTACT SECTION & RETURN-TO-START FOOTER
+       ========================================================================== */
+    .contact-dispatch-box {
+      background: var(--bg-card);
+      border: 2px solid var(--rule-heavy);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .contact-support-line {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 0.65rem;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .site-footer {
+      max-width: var(--container-w);
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid var(--rule-light);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+    }
+
+    .footer-return-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 0.8rem;
+      background: var(--bg-card);
+      border: 1px solid var(--rule-heavy);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--ink-primary);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .footer-return-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       10. RESPONSIVE & 390PX MOBILE ADAPTATION
+       ========================================================================== */
+    @media (max-width: 900px) {
+
+      .hero-layout,
+      .review-two-col,
+      .results-limits-split,
+      .spec-sheet-grid,
+      .garage-bottom-split,
+      .build-log-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .garage-bays-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .route-checkpoints-grid {
+        grid-template-columns: 1fr;
+        padding-top: 0;
+      }
+
+      .route-asphalt-line,
+      .route-car-token {
+        display: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      :root {
+        --section-pad: 3.25rem;
+      }
+
+      .header-inner {
+        flex-wrap: wrap;
+        padding: 0.65rem 1rem;
+      }
+
+      .turn-signal-pill {
+        display: none;
+      }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        padding-top: 0.45rem;
+        border-top: 1px solid var(--rule-light);
+        justify-content: space-between;
+      }
+
+      .nav-item-link {
+        padding: 0.35rem 0.45rem;
+        font-size: 0.78rem;
+        white-space: nowrap;
+      }
+
+      .nav-item-link .nav-plain {
+        display: none;
+      }
+
+      main {
+        padding: 0 1rem;
+      }
+
+      .hero-cold-start {
+        padding-top: 2rem;
+        padding-bottom: 2.75rem;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-cta-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-roadtest,
+      .btn-outline {
+        justify-content: center;
+        min-height: 44px;
+      }
+
+      .dashboard-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--rule-light);
+        padding-bottom: 0.45rem;
+      }
+
+      .dash-cell:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .road-tests-wrapper {
+        padding-left: 0;
+      }
+
+      .proving-track-rail {
+        display: none;
+      }
+
+      .build-sheet-card,
+      .technical-road-test,
+      .contact-dispatch-box {
+        padding: 1.25rem;
+      }
+
+      .spec-row {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+      }
+
+      .garage-bays-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-bay-placeholder,
+      .hydraulic-lift-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .contact-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body data-accent="cobalt" data-mascot="visible" data-motion="normal" data-density="comfortable">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ==========================================================================
+       REUSABLE ORIGINAL ANTHROPOMORPHIC TEST CAR ARTWORK ("COUPE-04")
+       Non-red cobalt rally-hatchback with roof lidar pod, distinct front/rear,
+       body crease lines, alloys, and original twin-ring projector eyes.
+       ========================================================================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <g id="coupe-04-character">
+        <g class="car-body-rig">
+          <!-- Ground contact shadow -->
+          <ellipse cx="115" cy="96" rx="82" ry="5" fill="rgba(0,0,0,0.16)" />
+
+          <!-- Headlight cone (illuminates in dark mode or inspecting state) -->
+          <polygon class="headlight-cone" points="202,64 258,42 258,88" />
+
+          <!-- Roof-mounted optical telemetry pod -->
+          <rect x="98" y="16" width="26" height="8" rx="3" fill="var(--ink-primary)" />
+          <circle class="roof-pod-light" cx="120" cy="20" r="2.6" fill="var(--car-trim)" />
+          <line x1="106" y1="24" x2="106" y2="30" stroke="var(--ink-primary)" stroke-width="2.5" />
+          <line x1="116" y1="24" x2="116" y2="30" stroke="var(--ink-primary)" stroke-width="2.5" />
+
+          <!-- Rear spoiler lip -->
+          <path d="M26,44 L18,34 L28,34 L34,44 Z" fill="var(--car-trim)" stroke="var(--ink-primary)" stroke-width="2"
+            stroke-linejoin="round" />
+
+          <!-- Main Three-Quarter Coupe/Hatchback Body Shell -->
+          <path
+            d="M24,78 L20,56 C20,49 24,45 31,44 L48,43 L68,28 C73,25 80,24 88,24 L138,24 C146,24 153,27 158,33 L172,49 L196,53 C203,54 207,59 208,66 L208,79 C208,83 204,86 199,86 L32,86 C27,86 24,82 24,78 Z"
+            fill="var(--car-paint)" stroke="var(--ink-primary)" stroke-width="2.5" stroke-linejoin="round" />
+
+          <!-- Lower chassis aero skirt & character crease line -->
+          <path d="M26,76 L206,76 L206,83 C206,85 203,86 199,86 L32,86 C28,86 26,84 26,81 Z"
+            fill="var(--car-paint-shadow)" />
+          <line x1="36" y1="63" x2="178" y2="63" stroke="var(--car-trim)" stroke-width="3" stroke-linecap="round" />
+          <text x="108" y="73" font-family="monospace" font-size="9" font-weight="bold" fill="#FFFFFF"
+            opacity="0.9">04</text>
+
+          <!-- Wrap-around greenhouse windows (original expressive windscreen) -->
+          <path d="M56,45 L72,30 C75,28 79,28 84,28 L112,28 L112,45 Z" fill="var(--car-glass)"
+            stroke="var(--ink-primary)" stroke-width="2" stroke-linejoin="round" />
+          <path d="M117,28 L138,28 C143,28 148,30 151,34 L163,47 L117,47 Z" fill="var(--car-glass)"
+            stroke="var(--ink-primary)" stroke-width="2" stroke-linejoin="round" />
+
+          <!-- Distinct Front Grille & Twin-Projector Expressive Headlight Eyes -->
+          <rect x="186" y="57" width="21" height="15" rx="4" fill="#181C24" stroke="var(--ink-primary)"
+            stroke-width="1.8" />
+          <circle cx="192" cy="64.5" r="5" fill="#FFFFFF" stroke="var(--ink-primary)" stroke-width="1.5" />
+          <circle class="eye-iris" cx="193.2" cy="64.5" r="2.2" fill="#111317" />
+          <circle cx="202" cy="64.5" r="4.2" fill="#FFFFFF" stroke="var(--ink-primary)" stroke-width="1.5" />
+          <circle class="eye-iris" cx="203" cy="64.5" r="1.9" fill="#111317" />
+
+          <!-- Amber front turn indicator & rear tail-lamp block -->
+          <rect x="184" y="73" width="8" height="3.5" rx="1" fill="var(--car-trim)" />
+          <rect x="20" y="50" width="5" height="12" rx="1.5" fill="var(--car-trim)" stroke="var(--ink-primary)"
+            stroke-width="1.5" />
+
+          <!-- Front & Rear Multi-Spoke Wheels -->
+          <g transform="translate(62, 84)">
+            <circle cx="0" cy="0" r="14" fill="#1E222B" stroke="var(--ink-primary)" stroke-width="2.5" />
+            <circle cx="0" cy="0" r="8" fill="#D1D5DB" stroke="var(--ink-primary)" stroke-width="1.5" />
+            <circle cx="0" cy="0" r="3" fill="var(--car-trim)" />
+          </g>
+          <g transform="translate(164, 84)">
+            <circle cx="0" cy="0" r="14" fill="#1E222B" stroke="var(--ink-primary)" stroke-width="2.5" />
+            <circle cx="0" cy="0" r="8" fill="#D1D5DB" stroke="var(--ink-primary)" stroke-width="1.5" />
+            <circle cx="0" cy="0" r="3" fill="var(--car-trim)" />
+          </g>
+
+          <!-- Expressive State Badges above Roof -->
+          <g class="badge-pass" transform="translate(136, 2)">
+            <rect x="0" y="0" width="24" height="16" rx="4" fill="var(--pass-green)" stroke="var(--ink-primary)"
+              stroke-width="1.5" />
+            <path d="M6,8.5 L10,12.5 L18,4.5" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </g>
+          <g class="badge-question" transform="translate(136, 2)">
+            <rect x="0" y="0" width="24" height="16" rx="4" fill="var(--car-trim)" stroke="var(--ink-primary)"
+              stroke-width="1.5" />
+            <text x="12" y="12.5" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold"
+              fill="#141619">?</text>
+          </g>
+          <g class="badge-check-engine" transform="translate(136, 2)">
+            <rect x="0" y="0" width="28" height="16" rx="4" fill="var(--signal-red)" stroke="var(--ink-primary)"
+              stroke-width="1.5" />
+            <text x="14" y="12" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold"
+              fill="#FFFFFF">LIMIT</text>
+          </g>
+        </g>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ==========================================================================
+       1. COLD-START CINEMATIC LOADING SCREEN
+       ========================================================================== -->
+  <div id="cold-start-loader" class="cold-start-loader" role="status" aria-live="polite"
+    aria-label="Cold start pre-test sequence">
+    <div class="loader-cluster">
+      <div class="loader-header-bar">
+        <span>BENDESHAH ROAD TESTS · TELEMETRY CHECK</span>
+        <span id="loader-step-num">STAGE 01 / 05</span>
+      </div>
+
+      <div class="loader-stage-bay" aria-hidden="true">
+        <div class="loader-road-stripes"></div>
+        <div class="loader-start-line"></div>
+        <div id="loader-car-actor" class="loader-car-actor" data-car-mood="inspecting">
+          <svg class="coupe-svg" viewBox="0 0 260 105">
+            <use href="#coupe-04-character"></use>
+          </svg>
+        </div>
+      </div>
+
+      <div class="loader-gauges">
+        <div class="loader-rpm-bar" aria-hidden="true">
+          <div id="loader-rpm-fill" class="loader-rpm-fill"></div>
+        </div>
+        <span id="loader-stage-text" class="loader-step-readout">UNLOCKING</span>
+      </div>
+
+      <div class="loader-footer-row">
+        <span class="loader-sub-caption">No fake horsepower detected.</span>
+        <button type="button" id="skip-warmup-btn" class="skip-warmup-btn">Skip warm-up [Esc]</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       2. HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#cold-start" class="brand-cluster" aria-label="Bendeshah Road Tests — Sahebjot Bendeshah Home">
+        <span class="brand-emblem" aria-hidden="true">
+          <svg width="38" height="20" viewBox="15 15 205 80">
+            <use href="#coupe-04-character"></use>
+          </svg>
+        </span>
+        <span class="brand-text-wrap">
+          <span class="brand-channel">Bendeshah Road Tests</span>
+          <span class="brand-owner">Sahebjot Bendeshah</span>
+        </span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li>
+            <a href="#cold-start" class="nav-item-link is-active" data-section-link="cold-start">
+              <span>Cold Start</span>
+              <span class="nav-plain">/ Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#road-tests" class="nav-item-link" data-section-link="road-tests">
+              <span>Road Tests</span>
+              <span class="nav-plain">/ Work</span>
+            </a>
+          </li>
+          <li>
+            <a href="#spec-sheet" class="nav-item-link" data-section-link="spec-sheet">
+              <span>Spec Sheet</span>
+              <span class="nav-plain">/ About</span>
+            </a>
+          </li>
+          <li>
+            <a href="#garage" class="nav-item-link" data-section-link="garage">
+              <span>Garage</span>
+              <span class="nav-plain">/ Cars</span>
+            </a>
+          </li>
+          <li>
+            <a href="#build-log" class="nav-item-link" data-section-link="build-log">
+              <span>Build Log</span>
+              <span class="nav-plain">/ Notes</span>
+            </a>
+          </li>
+          <li>
+            <a href="#contact" class="nav-item-link" data-section-link="contact">
+              <span>Contact</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-utilities">
+        <span id="turn-signal-pill" class="turn-signal-pill" aria-hidden="true">◄► LANE OK</span>
+
+        <button type="button" id="theme-toggle-btn" class="ctrl-btn" aria-label="Toggle day or night instrument theme">
+          <span id="theme-toggle-text">Night Panel</span>
+        </button>
+
+        <div class="tweak-menu-wrap">
+          <button type="button" id="tweak-toggle-btn" class="ctrl-btn" aria-expanded="false"
+            aria-controls="tweak-panel">
+            <span>Setup</span>
+          </button>
+          <div id="tweak-panel" class="tweak-panel" role="region" aria-label="Interface preferences">
+            <div class="tweak-row">
+              <span class="tweak-row-title">Paint / Accent</span>
+              <div class="tweak-btn-group">
+                <button type="button" class="tweak-choice" data-tweak-accent="cobalt"
+                  aria-pressed="true">Cobalt</button>
+                <button type="button" class="tweak-choice" data-tweak-accent="amber" aria-pressed="false">Amber</button>
+                <button type="button" class="tweak-choice" data-tweak-accent="lime" aria-pressed="false">Lime</button>
+              </div>
+            </div>
+            <div class="tweak-row">
+              <span class="tweak-row-title">Car Mascot</span>
+              <div class="tweak-btn-group">
+                <button type="button" class="tweak-choice" data-tweak-mascot="visible"
+                  aria-pressed="true">Shown</button>
+                <button type="button" class="tweak-choice" data-tweak-mascot="hidden"
+                  aria-pressed="false">Hidden</button>
+              </div>
+            </div>
+            <div class="tweak-row">
+              <span class="tweak-row-title">Animation Intensity</span>
+              <div class="tweak-btn-group">
+                <button type="button" class="tweak-choice" data-tweak-motion="normal"
+                  aria-pressed="true">Standard</button>
+                <button type="button" class="tweak-choice" data-tweak-motion="reduced"
+                  aria-pressed="false">Reduced</button>
+              </div>
+            </div>
+            <div class="tweak-row">
+              <span class="tweak-row-title">Layout Density</span>
+              <div class="tweak-btn-group">
+                <button type="button" class="tweak-choice" data-tweak-density="comfortable"
+                  aria-pressed="true">Comfort</button>
+                <button type="button" class="tweak-choice" data-tweak-density="compact"
+                  aria-pressed="false">Compact</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route-based scroll progress bar -->
+    <div class="instrument-progress-strip" aria-hidden="true">
+      <div id="scroll-progress-fill" class="instrument-progress-fill"></div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- ========================================================================
+         3. HERO SECTION: COLD START
+         ======================================================================== -->
+    <section id="cold-start" class="hero-cold-start">
+      <div class="hero-layout">
+        <div class="hero-copy-col">
+          <span class="hero-eyebrow">STUDENT DEVELOPER / INFORMATION TECHNOLOGY</span>
+          <h1 class="hero-title">I build things that can be checked.</h1>
+          <p class="hero-lead">
+            Welcome to <strong>Bendeshah Road Tests</strong>. I’m <strong>Sahebjot Bendeshah</strong>, a final-year
+            B.Tech IT student building <strong>ML systems</strong>, <strong>privacy-aware tools</strong>, and
+            <strong>applied AI</strong>—and taking every project through an honest walkaround of what works, what was
+            measured, and where the limits are.
+          </p>
+
+          <div class="hero-cta-row">
+            <a href="#road-tests" class="btn-roadtest">
+              <span>Start the road test</span>
+              <span aria-hidden="true">↓</span>
+            </a>
+            <a href="https://github.com/sahebjot" target="_blank" rel="noopener noreferrer" class="btn-outline">
+              <span>GitHub</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.linkedin.com/in/sahebjot-bendeshah" target="_blank" rel="noopener noreferrer"
+              class="btn-outline">
+              <span>LinkedIn</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <!-- Dashboard Telemetry Strip -->
+          <div class="dashboard-strip" role="region" aria-label="Current Developer Telemetry">
+            <div class="dash-cell">
+              <span class="dash-label">MODE</span>
+              <span class="dash-value">LEARNING IN PUBLIC</span>
+            </div>
+            <div class="dash-cell">
+              <span class="dash-label">STATUS</span>
+              <span class="dash-value">BUILDING · TESTING · DOCUMENTING</span>
+            </div>
+            <div class="dash-cell">
+              <span class="dash-label">CURRENT CONDITION</span>
+              <span class="dash-value">STILL IMPROVING</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Inspection Bay with Original Coupe-04 Character -->
+        <aside class="studio-bay-card car-mascot-figure" aria-label="Test Vehicle Inspection Bay">
+          <div class="studio-light-rig" aria-hidden="true"></div>
+          <div class="studio-top-meta">
+            <span>TEST UNIT: COUPE-04 (INSPECTOR)</span>
+            <span id="hero-check-engine" class="check-engine-badge" data-alert="false">COLD START SUCCESSFUL</span>
+          </div>
+
+          <div class="studio-car-stage">
+            <span class="tech-annotation ann-top-left">ROOF SENSOR: INPUT GATE</span>
+            <span class="tech-annotation ann-top-right">CHASSIS: ZERO FAKE HP</span>
+
+            <button type="button" id="hero-car-trigger" class="hero-car-interactive" data-car-mood="inspecting"
+              aria-label="Test car narrator: click to cycle inspection expression">
+              <svg class="coupe-svg" viewBox="0 0 260 105">
+                <use href="#coupe-04-character"></use>
+              </svg>
+            </button>
+          </div>
+
+          <div class="studio-narrator-box" aria-live="polite">
+            <span id="narrator-status-line">Parked at measurement line. Select a build below to begin walkaround.</span>
+          </div>
+
+          <div class="studio-footnote">
+            <span>No fake horsepower detected.</span>
+            <span>Click car to test lights &amp; states</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="road-divider" aria-hidden="true">
+      <span class="road-milepost">SECTOR 01 · PROVING GROUNDS</span>
+    </div>
+
+    <!-- ========================================================================
+         4. WORK SECTION: ROAD TESTS
+         ======================================================================== -->
+    <section id="road-tests" aria-labelledby="road-tests-heading">
+      <div class="section-header">
+        <div class="section-tag">Road Tests / Work</div>
+        <h2 id="road-tests-heading" class="section-heading">Road-Tested Engineering Builds</h2>
+        <p class="section-desc">
+          Four builds reviewed like enthusiast test cars: clear specifications, real benchmark numbers, verification
+          pipelines, and zero cover-ups when an external test exposes a limitation.
+        </p>
+      </div>
+
+      <div class="road-tests-wrapper">
+        <!-- Vertical Proving Track with Moving Car -->
+        <div class="proving-track-rail car-mascot-figure" aria-hidden="true">
+          <div class="proving-track-line"></div>
+          <div id="rail-car-follower" class="rail-car-follower" data-car-mood="inspecting">
+            <svg class="coupe-svg" viewBox="0 0 260 105">
+              <use href="#coupe-04-character"></use>
+            </svg>
+          </div>
+        </div>
+
+        <div class="road-test-list">
+          <!-- PROJECT 01: AGRINEXUS -->
+          <article class="build-sheet-card is-selected-build" data-build-index="0" data-mood="warning" data-alert="true"
+            data-log="AgriNexus on the dyno: 97.65% validation accuracy, but 42.86% on external benchmark. Check Engine light on for domain shift.">
+            <div class="build-sheet-top">
+              <div class="build-id-group">
+                <span class="build-num">PROJECT 01</span>
+                <span class="car-class-tag">PRIMARY TEST VEHICLE · VISION SYSTEM</span>
+              </div>
+              <div class="build-status-cluster">
+                <span class="check-indicator" data-check-label>CHECKED</span>
+                <span class="status-pill warn">RESULTS UNDER REVIEW</span>
+              </div>
+            </div>
+
+            <h3 class="build-title">AgriNexus</h3>
+            <p class="build-summary">
+              ConvNeXt plant disease classifier with a reject-non-leaf gate. Built to filter out irrelevant camera
+              uploads before running disease inference, and tested across both in-distribution validation and an
+              external benchmark.
+            </p>
+
+            <div class="telemetry-specs" aria-label="AgriNexus Road-Test Telemetry">
+              <div class="telemetry-item">
+                <span class="telemetry-label">Validation Split Result</span>
+                <span class="telemetry-val">97.65% validation accuracy</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">External Field Benchmark</span>
+                <span class="telemetry-val is-external-benchmark">42.86% on external benchmark</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Input Safeguard</span>
+                <span class="telemetry-val">Dual-gate reject-non-leaf pipeline</span>
+              </div>
+            </div>
+
+            <div class="build-sheet-footer">
+              <a href="#agrinexus-road-test" class="btn-inspect-build">
+                <span>View road test &amp; dual-gate route</span>
+                <span aria-hidden="true">↓</span>
+              </a>
+              <span class="reviewer-verdict">Note: Validation accuracy and external benchmark performance are distinct
+                measurements.</span>
+            </div>
+          </article>
+
+          <!-- PROJECT 02: ECOSNAP -->
+          <article class="build-sheet-card" data-build-index="1" data-mood="passed" data-alert="false"
+            data-log="EcoSnap walkaround: anti-fraud verification checkpoint active before issuing disposal rewards.">
+            <div class="build-sheet-top">
+              <div class="build-id-group">
+                <span class="build-num">PROJECT 02</span>
+                <span class="car-class-tag">VERIFICATION RIG · ANTI-FRAUD PIPELINE</span>
+              </div>
+              <div class="build-status-cluster">
+                <span class="check-indicator" data-check-label>PENDING</span>
+                <span class="status-pill pass">INSPECTION CHECKPOINT ACTIVE</span>
+              </div>
+            </div>
+
+            <h3 class="build-title">EcoSnap</h3>
+            <p class="build-summary">
+              Waste-disposal rewards app with an anti-fraud pipeline. Engineered around a simple inspection rule:
+              whenever an application rewards user-submitted photos, the anti-spoofing verification checkpoint is the
+              real product.
+            </p>
+
+            <div class="telemetry-specs">
+              <div class="telemetry-item">
+                <span class="telemetry-label">Core Architecture</span>
+                <span class="telemetry-val">Waste-disposal rewards + verification gate</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Security Posture</span>
+                <span class="telemetry-val">Untrusted upload screening before reward payout</span>
+              </div>
+            </div>
+
+            <div class="build-sheet-footer">
+              <button type="button" class="btn-inspect-build" data-walkaround-btn="walkaround-ecosnap"
+                aria-expanded="false" aria-controls="walkaround-ecosnap">
+                <span>Inspect build</span>
+                <span aria-hidden="true">+</span>
+              </button>
+              <span class="reviewer-verdict">Walkaround note: Treats user uploads as adversarial until verified.</span>
+            </div>
+
+            <div id="walkaround-ecosnap" class="walkaround-sheet">
+              <div class="walkaround-cols">
+                <div>
+                  <h4>Why the Checkpoint Matters</h4>
+                  <p>Without an anti-fraud pipeline, reward apps quickly get gamed by duplicate photos, stale
+                    submissions, or non-disposal images.</p>
+                </div>
+                <div>
+                  <h4>Pipeline Walkaround</h4>
+                  <p>Each submission passes through multi-step verification checks before a disposal reward is credited
+                    to the user.</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- PROJECT 03: SMART SCAN FOR ELECTRONIC WARFARE -->
+          <article class="build-sheet-card" data-build-index="2" data-mood="inspecting" data-alert="false"
+            data-log="Smart Scan for Electronic Warfare: SIH idea currently on the prototype bench (IN PROGRESS).">
+            <div class="build-sheet-top">
+              <div class="build-id-group">
+                <span class="build-num">PROJECT 03</span>
+                <span class="car-class-tag">CONCEPT PROTOTYPE · SIH IDEA</span>
+              </div>
+              <div class="build-status-cluster">
+                <span class="check-indicator" data-check-label>PENDING</span>
+                <span class="status-pill work">IN PROGRESS</span>
+              </div>
+            </div>
+
+            <h3 class="build-title">Smart Scan for Electronic Warfare</h3>
+            <p class="build-summary">
+              SIH idea. Active problem exploration and architecture scoping for structured scanning workflows in
+              electronic warfare scenarios.
+            </p>
+
+            <div class="telemetry-specs">
+              <div class="telemetry-item">
+                <span class="telemetry-label">Origin</span>
+                <span class="telemetry-val">Smart India Hackathon (SIH) Idea</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Current Build State</span>
+                <span class="telemetry-val">IN PROGRESS</span>
+              </div>
+            </div>
+
+            <div class="build-sheet-footer">
+              <button type="button" class="btn-inspect-build" data-walkaround-btn="walkaround-sih" aria-expanded="false"
+                aria-controls="walkaround-sih">
+                <span>Inspect build</span>
+                <span aria-hidden="true">+</span>
+              </button>
+              <span class="reviewer-verdict">Logged honestly as an ongoing SIH exploration without invented
+                metrics.</span>
+            </div>
+
+            <div id="walkaround-sih" class="walkaround-sheet">
+              <p>Currently in active design and problem formulation as an SIH idea. Kept transparent in the build log
+                with status strictly marked <strong>IN PROGRESS</strong>.</p>
+            </div>
+          </article>
+
+          <!-- PROJECT 04: VIDEO PIPELINE (Smaller Project) -->
+          <article class="build-sheet-card is-compact-build" data-build-index="3" data-mood="passed" data-alert="false"
+            data-log="Video Pipeline: compact support build for clean media workflow plumbing.">
+            <div class="build-sheet-top">
+              <div class="build-id-group">
+                <span class="build-num">PROJECT 04</span>
+                <span class="car-class-tag">COMPACT UTILITY BUILD</span>
+              </div>
+              <div class="build-status-cluster">
+                <span class="check-indicator" data-check-label>PENDING</span>
+                <span class="status-pill compact">SMALLER PROJECT</span>
+              </div>
+            </div>
+
+            <h3 class="build-title">Video Pipeline</h3>
+            <p class="build-summary">
+              A smaller, focused project exploring modular video pipeline stages and clean data handoffs. Documented as
+              a compact engineering utility without inflated claims.
+            </p>
+
+            <div class="build-sheet-footer">
+              <button type="button" class="btn-inspect-build" data-walkaround-btn="walkaround-video"
+                aria-expanded="false" aria-controls="walkaround-video">
+                <span>Inspect build</span>
+                <span aria-hidden="true">+</span>
+              </button>
+              <span class="reviewer-verdict">Compact build · No synthetic benchmarks</span>
+            </div>
+
+            <div id="walkaround-video" class="walkaround-sheet">
+              <p>Included as a smaller systems exercise focused on clean stage-to-stage video processing handoffs.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- ======================================================================
+           5. AGRINEXUS DETAILED VIEW: TECHNICAL ROAD TEST
+           ====================================================================== -->
+      <div id="agrinexus-road-test" class="technical-road-test" aria-labelledby="agrinexus-review-heading">
+        <div class="road-test-banner">
+          <div>
+            <div class="road-test-kicker">Flagship Technical Road Test · Project 01</div>
+            <h3 id="agrinexus-review-heading" class="road-test-title">AgriNexus — Walkaround, Test Route &amp; Telemetry
+            </h3>
+          </div>
+          <span class="status-pill warn">CHECK ENGINE: EXTERNAL SHIFT DOCUMENTED</span>
+        </div>
+
+        <div class="review-two-col">
+          <div class="review-panel">
+            <h4>What problem is this solving?</h4>
+            <p>
+              Most plant-disease vision models are trained and tested on clean, isolated leaf photos—then deployed where
+              users upload random non-leaf photos (soil, hands, tools) or field images under harsh lighting. Without an
+              upstream gate, a softmax classifier confidently assigns a plant disease to a non-leaf object, and
+              single-split validation scores hide out-of-distribution drops.
+            </p>
+          </div>
+          <div class="review-panel">
+            <h4>Under the hood</h4>
+            <p>
+              AgriNexus pairs a <strong>ConvNeXt plant disease classifier</strong> with an explicit upstream
+              <strong>reject-non-leaf gate</strong>. Every input is checked for relevance before classification, and the
+              system is evaluated on both its validation split (<strong>97.65%</strong>) and an external benchmark
+              (<strong>42.86%</strong>).
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Dual-Gate Test Route -->
+        <div class="test-route-container" role="region" aria-label="AgriNexus Dual-Gate Inspection Route">
+          <div class="test-route-header">
+            <span class="test-route-heading">Test Route — Dual-Gate Inspection Pipeline</span>
+            <div class="route-run-triggers" role="group" aria-label="Select road-test input scenario">
+              <button type="button" class="run-trigger-btn" data-route-mode="valid" aria-pressed="true">
+                Run 1: Valid Leaf Input
+              </button>
+              <button type="button" class="run-trigger-btn" data-route-mode="non-leaf" aria-pressed="false">
+                Run 2: Non-Leaf Upload
+              </button>
+              <button type="button" class="run-trigger-btn" data-route-mode="external" aria-pressed="false">
+                Run 3: External Benchmark Image
+              </button>
+            </div>
+          </div>
+
+          <div class="route-checkpoints-grid">
+            <div class="route-asphalt-line" aria-hidden="true"></div>
+            <div id="route-car-token" class="route-car-token" data-car-mood="passed" aria-hidden="true"
+              style="left: 76%;">
+              <svg class="coupe-svg" viewBox="0 0 260 105">
+                <use href="#coupe-04-character"></use>
+              </svg>
+            </div>
+
+            <div class="checkpoint-box is-active-gate" data-cp="1">
+              <span class="cp-num">STAGE 01</span>
+              <span class="cp-title">Image enters</span>
+              <p class="cp-text">Raw camera upload arrives at the intake line.</p>
+            </div>
+
+            <div class="checkpoint-box is-active-gate" data-cp="2">
+              <span class="cp-num">STAGE 02 · GATE 1</span>
+              <span class="cp-title">Reject-non-leaf gate</span>
+              <p class="cp-text">Checks whether the input is actually a plant leaf.</p>
+            </div>
+
+            <div class="checkpoint-box is-active-gate" data-cp="3">
+              <span class="cp-num">STAGE 03 · GATE 2</span>
+              <span class="cp-title">Disease classifier</span>
+              <p class="cp-text">Accepted leaf reaches the ConvNeXt classifier.</p>
+            </div>
+
+            <div class="checkpoint-box is-active-gate" data-cp="4">
+              <span class="cp-num">STAGE 04</span>
+              <span class="cp-title">Result returned</span>
+              <p class="cp-text">Prediction and inspection status returned.</p>
+            </div>
+          </div>
+
+          <div class="route-readout-bar" aria-live="polite">
+            <div>
+              <strong>TEST OUTCOME: </strong>
+              <span id="route-outcome-desc">Accepted leaf passed Gate 1 → ConvNeXt classifier evaluated leaf →
+                classification returned.</span>
+            </div>
+            <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+              <span id="route-badge-1" class="status-pill pass">PASSED</span>
+              <span id="route-badge-2" class="status-pill pass">CLASSIFICATION RETURNED</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Table & Known Limits -->
+        <div class="results-limits-split">
+          <div>
+            <div class="data-table-header">
+              <span>Results · Road-Test Data</span>
+              <span>Measured Evidence</span>
+            </div>
+            <table class="road-test-table" aria-label="AgriNexus factual evaluation results">
+              <thead>
+                <tr>
+                  <th>Inspection Stage / Split</th>
+                  <th>Measured Result</th>
+                  <th>Outcome Label</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Gate 1: Reject-Non-Leaf Gate</td>
+                  <td class="mono-figure">Upstream input filter</td>
+                  <td><span class="status-pill warn">REJECTED: NOT A LEAF</span></td>
+                </tr>
+                <tr>
+                  <td>In-Distribution Validation Split</td>
+                  <td class="mono-figure">97.65% validation accuracy</td>
+                  <td><span class="status-pill pass">PASSED</span></td>
+                </tr>
+                <tr class="limit-row">
+                  <td>External Benchmark Evaluation</td>
+                  <td class="mono-figure">42.86% on external benchmark</td>
+                  <td><span class="status-pill warn">NEEDS MORE TESTING</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="known-limits-panel" role="note" aria-label="Known limits">
+            <div class="known-limits-title">
+              <span aria-hidden="true">⚠</span>
+              <span>Known limits</span>
+            </div>
+            <p>
+              <strong>97.65% validation accuracy and 42.86% external benchmark accuracy measure two very different
+                things.</strong>
+            </p>
+            <p>
+              Validation accuracy reflects performance on images drawn from the same distribution as the training set.
+              When tested on an external benchmark with different lighting, backgrounds, and capture conditions,
+              accuracy drops to 42.86%. Documenting both numbers openly is essential because real-world deployment looks
+              like the external benchmark, not the validation split.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="road-divider" aria-hidden="true">
+      <span class="road-milepost">SECTOR 02 · OWNER’S MANUAL &amp; SPEC SHEET</span>
+    </div>
+
+    <!-- ========================================================================
+         6. ABOUT SECTION: SPEC SHEET
+         ======================================================================== -->
+    <section id="spec-sheet" aria-labelledby="spec-sheet-heading">
+      <div class="section-header">
+        <div class="section-tag">Spec Sheet / About</div>
+        <h2 id="spec-sheet-heading" class="section-heading">Still becoming a developer.</h2>
+        <p class="section-desc">
+          Factual owner’s manual and engineering profile—no invented mileage, fake horsepower, or exaggerated
+          credentials.
+        </p>
+      </div>
+
+      <div class="spec-sheet-grid">
+        <div class="spec-table-card" role="region" aria-label="Developer Specification Sheet">
+          <div class="spec-card-header">
+            <span>SPECIFICATION SHEET</span>
+            <span>SAHEBJOT BENDESHAH</span>
+          </div>
+          <div class="spec-rows">
+            <div class="spec-row">
+              <span class="spec-key">Role</span>
+              <span class="spec-val">Final-year B.Tech Information Technology Student</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Current Focus</span>
+              <span class="spec-val">ML systems, privacy-aware tools, and applied AI</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Technical Interests</span>
+              <span class="spec-val">Input gating, out-of-distribution evaluation, anti-fraud verification pipelines,
+                and privacy-respecting software design</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Working Style</span>
+              <span class="spec-val">Building, testing, documenting, and revising in public</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Core Principle</span>
+              <span class="spec-val">“I build things that can be checked.”</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="owner-manual-notes">
+          <p>
+            I learn by building systems, putting them through realistic checks, writing down where they fail, and
+            revising the architecture.
+          </p>
+          <p>
+            Whether it is adding a reject-non-leaf gate to a computer vision pipeline or designing anti-fraud checks for
+            a rewards app, I prefer engineering claims that can be inspected directly.
+          </p>
+          <div class="tweak-row-title" style="margin-top:1.25rem;">STANDARD EQUIPMENT / SKILLS</div>
+          <div class="equipment-tags" aria-label="Technical skills">
+            <span class="equip-tag">Machine Learning</span>
+            <span class="equip-tag">Python</span>
+            <span class="equip-tag">Computer Vision</span>
+            <span class="equip-tag">Applied AI</span>
+            <span class="equip-tag">Privacy-Aware Tools</span>
+            <span class="equip-tag">Experimentation</span>
+            <span class="equip-tag">Technical Documentation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="road-divider" aria-hidden="true">
+      <span class="road-milepost">SECTOR 03 · PERSONAL GARAGE</span>
+    </div>
+
+    <!-- ========================================================================
+         7. GARAGE / CARS SECTION
+         ======================================================================== -->
+    <section id="garage" aria-labelledby="garage-heading">
+      <div class="section-header">
+        <div class="section-tag">Garage / Cars</div>
+        <h2 id="garage-heading" class="section-heading">The Enthusiast Garage</h2>
+        <p class="section-desc">
+          Why the road-test framing? Because great car reviews and great engineering post-mortems ask the exact same
+          question: how does it actually behave when you take it off the brochure and onto a real road?
+        </p>
+      </div>
+
+      <!-- Four Honest Placeholder Cards (Zero Invented Personal Ownership Facts) -->
+      <div class="garage-bays-grid" aria-label="Personal Garage Placeholders">
+        <div class="garage-slot-card">
+          <div>
+            <div class="slot-label">BAY 01 · CURRENT CAR</div>
+            <div class="slot-placeholder">[Your current car]</div>
+          </div>
+          <p class="slot-note">Reserved for Sahebjot’s real daily driver entry—no invented vehicle specs.</p>
+        </div>
+
+        <div class="garage-slot-card">
+          <div>
+            <div class="slot-label">BAY 02 · DREAM CAR</div>
+            <div class="slot-placeholder">[Your dream car]</div>
+          </div>
+          <p class="slot-note">Reserved for the long-term dream build slot.</p>
+        </div>
+
+        <div class="garage-slot-card">
+          <div>
+            <div class="slot-label">BAY 03 · FAVOURITE ERA</div>
+            <div class="slot-placeholder">[Your favourite era]</div>
+          </div>
+          <p class="slot-note">Reserved for favourite automotive design &amp; engineering era.</p>
+        </div>
+
+        <div class="garage-slot-card">
+          <div>
+            <div class="slot-label">BAY 04 · BEST DRIVE</div>
+            <div class="slot-placeholder">[Your best drive]</div>
+          </div>
+          <p class="slot-note">Reserved for a memorable real-world road trip or route.</p>
+        </div>
+      </div>
+
+      <div class="garage-bottom-split">
+        <div class="photo-bay-placeholder">
+          <div>
+            <div class="slot-label">GARAGE PHOTO BAY</div>
+            <h3 style="font-size:1.08rem; font-weight:750; margin-bottom:0.3rem;">Personal Car Photography Slot</h3>
+            <p style="font-size:0.86rem; color:var(--ink-secondary);">
+              Kept free of stock web photos. Ready for personal garage snapshots and road-trip frames.
+            </p>
+          </div>
+          <div style="width:110px; height:52px; flex-shrink:0;" aria-hidden="true">
+            <svg class="coupe-svg" viewBox="0 0 260 105">
+              <use href="#coupe-04-character"></use>
+            </svg>
+          </div>
+        </div>
+
+        <div class="hydraulic-lift-card">
+          <div>
+            <span class="lift-badge">CARS × TECH TEASER</span>
+            <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.25rem;">Next experiment: on the lift</h3>
+            <p style="font-size:0.86rem; color:var(--ink-secondary);">
+              Where automotive telemetry curiosity meets inspectable ML tooling.
+            </p>
+          </div>
+          <span class="status-pill work" style="white-space:nowrap;">BAY RESERVED</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="road-divider" aria-hidden="true">
+      <span class="road-milepost">SECTOR 04 · WORKSHOP &amp; BUILD LOG</span>
+    </div>
+
+    <!-- ========================================================================
+         8. NOTES SECTION: BUILD LOG
+         ======================================================================== -->
+    <section id="build-log" aria-labelledby="build-log-heading">
+      <div class="section-header">
+        <div class="section-tag">Build Log / Notes</div>
+        <h2 id="build-log-heading" class="section-heading">Build Log</h2>
+        <p class="section-desc">
+          Honest workshop observations on machine learning evaluation, failed assumptions, privacy-aware tools, and
+          documenting work in progress.
+        </p>
+      </div>
+
+      <div class="build-log-grid">
+        <article class="log-entry-card">
+          <div>
+            <div class="log-entry-top">
+              <span class="log-category-badge is-warn">Test result</span>
+              <span>ENTRY 01</span>
+            </div>
+            <h3 class="log-entry-title">Why validation results can mislead</h3>
+            <p class="log-entry-body">
+              A 97.65% validation score looks great on paper, just like a brochure fuel-economy figure tested on a flat
+              indoor roller. Taking AgriNexus onto an external benchmark (42.86%) exposed how quickly domain
+              shift—lighting, background clutter, and camera differences—cuts into real-world accuracy.
+            </p>
+          </div>
+        </article>
+
+        <article class="log-entry-card">
+          <div>
+            <div class="log-entry-top">
+              <span class="log-category-badge">Workshop observation</span>
+              <span>ENTRY 02</span>
+            </div>
+            <h3 class="log-entry-title">What failed before adding the reject-non-leaf gate</h3>
+            <p class="log-entry-body">
+              Standard image classifiers are forced to pick a class even when handed a completely irrelevant photo.
+              Adding an upstream reject-non-leaf gate stopped invalid uploads at the intake stage before the ConvNeXt
+              classifier could hallucinate a plant diagnosis.
+            </p>
+          </div>
+        </article>
+
+        <article class="log-entry-card">
+          <div>
+            <div class="log-entry-top">
+              <span class="log-category-badge">Owner’s note</span>
+              <span>ENTRY 03</span>
+            </div>
+            <h3 class="log-entry-title">Debugging assumptions in reward pipelines</h3>
+            <p class="log-entry-body">
+              While building EcoSnap, the core engineering lesson was that any reward loop invites spoofing. Treating
+              every disposal upload as an untrusted input that must clear an anti-fraud pipeline kept the system
+              grounded in reality.
+            </p>
+          </div>
+        </article>
+
+        <article class="log-entry-card">
+          <div>
+            <div class="log-entry-top">
+              <span class="log-category-badge">Owner’s note</span>
+              <span>ENTRY 04</span>
+            </div>
+            <h3 class="log-entry-title">Why privacy-aware tooling is an engineering discipline</h3>
+            <p class="log-entry-body">
+              Good tools collect only what is strictly needed to verify a task and avoid hoarding raw user data by
+              default. Privacy isn’t a legal footer added at the end—it’s an architectural decision made at the start.
+            </p>
+          </div>
+        </article>
+
+        <article class="log-entry-card">
+          <div>
+            <div class="log-entry-top">
+              <span class="log-category-badge">Still investigating</span>
+              <span>ENTRY 05</span>
+            </div>
+            <h3 class="log-entry-title">Documenting unfinished work without fake numbers</h3>
+            <p class="log-entry-body">
+              Not every project is at the same stage. Keeping Smart Scan for Electronic Warfare clearly labeled as an
+              SIH idea <strong>IN PROGRESS</strong> and Video Pipeline as a smaller build makes the completed evidence
+              on AgriNexus and EcoSnap trustworthy.
+            </p>
+          </div>
+        </article>
+
+        <article class="log-entry-card">
+          <div>
+            <div class="log-entry-top">
+              <span class="log-category-badge">Workshop observation</span>
+              <span>ENTRY 06</span>
+            </div>
+            <h3 class="log-entry-title">Learning in public means keeping the failure logs</h3>
+            <p class="log-entry-body">
+              Whenever a test run drops from 97.65% to 42.86%, that gap is the most valuable part of the project.
+              Writing down exactly what broke turns a disappointing benchmark into a concrete engineering checklist.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="road-divider" aria-hidden="true">
+      <span class="road-milepost">SECTOR 05 · DISPATCH</span>
+    </div>
+
+    <!-- ========================================================================
+         9. CONTACT SECTION
+         ======================================================================== -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <div class="contact-dispatch-box">
+        <div style="max-width:56ch;">
+          <div class="section-tag">Contact</div>
+          <h2 id="contact-heading" class="section-heading">Have a problem worth testing?</h2>
+          <p class="section-desc">
+            I’m a final-year B.Tech IT student open to internships, graduate software/ML engineering roles, and
+            technical collaborations on ML systems, privacy-aware tools, and applied AI.
+          </p>
+          <p class="contact-support-line">Bring the problem. I’ll bring the test plan.</p>
+        </div>
+
+        <div class="contact-actions">
+          <a href="mailto:sahebjot@example.com?subject=Problem%20Worth%20Testing%20%E2%80%94%20Portfolio%20Inquiry"
+            class="btn-roadtest">
+            <span>Send the problem</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <a href="https://github.com/sahebjot" target="_blank" rel="noopener noreferrer" class="btn-outline">
+            <span>GitHub</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a href="https://www.linkedin.com/in/sahebjot-bendeshah" target="_blank" rel="noopener noreferrer"
+            class="btn-outline">
+            <span>LinkedIn</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer with Car Driving Back to Starting Line -->
+  <footer class="site-footer">
+    <div>
+      <strong>Bendeshah Road Tests</strong> · Sahebjot Bendeshah (Final-year B.Tech IT) · “I build things that can be
+      checked.”
+    </div>
+    <a href="#cold-start" class="footer-return-btn" aria-label="Drive back to Cold Start top of page">
+      <span class="footer-return-car" style="width:42px; height:20px; display:inline-block;" aria-hidden="true">
+        <svg class="coupe-svg" viewBox="0 0 260 105">
+          <use href="#coupe-04-character"></use>
+        </svg>
+      </span>
+      <span>Return to Cold Start ↑</span>
+    </a>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      if (reducedMotionQuery.matches) {
+        document.body.setAttribute("data-motion", "reduced");
+      }
+
+      /* ======================================================================
+         1. COLD-START LOADING SEQUENCE (ONCE PER SESSION, SKIPPABLE)
+         ====================================================================== */
+      const loaderEl = document.getElementById("cold-start-loader");
+      const loaderStepNum = document.getElementById("loader-step-num");
+      const loaderStageText = document.getElementById("loader-stage-text");
+      const loaderRpmFill = document.getElementById("loader-rpm-fill");
+      const loaderCarActor = document.getElementById("loader-car-actor");
+      const skipWarmupBtn = document.getElementById("skip-warmup-btn");
+
+      const SESSION_KEY = "bendeshah_road_tests_coldstart_v1";
+      const warmupStages = [
+        { num: "STAGE 01 / 05", text: "UNLOCKING", rpm: "20%", x: 0, mood: "idle" },
+        { num: "STAGE 02 / 05", text: "CHECKING SYSTEMS", rpm: "42%", x: 65, mood: "inspecting" },
+        { num: "STAGE 03 / 05", text: "WARMING UP", rpm: "68%", x: 140, mood: "inspecting" },
+        { num: "STAGE 04 / 05", text: "LOADING PROJECTS", rpm: "88%", x: 220, mood: "passed" },
+        { num: "STAGE 05 / 05", text: "READY FOR A TEST DRIVE", rpm: "100%", x: 310, mood: "passed" }
+      ];
+
+      let warmupInterval = null;
+
+      function finishColdStart() {
+        if (!loaderEl) return;
+        if (warmupInterval) clearInterval(warmupInterval);
+        loaderEl.classList.add("is-hidden");
+        try {
+          sessionStorage.setItem(SESSION_KEY, "1");
+        } catch (err) {
+          /* ignore storage restrictions */
+        }
+      }
+
+      let hasWarmedUp = false;
+      try {
+        hasWarmedUp = sessionStorage.getItem(SESSION_KEY) === "1";
+      } catch (err) {
+        hasWarmedUp = false;
+      }
+
+      if (reducedMotionQuery.matches || hasWarmedUp) {
+        finishColdStart();
+      } else {
+        let sIdx = 0;
+        warmupInterval = setInterval(function () {
+          sIdx += 1;
+          if (sIdx >= warmupStages.length) {
+            finishColdStart();
+            return;
+          }
+          const st = warmupStages[sIdx];
+          if (loaderStepNum) loaderStepNum.textContent = st.num;
+          if (loaderStageText) loaderStageText.textContent = st.text;
+          if (loaderRpmFill) loaderRpmFill.style.width = st.rpm;
+          if (loaderCarActor) {
+            loaderCarActor.style.transform = "translateX(" + st.x + "px)";
+            loaderCarActor.setAttribute("data-car-mood", st.mood);
+          }
+        }, 260);
+      }
+
+      if (skipWarmupBtn) {
+        skipWarmupBtn.addEventListener("click", finishColdStart);
+      }
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && loaderEl && !loaderEl.classList.contains("is-hidden")) {
+          finishColdStart();
+        }
+      });
+
+      /* ======================================================================
+         2. THEME TOGGLE (INSTRUMENT PANEL DARK MODE + HEADLIGHTS) & TWEAK MENU
+         ====================================================================== */
+      const htmlEl = document.documentElement;
+      const themeToggleBtn = document.getElementById("theme-toggle-btn");
+      const themeToggleText = document.getElementById("theme-toggle-text");
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", function () {
+          const isDark = htmlEl.getAttribute("data-theme") === "dark";
+          const next = isDark ? "light" : "dark";
+          htmlEl.setAttribute("data-theme", next);
+          if (themeToggleText) {
+            themeToggleText.textContent = next === "dark" ? "Day Manual" : "Night Panel";
+          }
+        });
+      }
+
+      const tweakToggleBtn = document.getElementById("tweak-toggle-btn");
+      const tweakPanel = document.getElementById("tweak-panel");
+
+      if (tweakToggleBtn && tweakPanel) {
+        tweakToggleBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const isOpen = tweakPanel.classList.toggle("is-open");
+          tweakToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        document.addEventListener("click", function (e) {
+          if (!tweakPanel.contains(e.target) && e.target !== tweakToggleBtn) {
+            tweakPanel.classList.remove("is-open");
+            tweakToggleBtn.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+
+      function setupTweakButtons(btnAttr, targetBodyAttr) {
+        const btns = document.querySelectorAll("[" + btnAttr + "]");
+        btns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const val = btn.getAttribute(btnAttr);
+            document.body.setAttribute(targetBodyAttr, val);
+            btns.forEach(function (other) {
+              other.setAttribute("aria-pressed", other === btn ? "true" : "false");
+            });
+          });
+        });
+      }
+
+      setupTweakButtons("data-tweak-accent", "data-accent");
+      setupTweakButtons("data-tweak-mascot", "data-mascot");
+      setupTweakButtons("data-tweak-motion", "data-motion");
+      setupTweakButtons("data-tweak-density", "data-density");
+
+      /* ======================================================================
+         3. HERO STUDIO CAR & PROVING TRACK BUILD SHEET INTERACTIONS
+         ====================================================================== */
+      const heroCarTrigger = document.getElementById("hero-car-trigger");
+      const heroCheckEngine = document.getElementById("hero-check-engine");
+      const narratorStatusLine = document.getElementById("narrator-status-line");
+      const railCarFollower = document.getElementById("rail-car-follower");
+      const buildCards = document.querySelectorAll(".build-sheet-card");
+
+      const heroStates = [
+        { mood: "inspecting", alert: false, badge: "OPTICAL GATE ON", text: "Headlights & roof lidar scanning input assumptions." },
+        { mood: "passed", alert: false, badge: "CHECK PASSED", text: "97.65% validation split logged. Zero fake horsepower." },
+        { mood: "confused", alert: false, badge: "NON-LEAF DETECTED", text: "Wait—someone uploaded a non-leaf photo. Halted at Gate 1." },
+        { mood: "warning", alert: true, badge: "CHECK ENGINE: 42.86%", text: "External benchmark drop (42.86%) flagged for domain-shift inspection." }
+      ];
+      let heroStateIndex = 0;
+
+      function syncCarCharacter(mood, isAlert, badgeLabel, statusMessage) {
+        if (heroCarTrigger) heroCarTrigger.setAttribute("data-car-mood", mood);
+        if (railCarFollower) {
+          railCarFollower.setAttribute("data-car-mood", mood);
+          railCarFollower.classList.toggle("is-warning", Boolean(isAlert));
+        }
+        if (heroCheckEngine) {
+          heroCheckEngine.setAttribute("data-alert", isAlert ? "true" : "false");
+          heroCheckEngine.textContent = badgeLabel;
+        }
+        if (narratorStatusLine && statusMessage) {
+          narratorStatusLine.textContent = statusMessage;
+        }
+      }
+
+      if (heroCarTrigger) {
+        heroCarTrigger.addEventListener("click", function () {
+          heroStateIndex = (heroStateIndex + 1) % heroStates.length;
+          const st = heroStates[heroStateIndex];
+          syncCarCharacter(st.mood, st.alert, st.badge, st.text);
+        });
+      }
+
+      function focusBuildCard(cardEl) {
+        buildCards.forEach(function (c) {
+          const isMatch = c === cardEl;
+          c.classList.toggle("is-selected-build", isMatch);
+          const checkTag = c.querySelector("[data-check-label]");
+          if (checkTag && isMatch) {
+            checkTag.textContent = "CHECKED";
+          }
+        });
+
+        const mood = cardEl.getAttribute("data-mood") || "inspecting";
+        const isAlert = cardEl.getAttribute("data-alert") === "true";
+        const logText = cardEl.getAttribute("data-log") || "";
+
+        syncCarCharacter(
+          mood,
+          isAlert,
+          isAlert ? "CHECK ENGINE: LIMITATION" : "INSPECTING BUILD",
+          logText
+        );
+
+        if (railCarFollower && cardEl.offsetParent) {
+          const topPx = cardEl.offsetTop + 22;
+          railCarFollower.style.transform = "translate(-50%, " + topPx + "px)";
+        }
+      }
+
+      buildCards.forEach(function (cardEl) {
+        cardEl.addEventListener("mouseenter", function () {
+          focusBuildCard(cardEl);
+        });
+        cardEl.addEventListener("focusin", function () {
+          focusBuildCard(cardEl);
+        });
+      });
+
+      /* Walkaround Expandable Sheets */
+      const walkaroundBtns = document.querySelectorAll("[data-walkaround-btn]");
+      walkaroundBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const targetId = btn.getAttribute("data-walkaround-btn");
+          const sheet = document.getElementById(targetId);
+          if (!sheet) return;
+          const open = sheet.classList.toggle("is-open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+          const symbol = btn.querySelector("span:last-child");
+          if (symbol) symbol.textContent = open ? "−" : "+";
+        });
+      });
+
+      /* ======================================================================
+         4. AGRINEXUS DUAL-GATE INTERACTIVE TEST ROUTE
+         ====================================================================== */
+      const routeTriggerBtns = document.querySelectorAll("[data-route-mode]");
+      const routeCarToken = document.getElementById("route-car-token");
+      const checkpointBoxes = document.querySelectorAll(".checkpoint-box");
+      const routeOutcomeDesc = document.getElementById("route-outcome-desc");
+      const routeBadge1 = document.getElementById("route-badge-1");
+      const routeBadge2 = document.getElementById("route-badge-2");
+
+      const routeRuns = {
+        "valid": {
+          carLeft: "76%",
+          mood: "passed",
+          maxCp: 4,
+          haltedCp: null,
+          desc: "Valid leaf image clears Gate 1 → evaluated by ConvNeXt disease classifier (97.65% validation split) → classification returned.",
+          b1Text: "PASSED",
+          b1Class: "status-pill pass",
+          b2Text: "CLASSIFICATION RETURNED",
+          b2Class: "status-pill pass",
+          alert: false
+        },
+        "non-leaf": {
+          carLeft: "27%",
+          mood: "confused",
+          maxCp: 2,
+          haltedCp: 2,
+          desc: "Irrelevant non-leaf image is stopped at Gate 1 before reaching the disease classifier. Prevents false disease predictions.",
+          b1Text: "REJECTED: NOT A LEAF",
+          b1Class: "status-pill warn",
+          b2Text: "STOPPED AT GATE 1",
+          b2Class: "status-pill warn",
+          alert: true
+        },
+        "external": {
+          carLeft: "76%",
+          mood: "warning",
+          maxCp: 4,
+          haltedCp: 4,
+          desc: "External field sample reaches Stage 4, but out-of-distribution domain shift drops external benchmark accuracy to 42.86%.",
+          b1Text: "CLASSIFICATION RETURNED",
+          b1Class: "status-pill work",
+          b2Text: "NEEDS MORE TESTING",
+          b2Class: "status-pill warn",
+          alert: true
+        }
+      };
+
+      routeTriggerBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const mode = btn.getAttribute("data-route-mode");
+          const cfg = routeRuns[mode];
+          if (!cfg) return;
+
+          routeTriggerBtns.forEach(function (b) {
+            b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+          });
+
+          if (routeCarToken) {
+            routeCarToken.style.left = cfg.carLeft;
+            routeCarToken.setAttribute("data-car-mood", cfg.mood);
+          }
+
+          checkpointBoxes.forEach(function (box) {
+            const step = parseInt(box.getAttribute("data-cp"), 10);
+            box.classList.toggle("is-active-gate", step <= cfg.maxCp);
+            box.classList.toggle("is-halted-gate", step === cfg.haltedCp);
+          });
+
+          if (routeOutcomeDesc) routeOutcomeDesc.textContent = cfg.desc;
+          if (routeBadge1) {
+            routeBadge1.textContent = cfg.b1Text;
+            routeBadge1.className = cfg.b1Class;
+          }
+          if (routeBadge2) {
+            routeBadge2.textContent = cfg.b2Text;
+            routeBadge2.className = cfg.b2Class;
+          }
+
+          syncCarCharacter(cfg.mood, cfg.alert, cfg.b2Text, cfg.desc);
+        });
+      });
+
+      /* ======================================================================
+         5. ROUTE SCROLL PROGRESS & TURN-SIGNAL ACTIVE SECTION TRACKING
+         ====================================================================== */
+      const scrollProgressFill = document.getElementById("scroll-progress-fill");
+      const turnSignalPill = document.getElementById("turn-signal-pill");
+      const navLinks = document.querySelectorAll("[data-section-link]");
+
+      window.addEventListener("scroll", function () {
+        if (!scrollProgressFill) return;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+        scrollProgressFill.style.width = pct + "%";
+      }, { passive: true });
+
+      const sectionIds = ["cold-start", "road-tests", "spec-sheet", "garage", "build-log", "contact"];
+      const sectionEls = sectionIds.map(function (id) {
+        return document.getElementById(id);
+      }).filter(Boolean);
+
+      let blinkTimeout = null;
+
+      if ("IntersectionObserver" in window && sectionEls.length) {
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const activeId = entry.target.id;
+              navLinks.forEach(function (link) {
+                link.classList.toggle("is-active", link.getAttribute("data-section-link") === activeId);
+              });
+
+              if (turnSignalPill) {
+                turnSignalPill.textContent = "◄► " + activeId.toUpperCase().replace("-", " ");
+                turnSignalPill.classList.add("is-blinking");
+                if (blinkTimeout) clearTimeout(blinkTimeout);
+                blinkTimeout = setTimeout(function () {
+                  turnSignalPill.classList.remove("is-blinking");
+                }, 550);
+              }
+            }
+          });
+        }, { rootMargin: "-25% 0px -60% 0px" });
+
+        sectionEls.forEach(function (el) {
+          observer.observe(el);
+        });
+      }
+    })();
+  </script>
+</body>
+
+</html>

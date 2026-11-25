@@ -1,0 +1,297 @@
+.labWrapper {
+  min-height: 100vh;
+  background: var(--sky-gradient);
+  padding: var(--space-5) 0 var(--space-10);
+  color: var(--text-primary);
+}
+
+.topBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+  border-bottom: var(--border-ink);
+}
+
+.brandBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-cobalt);
+}
+
+[data-theme='night'] .kicker {
+  color: var(--accent-yellow);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 0.96rem;
+  color: var(--text-secondary);
+  max-width: 66ch;
+}
+
+.quickActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Telemetry Control Console */
+.consolePanel {
+  background: var(--bg-surface);
+  border: var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.consoleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.controlLabel {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+}
+
+.monoValue {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+}
+
+.pillGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pillBtn {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.68rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-thin);
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  transition: transform 100ms ease, background-color 100ms ease;
+}
+
+.pillBtnActive {
+  background: var(--accent-cobalt);
+  color: #ffffff;
+  border-color: var(--ink-outline);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.pillBtnWarn {
+  background: var(--signal-red-soft);
+  color: var(--signal-red);
+  border-color: var(--signal-red);
+}
+
+.pillBtnWarn.pillBtnActive {
+  background: var(--signal-red);
+  color: #ffffff;
+}
+
+.rangeInput {
+  width: 100%;
+  accent-color: var(--accent-cobalt);
+  cursor: pointer;
+}
+
+/* Cast Showcase Grid (3 Original Cast Vehicles in Side + Front Views) */
+.sectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+  font-weight: 800;
+}
+
+.sectionMeta {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.castGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.castCard {
+  background: var(--bg-surface);
+  border: var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.castHeader {
+  padding: var(--space-4);
+  background: var(--bg-panel);
+  border-bottom: var(--border-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.castTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.castName {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.castPersonality {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.stageGrid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: radial-gradient(circle at 50% 35%, var(--bg-elevated), var(--bg-surface));
+  align-items: end;
+}
+
+@media (max-width: 520px) {
+  .stageGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stageCell {
+  background: var(--bg-panel);
+  border: var(--border-thin);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem;
+  position: relative;
+}
+
+.stageTag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.castSpecFooter {
+  padding: 0.75rem var(--space-4);
+  border-top: var(--border-thin);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: var(--bg-elevated);
+}
+
+/* All 7 Moods Matrix */
+.moodMatrixGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.moodTile {
+  background: var(--bg-surface);
+  border: var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.moodTileActive {
+  border-color: var(--accent-cobalt);
+  box-shadow: 4px 4px 0px var(--accent-cobalt);
+}
+
+.moodTileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.moodName {
+  font-family: var(--font-label);
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.moodNote {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  min-height: 2.2em;
+}
+

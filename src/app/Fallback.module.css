@@ -1,0 +1,26 @@
+.fallbackBox {
+  background: var(--bg-surface);
+  border: var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+  padding: var(--space-5);
+  margin: var(--space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.fallbackTitle {
+  font-family: var(--font-label);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--signal-red);
+}
+
+.fallbackText {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+

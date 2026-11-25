@@ -1,0 +1,131 @@
+:root {
+  /* Color Palette - Warm Daylight (Default) */
+  --bg-base: #f7f4eb;
+  --bg-surface: #ffffff;
+  --bg-panel: #ede8da;
+  --bg-elevated: #fcfbf7;
+  --bg-asphalt: #282b33;
+  --bg-asphalt-stripe: #ffd13b;
+  --bg-grass: #dce6c8;
+
+  /* Typography Ink */
+  --text-primary: #17191e;
+  --text-secondary: #3e4350;
+  --text-muted: #656c7e;
+  --ink-outline: #1b1e26;
+
+  /* Core Cast Accents */
+  --accent-cobalt: #2f5bff;
+  --accent-cobalt-deep: #1b3fcc;
+  --accent-cobalt-soft: #e6ecff;
+
+  --accent-yellow: #ffc72c;
+  --accent-yellow-deep: #c99000;
+  --accent-yellow-soft: #fff6d6;
+
+  --accent-teal: #488b86;
+  --accent-teal-deep: #2f6460;
+  --accent-teal-soft: #e2f2f0;
+
+  /* Dynamic Accent (controllable by Tweak Panel) */
+  --accent-active: var(--accent-cobalt);
+
+  /* Signal & Telemetry Colors (Red strictly reserved for limits/warnings/failures) */
+  --signal-red: #d62828;
+  --signal-red-soft: #fdeaea;
+  --signal-red-border: #f09898;
+
+  --signal-pass: #1c7c49;
+  --signal-pass-soft: #e5f6ed;
+  --signal-pass-border: #8fd4ae;
+
+  --signal-amber: #d97706;
+  --signal-amber-soft: #fef3c7;
+
+  /* Sky & Atmosphere */
+  --sky-gradient: linear-gradient(180deg, #ffefc2 0%, #f7f4eb 62%, #ede8da 100%);
+  --headlight-beam-opacity: 0.08;
+  --tail-glow-opacity: 0.15;
+  --window-lit-color: #dce8ff;
+  --dash-glow: rgba(47, 91, 255, 0.08);
+
+  /* Fonts */
+  --font-display: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-label: 'Barlow Condensed', 'Franklin Gothic Medium', 'Arial Narrow', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Borders, Shadows & Tactile Hand-Drawn Feel */
+  --border-thin: 1.5px solid var(--ink-outline);
+  --border-ink: 2.5px solid var(--ink-outline);
+  --border-heavy: 3.5px solid var(--ink-outline);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --shadow-hard: 4px 4px 0px var(--ink-outline);
+  --shadow-hard-sm: 2px 2px 0px var(--ink-outline);
+  --shadow-hard-lg: 6px 6px 0px var(--ink-outline);
+  --shadow-soft: 0 10px 28px rgba(23, 25, 30, 0.08);
+
+  /* Spacing & Layout */
+  --spacing-scale: 1;
+  --space-1: calc(0.25rem * var(--spacing-scale));
+  --space-2: calc(0.5rem * var(--spacing-scale));
+  --space-3: calc(0.75rem * var(--spacing-scale));
+  --space-4: calc(1rem * var(--spacing-scale));
+  --space-5: calc(1.5rem * var(--spacing-scale));
+  --space-6: calc(2rem * var(--spacing-scale));
+  --space-8: calc(3rem * var(--spacing-scale));
+  --space-10: calc(4rem * var(--spacing-scale));
+  --container-max: 1280px;
+}
+
+[data-theme='night'] {
+  --bg-base: #0d1118;
+  --bg-surface: #151b26;
+  --bg-panel: #1c2433;
+  --bg-elevated: #1e2738;
+  --bg-asphalt: #0b0e14;
+  --bg-asphalt-stripe: #ffc72c;
+  --bg-grass: #15241e;
+
+  --text-primary: #f4f6fb;
+  --text-secondary: #c2cbe0;
+  --text-muted: #8b96b0;
+  --ink-outline: #384560;
+
+  --accent-cobalt: #4d73ff;
+  --accent-cobalt-deep: #2f5bff;
+  --accent-cobalt-soft: #1a274d;
+
+  --accent-yellow: #ffd047;
+  --accent-yellow-deep: #f5b400;
+  --accent-yellow-soft: #332a10;
+
+  --accent-teal: #5cb0aa;
+  --accent-teal-deep: #488b86;
+  --accent-teal-soft: #162e2d;
+
+  --signal-red: #ff5454;
+  --signal-red-soft: #2e1417;
+  --signal-red-border: #8a2be2;
+  --signal-red-border: #9e2a2b;
+
+  --signal-pass: #34d399;
+  --signal-pass-soft: #112a22;
+  --signal-pass-border: #236c4d;
+
+  --sky-gradient: linear-gradient(180deg, #070a10 0%, #0d1118 55%, #151b26 100%);
+  --headlight-beam-opacity: 0.88;
+  --tail-glow-opacity: 0.92;
+  --window-lit-color: #ffe082;
+  --dash-glow: rgba(77, 115, 255, 0.26);
+
+  --shadow-hard: 4px 4px 0px #06080c;
+  --shadow-hard-sm: 2px 2px 0px #06080c;
+  --shadow-hard-lg: 6px 6px 0px #06080c;
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
