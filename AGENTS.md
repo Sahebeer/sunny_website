@@ -11,6 +11,7 @@ A personal portfolio for an IT fresher. It shows who they are, their projects, s
 - Motion: `motion` (Framer Motion) only where it earns its place. Respect `prefers-reduced-motion`.
 - Fonts via `next/font`. No default Inter/Roboto/Arial look.
 - Icons: none by default. If one is truly needed, draw a custom inline SVG that matches the line weight of the design.
+- Owner-approved 3D exception: `three` may power the primary interactive portfolio scene. Keep the scene lightweight, static-export friendly, keyboard-complemented by DOM controls, and disabled to a calm presentation under `prefers-reduced-motion`.
 
 ## Content lives in ONE place
 All text, projects, links and images come from `src/content/site.ts` (typed). Components never hard-code copy. The owner should be able to update the whole site by editing only that file and `public/images/`.

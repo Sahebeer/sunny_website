@@ -1,0 +1,520 @@
+"use client";
+
+import * as THREE from "three";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { site, type Project } from "@site";
+import styles from "./three-portfolio.module.css";
+
+type Section = "home" | "projects" | "about" | "contact";
+
+type ProjectEntry = {
+  group: THREE.Group;
+  mesh: THREE.Mesh;
+  index: number;
+};
+
+type SceneRefs = {
+  camera: THREE.PerspectiveCamera;
+  renderer: THREE.WebGLRenderer;
+  projectEntries: ProjectEntry[];
+  selectedCar: THREE.Group;
+};
+
+const accent = 0xff6338;
+const pale = 0xd5e5e5;
+const dark = 0x081010;
+
+export function ThreePortfolio() {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<SceneRefs | null>(null);
+  const activeSectionRef = useRef<Section>("home");
+  const selectedProjectRef = useRef(0);
+  const [started, setStarted] = useState(false);
+  const [activeSection, setActiveSection] = useState<Section>("home");
+  const [selectedProject, setSelectedProject] = useState(0);
+
+  useEffect(() => {
+    activeSectionRef.current = activeSection;
+  }, [activeSection]);
+
+  useEffect(() => {
+    selectedProjectRef.current = selectedProject;
+  }, [selectedProject]);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+    const container = mount;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(dark);
+
+    const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+    camera.position.set(11, 6.5, 15);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const ambient = new THREE.HemisphereLight(0xc2dce0, 0x050707, 1.5);
+    scene.add(ambient);
+    const coolLight = new THREE.DirectionalLight(0xb8d3d5, 2.2);
+    coolLight.position.set(-5, 10, 8);
+    scene.add(coolLight);
+    const warmLight = new THREE.PointLight(accent, 1.7, 18);
+    warmLight.position.set(0, 6.5, -1);
+    scene.add(warmLight);
+    const frontFill = new THREE.PointLight(0x9fc8ca, 2.4, 16);
+    frontFill.position.set(-4, 3.5, 8);
+    scene.add(frontFill);
+
+    const world = new THREE.Group();
+    scene.add(world);
+
+    const makeMaterial = (color: number, roughness = 0.72, metalness = 0.08) =>
+      new THREE.MeshStandardMaterial({ color, roughness, metalness });
+
+    const addBox = (
+      parent: THREE.Object3D,
+      size: [number, number, number],
+      position: [number, number, number],
+      color: number,
+      options?: { roughness?: number; metalness?: number },
+    ) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), makeMaterial(color, options?.roughness, options?.metalness));
+      mesh.position.set(...position);
+      parent.add(mesh);
+      return mesh;
+    };
+
+    addBox(world, [44, 0.2, 44], [0, -0.1, 0], 0x101a1b);
+    const grid = new THREE.GridHelper(40, 20, 0x263536, 0x172526);
+    grid.position.y = 0.015;
+    world.add(grid);
+
+    const canopy = new THREE.Group();
+    canopy.position.y = 6.6;
+    world.add(canopy);
+    addBox(canopy, [18, 0.3, 7], [0, 0, 0], 0x101718, { metalness: 0.35 });
+    addBox(canopy, [18.2, 0.08, 0.12], [0, -0.15, 3.45], accent, { roughness: 0.45, metalness: 0.2 });
+    [-5, 0, 5].forEach((x) => addBox(canopy, [3.3, 0.05, 0.55], [x, -0.2, 0], pale, { roughness: 0.4 }));
+    [-7.8, 7.8].forEach((x) => {
+      addBox(world, [0.34, 6.6, 0.34], [x, 3.2, 0], 0x263536, { metalness: 0.35 });
+      addBox(world, [0.48, 0.08, 0.48], [x, 0.05, 0], accent, { roughness: 0.5 });
+    });
+
+    const pump = new THREE.Group();
+    pump.position.set(-4.3, 1.75, -0.25);
+    world.add(pump);
+    addBox(pump, [2.3, 3.5, 1.45], [0, 0, 0], 0x2b3a3b, { metalness: 0.28 });
+    addBox(pump, [1.3, 0.95, 0.08], [0, 0.8, 0.75], 0x071010, { metalness: 0.1 });
+    addBox(pump, [1.05, 0.06, 0.08], [0, 0.8, 0.8], accent, { roughness: 0.35 });
+    [-0.38, 0, 0.38].forEach((x) => addBox(pump, [0.14, 0.95, 0.12], [x, -0.65, 0.76], 0x9bb6b7));
+    addBox(pump, [2.7, 0.18, 1.8], [0, -1.8, 0], 0x142122);
+    const pumpCable = new THREE.Mesh(
+      new THREE.TorusGeometry(0.7, 0.035, 6, 24, Math.PI * 1.25),
+      makeMaterial(accent, 0.55, 0.1),
+    );
+    pumpCable.rotation.x = Math.PI / 2;
+    pumpCable.position.set(1.22, -0.2, 0.7);
+    pump.add(pumpCable);
+
+    const posterEntries: ProjectEntry[] = [];
+    const posterColors = [0x243031, 0x203436, 0x2c2c2a];
+    site.projects.forEach((project, index) => {
+      const poster = new THREE.Group();
+      poster.position.set(1.5 + index * 3.65, 3.25, -0.9);
+      poster.rotation.y = (index - 1) * -0.045;
+      poster.userData.projectIndex = index;
+      world.add(poster);
+      addBox(poster, [3.35, 2.25, 0.12], [0, 0, -0.08], 0x060a0a, { metalness: 0.25 });
+      const texture = makePosterTexture(project, posterColors[index % posterColors.length]);
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(3.15, 2.05, 0.08),
+        new THREE.MeshStandardMaterial({ map: texture, roughness: 0.76, metalness: 0.05 }),
+      );
+      mesh.userData.projectIndex = index;
+      poster.add(mesh);
+      addBox(poster, [2.85, 0.05, 0.05], [0, -1.15, 0.05], accent, { roughness: 0.5 });
+      posterEntries.push({ group: poster, mesh, index });
+    });
+
+    const car = createProjectCar();
+    car.position.set(2.3, 0.45, 3.2);
+    world.add(car);
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const cameraTargets: Record<Section, THREE.Vector3> = {
+      home: new THREE.Vector3(11, 6.5, 15),
+      projects: new THREE.Vector3(8.5, 4.8, 11),
+      about: new THREE.Vector3(-10, 5.8, 13),
+      contact: new THREE.Vector3(0, 7.5, 17),
+    };
+    const lookTargets: Record<Section, THREE.Vector3> = {
+      home: new THREE.Vector3(0, 2.5, 0),
+      projects: new THREE.Vector3(2, 2.7, -0.5),
+      about: new THREE.Vector3(-2.5, 2.5, 0),
+      contact: new THREE.Vector3(0, 2.5, 0),
+    };
+
+    function resize() {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function pickProject(event: PointerEvent) {
+      const bounds = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+      pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObjects(posterEntries.map((entry) => entry.mesh), false)[0];
+      return typeof hit?.object.userData.projectIndex === "number" ? hit.object.userData.projectIndex : null;
+    }
+
+    function handlePointerMove(event: PointerEvent) {
+      const picked = pickProject(event);
+      renderer.domElement.style.cursor = picked === null ? "default" : "pointer";
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      const picked = pickProject(event);
+      if (picked === null) return;
+      selectedProjectRef.current = picked;
+      setSelectedProject(picked);
+      activeSectionRef.current = "projects";
+      setActiveSection("projects");
+    }
+
+    container.addEventListener("pointermove", handlePointerMove);
+    container.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("resize", resize);
+
+    let frame = 0;
+    const clock = new THREE.Clock();
+    function animate() {
+      frame = window.requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+      const section = activeSectionRef.current;
+      camera.position.lerp(cameraTargets[section], reducedMotion ? 0.08 : 0.035);
+      camera.lookAt(lookTargets[section]);
+      if (!reducedMotion) {
+        car.rotation.y = Math.sin(elapsed * 0.18) * 0.015;
+        car.position.y = 0.45 + Math.sin(elapsed * 0.55) * 0.025;
+      }
+      posterEntries.forEach(({ group, index }) => {
+        const selected = selectedProjectRef.current === index;
+        const targetZ = selected ? 0.6 : -0.9;
+        const targetY = selected ? 3.45 : 3.25;
+        group.position.z += (targetZ - group.position.z) * (reducedMotion ? 0.1 : 0.045);
+        group.position.y += (targetY - group.position.y) * (reducedMotion ? 0.1 : 0.045);
+      });
+      renderer.render(scene, camera);
+    }
+    resize();
+    animate();
+
+    sceneRef.current = { camera, renderer, projectEntries: posterEntries, selectedCar: car };
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", resize);
+      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerdown", handlePointerDown);
+      posterEntries.forEach(({ mesh }) => {
+        const material = mesh.material as THREE.MeshStandardMaterial;
+        material.map?.dispose();
+        material.dispose();
+        mesh.geometry.dispose();
+      });
+      renderer.dispose();
+      container.removeChild(renderer.domElement);
+      sceneRef.current = null;
+    };
+  }, []);
+
+  function changeSection(section: Section) {
+    activeSectionRef.current = section;
+    setActiveSection(section);
+  }
+
+  function chooseProject(index: number) {
+    selectedProjectRef.current = index;
+    setSelectedProject(index);
+    changeSection("projects");
+  }
+
+  const selected = site.projects[selectedProject];
+  const world = site.world;
+
+  return (
+    <main className={styles.world} data-started={started ? "true" : "false"}>
+      <div ref={mountRef} className={styles.canvas} aria-label={world.sceneLabel} />
+
+      {!started ? (
+        <section className={styles.boot} aria-labelledby="boot-title">
+          <div className={styles.bootFrame}>
+            <p>{world.bootKicker}</p>
+            <h1 id="boot-title">{world.bootTitle}</h1>
+            <p>{world.bootBody}</p>
+            <button type="button" onClick={() => setStarted(true)}>{world.bootAction}</button>
+          </div>
+        </section>
+      ) : (
+        <>
+          <header className={styles.header}>
+            <button className={styles.mark} type="button" onClick={() => changeSection("home")}>
+              {site.navigation.mark}
+            </button>
+            <nav className={styles.nav} aria-label={world.sceneLabel}>
+              <NavButton label={world.nav.home} active={activeSection === "home"} onClick={() => changeSection("home")} />
+              <NavButton label={world.nav.projects} active={activeSection === "projects"} onClick={() => changeSection("projects")} />
+              <NavButton label={world.nav.about} active={activeSection === "about"} onClick={() => changeSection("about")} />
+              <NavButton label={world.nav.contact} active={activeSection === "contact"} onClick={() => changeSection("contact")} />
+            </nav>
+            <span className={styles.status}>{world.sceneStatus}</span>
+          </header>
+
+          <section className={styles.identity} aria-labelledby="identity-title">
+            <p>{site.profile.role}</p>
+            <h1 id="identity-title">{site.profile.name}</h1>
+            <span>{site.profile.location}</span>
+          </section>
+
+          <p className={styles.sceneHint}>{world.sceneHint}</p>
+
+          {activeSection === "projects" ? (
+            <ProjectPanel selected={selected} selectedIndex={selectedProject} onChoose={chooseProject} />
+          ) : null}
+          {activeSection === "about" ? <AboutPanel /> : null}
+          {activeSection === "contact" ? <ContactPanel /> : null}
+
+          <div className={styles.bottomBar}>
+            <span>{site.profile.availability}</span>
+            <span>{site.entryConsole.sceneNote}</span>
+            <span>{String(selectedProject + 1).padStart(2, "0")} / {String(site.projects.length).padStart(2, "0")}</span>
+          </div>
+        </>
+      )}
+    </main>
+  );
+}
+
+function NavButton({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+      <button className={active ? styles.navActive : undefined} type="button" aria-current={active ? "page" : undefined} onClick={onClick}>
+      {label}
+    </button>
+  );
+}
+
+function ProjectPanel({ selected, selectedIndex, onChoose }: { selected: Project; selectedIndex: number; onChoose: (index: number) => void }) {
+  const world = site.world;
+  return (
+    <aside className={styles.panel} aria-labelledby="projects-title">
+      <div className={styles.panelHeader}>
+        <div>
+          <p>{world.sceneLabel}</p>
+          <h2 id="projects-title">{world.projectsTitle}</h2>
+        </div>
+        <span>{world.projectsNote}</span>
+      </div>
+      <div className={styles.projectList} role="list" aria-label={world.projectsTitle}>
+        {site.projects.map((project, index) => (
+          <button className={selectedIndex === index ? styles.projectActive : undefined} key={project.slug} type="button" onClick={() => onChoose(index)}>
+            <span>{project.code}</span>
+            <strong>{project.title}</strong>
+            <small>{project.status}</small>
+          </button>
+        ))}
+      </div>
+      <article className={styles.projectDetail} aria-live="polite">
+        <p>{selected.code} / {selected.year}</p>
+        <h3>{selected.title}</h3>
+        <p>{selected.summary}</p>
+        <dl>
+          <div><dt>{world.specLabels.stack}</dt><dd>{selected.stack.join(" · ")}</dd></div>
+          <div><dt>{world.specLabels.role}</dt><dd>{selected.role}</dd></div>
+          <div><dt>{selected.metric.label}</dt><dd>{selected.metric.value}</dd></div>
+        </dl>
+      </article>
+    </aside>
+  );
+}
+
+function AboutPanel() {
+  const world = site.world;
+  return (
+    <aside className={styles.panel} aria-labelledby="about-title">
+      <div className={styles.panelHeader}>
+        <div><p>{site.profile.role}</p><h2 id="about-title">{world.aboutTitle}</h2></div>
+        <span>{site.profile.location}</span>
+      </div>
+      <div className={styles.aboutCopy}>
+        {site.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      </div>
+      <dl className={styles.currently}>
+        <div><dt>Learning</dt><dd>{site.about.currently.learning}</dd></div>
+        <div><dt>Building</dt><dd>{site.about.currently.building}</dd></div>
+        <div><dt>Reading</dt><dd>{site.about.currently.reading}</dd></div>
+      </dl>
+    </aside>
+  );
+}
+
+function ContactPanel() {
+  const world = site.world;
+  return (
+    <aside className={styles.panel} aria-labelledby="contact-title">
+      <div className={styles.panelHeader}>
+        <div><p>{site.profile.availability}</p><h2 id="contact-title">{world.contactTitle}</h2></div>
+        <span>{site.profile.email}</span>
+      </div>
+      <p className={styles.contactNote}>{world.contactNote}</p>
+      <div className={styles.contactRows}>
+        <div><span>{world.specLabels.email}</span><strong>{site.profile.email}</strong></div>
+        <div><span>{world.specLabels.social}</span><strong>{site.profile.socials.join(" / ")}</strong></div>
+        <div><span>{world.specLabels.resume}</span><strong>{site.profile.resumeUrl}</strong></div>
+      </div>
+    </aside>
+  );
+}
+
+function makePosterTexture(project: Project, background: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 800;
+  canvas.height = 520;
+  const context = canvas.getContext("2d");
+  if (!context) return new THREE.CanvasTexture(canvas);
+  const color = `#${background.toString(16).padStart(6, "0")}`;
+  context.fillStyle = color;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.strokeStyle = "#ff6338";
+  context.lineWidth = 6;
+  context.strokeRect(34, 34, canvas.width - 68, canvas.height - 68);
+  context.fillStyle = "#9fb4b5";
+  context.font = "28px monospace";
+  context.fillText(project.code, 64, 86);
+  context.fillStyle = "#f0eee7";
+  context.font = "600 74px Arial";
+  context.fillText(project.title, 64, 260);
+  context.fillStyle = "#9fb4b5";
+  context.font = "24px monospace";
+  context.fillText(`${project.metric.label} / ${project.metric.value}`, 64, 390);
+  context.fillText(project.status.toUpperCase(), 64, 438);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function createProjectCar() {
+  const car = new THREE.Group();
+  const material = new THREE.MeshStandardMaterial({ color: 0x1b2c2d, roughness: 0.25, metalness: 0.68 });
+  const glassMaterial = new THREE.MeshStandardMaterial({ color: 0x315052, roughness: 0.14, metalness: 0.45 });
+  const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x050707, roughness: 0.82, metalness: 0.2 });
+  const rimMaterial = new THREE.MeshStandardMaterial({ color: 0x91a8a9, roughness: 0.33, metalness: 0.7 });
+  const lightMaterial = new THREE.MeshStandardMaterial({ color: 0xd5e5e5, roughness: 0.28, metalness: 0.18 });
+  const accentMaterial = new THREE.MeshStandardMaterial({ color: accent, roughness: 0.38, metalness: 0.28 });
+
+  const bodyShape = new THREE.Shape();
+  bodyShape.moveTo(-3.5, 0.08);
+  bodyShape.lineTo(-3.25, 0.42);
+  bodyShape.lineTo(-2.4, 0.52);
+  bodyShape.lineTo(-1.38, 1.05);
+  bodyShape.lineTo(1.2, 1.08);
+  bodyShape.lineTo(2.1, 0.82);
+  bodyShape.lineTo(3.25, 0.66);
+  bodyShape.lineTo(3.5, 0.3);
+  bodyShape.lineTo(3.2, 0.08);
+  bodyShape.closePath();
+  const body = extrudeCarShape(bodyShape, 2.5, material);
+  body.position.y = 0.25;
+  car.add(body);
+
+  const cabinShape = new THREE.Shape();
+  cabinShape.moveTo(-1.14, 0.98);
+  cabinShape.lineTo(-0.62, 1.7);
+  cabinShape.lineTo(1.16, 1.63);
+  cabinShape.lineTo(1.75, 1.03);
+  cabinShape.closePath();
+  const cabin = extrudeCarShape(cabinShape, 1.98, glassMaterial);
+  cabin.position.y = 0.28;
+  car.add(cabin);
+
+  const windowShape = new THREE.Shape();
+  windowShape.moveTo(-0.94, 1.05);
+  windowShape.lineTo(-0.5, 1.56);
+  windowShape.lineTo(0.92, 1.52);
+  windowShape.lineTo(1.38, 1.08);
+  windowShape.closePath();
+  [-1, 1].forEach((side) => {
+    const window = new THREE.Mesh(new THREE.ShapeGeometry(windowShape), new THREE.MeshStandardMaterial({ color: 0x0b1718, roughness: 0.12, metalness: 0.72 }));
+    window.position.set(0, 0.28, side * 1.01);
+    window.scale.y = 0.92;
+    car.add(window);
+  });
+
+  const roofLine = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.05, 2.08), accentMaterial);
+  roofLine.position.set(0.28, 1.94, 0);
+  roofLine.rotation.z = -0.04;
+  car.add(roofLine);
+
+  [-2.7, -2.3].forEach((x, index) => {
+    const light = new THREE.Mesh(new THREE.BoxGeometry(index === 0 ? 0.16 : 0.1, 0.12, 0.7), lightMaterial);
+    light.position.set(x, 0.62, 1.12);
+    light.rotation.z = -0.12;
+    car.add(light);
+  });
+  const tail = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.16, 1.7), accentMaterial);
+  tail.position.set(3.42, 0.62, 0);
+  car.add(tail);
+
+  [-1, 1].forEach((side) => {
+    const sideBlade = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.12, 0.08), accentMaterial);
+    sideBlade.position.set(-0.05, 0.36, side * 1.28);
+    sideBlade.rotation.z = side * 0.02;
+    car.add(sideBlade);
+  });
+
+  [-1, 1].forEach((side) => {
+    const post = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.75, 0.12), material);
+    post.position.set(2.65, 1.05, side * 0.74);
+    car.add(post);
+  });
+  const spoiler = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.09, 2.1), material);
+  spoiler.position.set(2.78, 1.45, 0);
+  spoiler.rotation.x = -0.06;
+  car.add(spoiler);
+
+  [-2.05, 2.05].forEach((x) => {
+    [-1, 1].forEach((side) => {
+      const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.3, 16), wheelMaterial);
+      wheel.rotation.x = Math.PI / 2;
+      wheel.position.set(x, 0.4, side * 1.15);
+      car.add(wheel);
+      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.32, 12), rimMaterial);
+      rim.rotation.x = Math.PI / 2;
+      rim.position.set(x, 0.4, side * 1.17);
+      car.add(rim);
+    });
+  });
+  return car;
+}
+
+function extrudeCarShape(shape: THREE.Shape, depth: number, material: THREE.Material) {
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: 0.06,
+    bevelThickness: 0.06,
+    curveSegments: 2,
+    depth,
+  });
+  geometry.translate(0, 0, -depth / 2);
+  return new THREE.Mesh(geometry, material);
+}

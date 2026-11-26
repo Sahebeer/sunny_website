@@ -55,10 +55,28 @@ export type EntryConsole = {
   footnote: string;
 };
 
+export type WorldCopy = {
+  bootKicker: string;
+  bootTitle: string;
+  bootBody: string;
+  bootAction: string;
+  sceneLabel: string;
+  sceneStatus: string;
+  sceneHint: string;
+  nav: { home: string; projects: string; about: string; contact: string };
+  projectsTitle: string;
+  projectsNote: string;
+  aboutTitle: string;
+  contactTitle: string;
+  contactNote: string;
+  backLabel: string;
+  specLabels: { stack: string; role: string; email: string; social: string; resume: string };
+};
+
 export const site = {
   metadata: {
-    title: "Direction Lab — Sunny Portfolio",
-    description: "Three visual directions for an IT fresher's portfolio.",
+    title: "Sunny — Interactive Portfolio",
+    description: "An interactive portfolio for an IT fresher, built as a spatial workbench.",
   },
   navigation: {
     mark: "SJ / 01",
@@ -81,6 +99,23 @@ export const site = {
     sceneNote: "A spatial interface for the workbench.",
     footnote: "The game layer is only the way in. The work stays visible.",
   } satisfies EntryConsole,
+  world: {
+    bootKicker: "Sunny / interactive portfolio",
+    bootTitle: "Start the workbench",
+    bootBody: "A spatial index of projects, process, and the person behind them.",
+    bootAction: "Start",
+    sceneLabel: "Nocturne service bay / 001",
+    sceneStatus: "Scene online",
+    sceneHint: "Select a project to bring it forward.",
+    nav: { home: "Home", projects: "Projects", about: "About", contact: "Contact" },
+    projectsTitle: "Project bay",
+    projectsNote: "Select a model on the wall to inspect its build.",
+    aboutTitle: "Operator notes",
+    contactTitle: "Open channel",
+    contactNote: "Available for a first role where useful software matters.",
+    backLabel: "Back to the bay",
+    specLabels: { stack: "Stack", role: "Role", email: "Email", social: "Social", resume: "Resume" },
+  } satisfies WorldCopy,
   profile: {
     // DEMO / TODO(owner): Replace the Phase 1 placeholders with real profile data.
     name: "[Your Name]",
