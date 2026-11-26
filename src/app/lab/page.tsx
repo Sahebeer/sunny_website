@@ -1,4 +1,5 @@
 import { site, featuredProject, type Direction } from "@site";
+import { DeveloperWorkbench } from "@/components/developer-workbench";
 import { InteractionPrototypes } from "@/components/interaction-prototypes";
 import styles from "./lab.module.css";
 
@@ -50,6 +51,7 @@ function DirectionSection({ direction }: { direction: Direction }) {
           <p className={styles.heroEyebrow}>{direction.heroKicker}</p>
           <h1>{direction.heroTitle}</h1>
           <p className={styles.heroBody}>{direction.heroBody}</p>
+          <p className={styles.profileStatement}>{site.profile.statement}</p>
           <div className={styles.heroMeta}>
             <span>{site.profile.name}</span>
             <span>{site.profile.role}</span>
@@ -105,6 +107,7 @@ function DirectionSection({ direction }: { direction: Direction }) {
               </dl>
             </div>
           </article>
+          <DeveloperWorkbench direction={direction.id} />
         </div>
 
         <div className={styles.prototypeBlock}>

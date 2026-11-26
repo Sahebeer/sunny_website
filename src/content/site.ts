@@ -28,6 +28,18 @@ export type Direction = {
   tokens: Array<{ label: string; value: string; swatch?: string }>;
 };
 
+export type DeveloperArtifact = {
+  label: string;
+  title: string;
+  body: string;
+  terminalLabel: string;
+  terminalStatus: string;
+  prompt: string;
+  terminalLines: string[];
+  wallLabel: string;
+  wallNote: string;
+};
+
 export const site = {
   metadata: {
     title: "Direction Lab — Sunny Portfolio",
@@ -63,6 +75,7 @@ export const site = {
     },
   },
   projects: [
+    // DEMO
     {
       slug: "ledgerline",
       code: "P-01",
@@ -77,6 +90,7 @@ export const site = {
       cover: "ledgerline",
       coverAlt: "A warm paper-toned project plate labelled P-01 Ledgerline",
     },
+    // DEMO
     {
       slug: "fieldnote",
       code: "P-02",
@@ -91,6 +105,7 @@ export const site = {
       cover: "fieldnote",
       coverAlt: "A cool grey project plate labelled P-02 Fieldnote",
     },
+    // DEMO
     {
       slug: "signal-api",
       code: "P-03",
@@ -106,6 +121,24 @@ export const site = {
       coverAlt: "A dark project plate labelled P-03 Signal API",
     },
   ] satisfies Project[],
+  // DEMO
+  developerArtifact: {
+    label: "Developer workbench / process left visible",
+    title: "Trace the build, not just the outcome.",
+    body: "A little evidence of the work in motion makes the portfolio feel lived-in: a command, a route, a rough edge, a project that has not been polished into a case study yet.",
+    terminalLabel: "Local session / P-01 Ledgerline",
+    terminalStatus: "Live trace / demo",
+    prompt: "dev@workbench:~/ledgerline$",
+    terminalLines: [
+      "npm run check",
+      "14 routes checked / 0 blocking errors",
+      "route /expenses     42ms",
+      "schema: recurring_spend     ok",
+      "git show --stat       P-01",
+    ],
+    wallLabel: "Project wall / small systems",
+    wallNote: "Three frames from the same workbench. Different jobs, same appetite for useful tools.",
+  } satisfies DeveloperArtifact,
   directions: [
     {
       id: "concours",

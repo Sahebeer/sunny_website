@@ -1,0 +1,317 @@
+.workbench {
+  --artifact-bg: var(--direction-panel);
+  --artifact-line: var(--direction-line);
+  --artifact-muted: var(--direction-muted);
+  --artifact-accent: var(--direction-accent);
+  --terminal-bg: var(--direction-ink);
+  --terminal-ink: var(--direction-bg);
+  --poster-ink: var(--direction-ink);
+  margin-top: clamp(3rem, 6vw, 6rem);
+  padding-top: clamp(2rem, 4vw, 4rem);
+  border-top: 1px solid var(--direction-line);
+}
+
+.workbench.concours {
+  --terminal-bg: #25231e;
+  --terminal-ink: #f1eee7;
+  --artifact-bg: #ebe5da;
+}
+
+.workbench.telemetry {
+  --terminal-bg: #050707;
+  --terminal-ink: #f0eee7;
+  --artifact-bg: #151b1b;
+}
+
+.workbench.atelier {
+  --terminal-bg: #c4d0d3;
+  --terminal-ink: #17323a;
+  --artifact-bg: rgba(247, 249, 249, 0.64);
+}
+
+.workbenchIntro {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(0, 1.3fr) minmax(14rem, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 1.5rem;
+}
+
+.workbenchIntro h3,
+.workbenchIntro p {
+  margin: 0;
+}
+
+.workbenchIntro h3 {
+  max-width: 14ch;
+  font-family: var(--direction-display);
+  font-size: clamp(2rem, 4.5vw, 5rem);
+  font-weight: 500;
+  letter-spacing: -0.08em;
+  line-height: 0.9;
+}
+
+.telemetry .workbenchIntro h3 {
+  font-family: var(--direction-text);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.workbenchLabel,
+.workbenchIntro > p:last-child,
+.terminalFrame,
+.posterWall,
+.poster {
+  font-family: var(--direction-detail);
+}
+
+.workbenchLabel {
+  color: var(--artifact-accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.workbenchIntro > p:last-child {
+  max-width: 25rem;
+  color: var(--artifact-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.artifactLayout {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.terminalFrame {
+  min-height: 23rem;
+  margin: 0;
+  background: var(--terminal-bg);
+  color: var(--terminal-ink);
+  box-shadow: 0.6rem 0.6rem 0 var(--artifact-accent);
+}
+
+.terminalFrame figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--terminal-ink) 22%, transparent);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.terminalFrame figcaption span:last-child {
+  color: var(--artifact-accent);
+  text-align: right;
+}
+
+.terminalBody {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.25rem 1rem 1.5rem;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.prompt,
+.commandLine {
+  color: var(--artifact-accent);
+}
+
+.prompt {
+  display: none;
+}
+
+.outputLine {
+  color: color-mix(in srgb, var(--terminal-ink) 70%, transparent);
+}
+
+.outputLine::before {
+  margin-right: 0.5rem;
+  color: var(--artifact-accent);
+  content: ">";
+}
+
+.cursorMark {
+  color: var(--artifact-accent);
+}
+
+.posterWall {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--artifact-line);
+  background: var(--artifact-bg);
+}
+
+.wallHeader {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(10rem, 1.2fr);
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--artifact-line);
+  color: var(--artifact-muted);
+  font-size: 0.65rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.wallHeader span:first-child {
+  color: var(--artifact-accent);
+}
+
+.posterGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+  padding: 1.5rem 0 0.75rem;
+}
+
+.poster {
+  min-height: 12rem;
+  padding: 0.9rem;
+  border: 1px solid var(--artifact-line);
+  background: var(--direction-bg);
+  color: var(--poster-ink);
+  box-shadow: 0 0.35rem 0 color-mix(in srgb, var(--artifact-accent) 35%, transparent);
+}
+
+.posterOne {
+  grid-column: 1 / span 2;
+  transform: rotate(-1deg);
+}
+
+.posterTwo {
+  grid-column: 3 / span 2;
+  margin-top: 1.25rem;
+  transform: rotate(1.2deg);
+}
+
+.posterThree {
+  grid-column: 2 / span 3;
+  margin-top: -0.35rem;
+  transform: rotate(-0.5deg);
+}
+
+.posterRail,
+.posterFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--artifact-accent);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.poster h4,
+.poster p {
+  margin: 0;
+}
+
+.poster h4 {
+  margin-top: 2.5rem;
+  font-family: var(--direction-display);
+  font-size: clamp(1.35rem, 2.5vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 0.9;
+}
+
+.telemetry .poster h4 {
+  font-family: var(--direction-text);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.poster p {
+  min-height: 3.5rem;
+  margin-top: 1rem;
+  color: var(--artifact-muted);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.posterFooter {
+  margin-top: 1.2rem;
+  color: var(--artifact-muted);
+}
+
+.posterFooter span:last-child {
+  color: var(--artifact-accent);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .workbenchIntro {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .workbenchIntro h3 {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .workbenchLabel {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .workbenchIntro > p:last-child {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .artifactLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .workbenchIntro {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .workbenchIntro h3,
+  .workbenchLabel,
+  .workbenchIntro > p:last-child {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .terminalFrame {
+    min-height: 0;
+    box-shadow: 0.35rem 0.35rem 0 var(--artifact-accent);
+  }
+
+  .wallHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .posterGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .posterOne,
+  .posterTwo,
+  .posterThree {
+    grid-column: 1;
+    margin-top: 0;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posterOne,
+  .posterTwo,
+  .posterThree {
+    transform: none;
+  }
+}
