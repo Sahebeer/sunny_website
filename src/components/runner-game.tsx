@@ -89,11 +89,15 @@ function LaneRunScene({ round, gameOver, targetLane, reducedMotion, onScore, onS
   const distance = useRef(0);
   const scoreRef = useRef(0);
   const bonus = useRef(0);
+  const displayedSpeed = useRef(0);
 
   useFrame((_, delta) => {
     if (gameOver || document.visibilityState === "hidden") return;
     const speed = 5.8 + Math.min(scoreRef.current * 0.06, 9);
-    onSpeed(speed);
+    if (Math.abs(speed - displayedSpeed.current) >= 0.1) {
+      displayedSpeed.current = speed;
+      onSpeed(speed);
+    }
     distance.current += speed * delta;
     const nextScore = Math.floor(distance.current / 2) + bonus.current;
     if (nextScore !== scoreRef.current) {
