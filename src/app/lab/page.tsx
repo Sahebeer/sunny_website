@@ -1,5 +1,5 @@
-import { ThreePortfolio } from "@/components/three-portfolio";
+import { LabClient } from "@/components/lab-client";
 
 export default function LabPage() {
-  return <ThreePortfolio />;
+  return <LabClient />;
 }

@@ -134,9 +134,9 @@ def mesh_object(name, vertices, faces, material, bevel=0.06):
 def build_station():
     cold = emit("cold fluorescent tubes", (0.78, 0.94, 1.0), 9)
     orange = emit("warm orange livery", (1.0, 0.18, 0.035), 7)
-    concrete = principled("weathered concrete", (0.16, 0.2, 0.2), 0.82, 0.05, "concrete")
-    metal = principled("painted station metal", (0.22, 0.31, 0.32), 0.46, 0.5, "metal")
-    steel = principled("brushed steel", (0.3, 0.4, 0.41), 0.3, 0.78, "steel")
+    concrete = principled("weathered concrete", (0.06, 0.085, 0.09), 0.82, 0.05)
+    metal = principled("painted station metal", (0.055, 0.085, 0.09), 0.46, 0.5)
+    steel = principled("brushed steel", (0.24, 0.34, 0.36), 0.3, 0.78)
     black = principled("rubber and shadow", (0.006, 0.012, 0.013), 0.6, 0.05)
     white = principled("frosted underside", (0.7, 0.82, 0.82), 0.28, 0.15, "snow")
     yellow = principled("safety yellow", (0.8, 0.54, 0.03), 0.4, 0.2)
@@ -172,24 +172,45 @@ def build_station():
 
 
 def build_car():
-    body = principled("car dark painted body", (0.012, 0.018, 0.018), 0.2, 0.82, "metal")
-    trim = principled("car trim", (0.16, 0.22, 0.22), 0.25, 0.9, "steel")
+    body = principled("car dark painted body", (0.018, 0.028, 0.03), 0.2, 0.82)
+    trim = principled("car trim", (0.16, 0.22, 0.22), 0.25, 0.9)
     glass = principled("smoked glass", (0.018, 0.055, 0.06), 0.08, 0.38)
     rubber = principled("tire rubber", (0.006, 0.008, 0.009), 0.72, 0.02)
     orange = emit("car orange nose strip", (1.0, 0.16, 0.04), 8)
     red = emit("rear red light", (1.0, 0.01, 0.002), 5)
 
-    vertices = [(-5.4, 0.35, -1.25), (-4.2, 1.0, -1.05), (-2.2, 1.2, -1.0), (-0.8, 2.0, -0.9), (1.5, 1.9, -0.85), (3.8, 1.3, -0.9), (5.0, 0.7, -1.1), (5.2, 0.35, -1.25), (-5.4, 0.35, 1.25), (-4.2, 1.0, 1.05), (-2.2, 1.2, 1.0), (-0.8, 2.0, 0.9), (1.5, 1.9, 0.85), (3.8, 1.3, 0.9), (5.0, 0.7, 1.1), (5.2, 0.35, 1.25)]
-    faces = [(0, 1, 2, 3, 4, 5, 6, 7), (8, 15, 14, 13, 12, 11, 10, 9), (0, 8, 9, 1), (1, 9, 10, 2), (2, 10, 11, 3), (3, 11, 12, 4), (4, 12, 13, 5), (5, 13, 14, 6), (6, 14, 15, 7), (7, 15, 8, 0)]
-    mesh_object("CAR_WEDGE_BODY", vertices, faces, body, 0.16)
+    shell_left = [(-5.0, 0.38, -0.95), (-4.2, 0.76, -0.98), (-2.2, 1.0, -1.0), (4.5, 0.9, -0.9), (4.5, 0.38, -0.98), (-2.5, 0.38, -1.08)]
+    shell_right = [(x, y, -z) for x, y, z in shell_left]
+    shell_faces = [(0, 1, 2, 3, 4, 5), (11, 10, 9, 8, 7, 6)]
+    for index in range(6):
+        next_index = (index + 1) % 6
+        shell_faces.append((index, next_index, next_index + 6, index + 6))
+    mesh_object("CAR_MAIN_SHELL", shell_left + shell_right, shell_faces, body, 0.16)
+    mesh_object("CAR_WEDGE_NOSE", [(-5.5, 0.38, -1.05), (-2.8, 0.38, -1.08), (-1.7, 1.16, -0.82), (-5.5, 0.38, 1.05), (-2.8, 0.38, 1.08), (-1.7, 1.16, 0.82)], [(0, 1, 2), (3, 5, 4), (0, 3, 4, 1), (1, 4, 5, 2), (2, 5, 3, 0)], body, 0.14)
+    cube("CAR_REAR_DECK", (2.8, 1.18, 0), (2.0, 0.22, 1.02), body, 0.16)
     mesh_object("CAR_GLASS_CANOPY", [(-2.4, 1.25, -0.82), (-0.8, 2.12, -0.72), (1.45, 2.03, -0.68), (2.45, 1.35, -0.78), (-2.4, 1.25, 0.82), (-0.8, 2.12, 0.72), (1.45, 2.03, 0.68), (2.45, 1.35, 0.78)], [(0, 1, 2, 3), (4, 7, 6, 5), (0, 4, 5, 1), (1, 5, 6, 2), (2, 6, 7, 3), (3, 7, 4, 0)], glass, 0.08)
+    mesh_object("CAR_LEFT_SIDE_WINDOW", [(-2.25, 1.28, -0.91), (-0.72, 1.98, -0.91), (1.32, 1.92, -0.91), (2.18, 1.36, -0.91)], [(0, 1, 2, 3), (3, 2, 1, 0)], glass, 0.025)
+    mesh_object("CAR_RIGHT_SIDE_WINDOW", [(-2.25, 1.28, 0.91), (-0.72, 1.98, 0.91), (1.32, 1.92, 0.91), (2.18, 1.36, 0.91)], [(0, 3, 2, 1), (1, 2, 3, 0)], glass, 0.025)
+    mesh_object("CAR_HOOD_SURFACE", [(-5.18, 0.45, -1.04), (-2.45, 1.15, -0.86), (-2.45, 1.15, 0.86), (-5.18, 0.45, 1.04)], [(0, 1, 2, 3), (3, 2, 1, 0)], body, 0.055)
     curve_tube("CAR_NOSE_LIGHT", [(-5.08, 0.54, -1.21), (-3.8, 0.63, -1.22), (-2.4, 0.68, -1.2)], 0.055, orange)
     curve_tube("CAR_REAR_LIGHT", [(3.5, 0.7, 1.12), (4.55, 0.65, 1.15), (5.0, 0.55, 1.18)], 0.06, red)
     for x in (-3.15, 3.3):
         for z in (-1.08, 1.08):
-            cylinder("CAR_RECESSED_WHEEL", (x, 0.42, z), 0.78, 0.34, rubber, rotation=(math.pi / 2, 0, 0), bevel=0.08)
-            cylinder("CAR_WHEEL_HUB", (x, 0.42, z + (-0.18 if z < 0 else 0.18)), 0.27, 0.04, trim, rotation=(math.pi / 2, 0, 0), bevel=0.03)
+            cylinder("CAR_RECESSED_WHEEL", (x, 0.42, z), 0.78, 0.34, rubber, rotation=(0, 0, 0), bevel=0.08)
+            cylinder("CAR_WHEEL_HUB", (x, 0.42, z + (-0.18 if z < 0 else 0.18)), 0.27, 0.04, trim, rotation=(0, 0, 0), bevel=0.03)
     cube("CAR_SIDE_LIVERY", (-0.5, 0.83, -1.02), (2.8, 0.045, 0.045), orange, 0.02)
+
+
+def orient_for_gltf():
+    """The source sketches use Y as height; Blender uses Z as height.
+
+    Rotate the authored collection before export so the GLB presents the
+    station and car upright in the Y-up web runtime.
+    """
+    bpy.ops.object.select_all(action="SELECT")
+    for obj in bpy.context.selected_objects:
+        obj.rotation_euler.rotate_axis("X", math.pi / 2)
+    bpy.ops.object.select_all(action="DESELECT")
 
 
 def export(name):
@@ -213,9 +234,11 @@ def main():
     OPTIONS = args()
     clear()
     build_station()
+    orient_for_gltf()
     export("station.glb")
     clear()
     build_car()
+    orient_for_gltf()
     export("car.glb")
 
 

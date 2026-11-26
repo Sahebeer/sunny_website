@@ -1,69 +1,56 @@
-# BRIEF.md — Design brief & site spec
+# Portfolio brief — Midnight Service Station
 
-> Owner: fill in anything in [brackets]. Leave the rest. Codex treats this as the source of truth for taste.
+## Product idea
 
-## About the owner
-- Name: [Your Name]
-- Role: IT fresher / [e.g. Full-stack developer, ML engineer]
-- Location: [City, India]
-- One honest sentence about what you like building: [e.g. "Fast, useful tools that people actually open twice."]
-- Interests outside code: cars (design, engineering, motorsport), [others]
+This is a personal portfolio for an IT fresher who thinks like a product-minded developer. The first impression is a cinematic night service station in falling snow: a place to stop, inspect the work, and choose a direction. The attached gas-station/car image is a mood and lighting reference only. It must not be pasted as the site background or copied pixel-for-pixel.
 
-## Personality of the site
-Creative, unique, aesthetic, precise, confident, calm, engineered, editorial, a little playful in one place only.
-It should feel like **a premium car brochure crossed with an engineer's notebook.**
+The site should feel authored by a developer with a strong visual point of view: tactile, technical, slightly strange, and restrained. It should not read as a corporate agency landing page or a generic portfolio template.
 
-## Car influence, done with taste
-Use these as *design language*, never as decoration:
-- **Spec sheets.** Each project is presented like a model's spec page: clean label/value rows (Stack, Role, Year, Status, Duration, Key metric) set in a mono or tabular face.
-- **Technical drawing.** Thin hairlines, dimension markers, small coordinate labels and section numbers (01, 02, 03) as the grid's annotation.
-- **Livery.** One accent colour, used like a racing stripe: rarely, purposefully, never as a gradient.
-- **Instrument cluster.** Numbers matter: tabular figures, crisp counters, precise alignment.
-- **Model naming.** Projects get a short code (e.g. `P-01`, `P-02`) like chassis codes. Keep headings plain English. No puns.
+## Scene language
 
-## Three visual directions (Phase 1 builds all three so the owner can choose)
-**A — Concours (editorial luxury)**
-Warm off-white paper, deep ink, a serif display face with a refined grotesk. Huge type, generous whitespace, photography-first, like a coffee-table car book.
+- A real station canopy, pump bank, hoses, signage, wet ground, snow, haze, and a low wedge-shaped car form the hero world.
+- The station and car are authored as GLB assets by the Blender pipeline in `scripts/blender/` and loaded with `useGLTF`.
+- Three.js may compose, light, animate, and present the authored assets. It must not create the authored station, pump, or car from primitive geometry at runtime.
+- The scene uses a near-black environment, cold overhead tubes, selective warm orange accents, controlled reflections, fog, snow, and a restrained filmic finish.
+- The car should read from a front-left three-quarter angle, with a low wedge nose, dark glass canopy, hard body planes, wheels, front light strip, and enough material separation to remain legible.
 
-**B — Telemetry (motorsport data)**
-Near-black, a mono + condensed grotesk pairing, timing-screen grids, one hot livery accent (e.g. signal orange). Dense, precise, alive but not noisy.
+## Experience map
 
-**C — Atelier (technical drawing)**
-Pale cool grey, blueprint hairlines, dimension annotations, a neutral grotesk with mono details. It should feel like a design studio's engineering sheet.
+1. Intro: black screen, real asset loading progress, a brief light-up/flicker, and a camera dolly into the station.
+2. Home: owner identity and a concise positioning statement layered over the scene. No visible bracket placeholders.
+3. Projects: camera moves toward the pump/screen area. Project cards behave like instrument panels and open a routed project bay/spec sheet.
+4. About: the camera moves to a quieter inspection angle for profile, skills, education, and working style.
+5. Contact: the camera rises toward the station signage and exposes the contact action.
 
-Owner's pick (fill after Phase 1): [A / B / C / mix, e.g. "B layout with A typography"]
+Browser history is part of the experience. Navigation and project bays use URL state, browser back returns to the previous view and scroll position, Escape/outside click close overlays, and focus returns to the element that opened an overlay.
 
-## The one signature interaction
-Pick one with the owner in Phase 1. Candidates:
-1. **Spec sheet reveal.** Hovering or focusing a project row draws its spec lines in, like a technical drawing being plotted.
-2. **Rev-line scroll indicator.** A thin line in the header that fills with scroll, with section numbers ticking like gear indicators.
-3. **Garage door.** The projects index is a horizontal "lineup"; selecting one slides it forward into a full spec page with a shared-element transition.
+## Motion rules
 
-Chosen: [1 / 2 / 3 / other]
+- Motion is choreographed around the scene: intro reveal, camera stations, light flicker, pointer parallax, project-panel transition, and subtle snow.
+- The first frame must be useful while heavier assets load. Progress is real, not a fake timer.
+- Reduced motion removes camera animation, flicker, snow movement, and non-essential transitions while preserving content and controls.
+- Hidden tabs pause expensive animation. Mobile uses fewer particles and avoids the reflector-heavy path.
+- Use `motion`, GSAP/ScrollTrigger, Lenis, or another dependency only when it improves the scene and keeps the existing interaction correct. Do not stack effects for decoration.
 
-## Pages & sections
-1. **Home**
-   - Hero: name, role, one-line statement, availability status ("Open to roles from [month]"), primary link to projects and resume. No portrait required; the typography carries it.
-   - Selected work: 3–4 featured projects as spec-sheet rows or a lineup.
-   - About (short): who I am in 3–4 sentences, plus a "Currently" block (learning, building, reading).
-   - Skills: grouped (Languages / Frameworks / Tools / Concepts) as plain text lists. No bars, no logos.
-   - Education & experience: a compact timeline (degree, internships, certifications, hackathons).
-   - Garage (personal): a small, tasteful section on the car interest, e.g. a favourite design or a "dream spec" card. This is where a bit of personality is allowed.
-   - Contact: email, GitHub, LinkedIn, resume PDF. A large, simple closing line.
-2. **Projects index** (`/work`): all projects, filterable by type or stack.
-3. **Project detail** (`/work/[slug]`): spec sheet, problem, approach, what I built, screenshots, outcome or metrics, what I learned, links (live, repo).
-4. **404 page**: on-brand and witty in one line.
+## Asset pipeline
 
-## Demo content (Phase 2)
-Use realistic placeholder content in `src/content/site.ts`: 5 plausible fresher projects (e.g. an expense tracker, an ML image classifier, a college event app, a REST API, a CLI tool), a B.Tech/BCA style education entry, one internship and two certifications. Mark every placeholder with `// DEMO`. Use neutral placeholder images (solid tonal blocks with the project code), not stock photos.
+Run `npm run assets` to:
 
-## Content schema (`src/content/site.ts`)
-- `profile`: name, role, location, statement, availability, email, socials, resumeUrl
-- `about`: paragraphs[], currently { learning, building, reading }
-- `projects[]`: slug, code, title, summary, year, role, status, stack[], metric { label, value }, featured, cover, images[], problem, approach, outcome, learned, links { live, repo }
-- `skills`: { languages[], frameworks[], tools[], concepts[] }
-- `timeline[]`: year, title, org, type (education | work | cert | award), note
-- `garage`: title, body, spec[] { label, value }, image
+1. Fetch the selected CC0 Poly Haven HDRI and PBR maps into `public/assets/`.
+2. Write attribution to `CREDITS.md`.
+3. Run Blender headlessly with `scripts/blender/build_assets.py`.
+4. Export Draco-compressed `public/models/station.glb` and `public/models/car.glb`.
 
-## Non-negotiables
-Fast, accessible, responsive and readable. Taste over tricks.
+Never commit a downloaded asset without its source attribution. Never replace a weak authored mesh with Three.js primitive stand-ins. If a better vetted CC0 model is sourced, document the choice in `DECISIONS.md` and preserve the GLB loading contract.
+
+## Content and implementation
+
+All owner-facing text, project metadata, links, and image paths live in `src/content/site.ts`. Components consume typed content; they do not invent portfolio copy. `public/images/` remains available for owner-supplied media.
+
+The stack is Next.js App Router, TypeScript, static-export friendly, CSS Modules, `src/styles/tokens.css`, `next/font`, `motion`, and the approved Three.js scene exception. Keep the implementation keyboard accessible, semantic, and safe at 375, 768, 1280, 1440, and 1920px.
+
+## Review loop
+
+Run `npm run lint`, `npm run build`, and `npm run review`. The review script starts a static server for the exported `out/` directory and captures every station view at 1440×900 and 390×844 into `review/round-N/`. Keep an honest `notes.md` per round, fix the largest visual or interaction gap, and run at least three rounds before calling a milestone complete.
+
+The reference target is the atmosphere and commitment of the supplied image, not a promise that generated geometry is automatically award-level. Compare actual screenshots, report what is still weak, and do not describe the build as final while the car, station silhouette, legibility, or performance remains materially below the target.

@@ -12,11 +12,11 @@ const api = "https://api.polyhaven.com";
 
 const preferred = {
   hdri: ["moonlit_golf", "rogland_clear_night", "winter_evening", "kloppenheim_06_puresky", "wasteland_clouds"],
-  concrete: ["concrete_leaking_001", "concrete_floor_001", "concrete_001"],
-  metal: ["metal_plate_001", "painted_metal_001", "metal_001"],
-  steel: ["brushed_steel", "brushed_metal_001", "metal_rough_001"],
-  snow: ["snow_001", "snow", "ice_001"],
-  asphalt: ["asphalt_road", "asphalt_001", "road"],
+  concrete: ["concrete_floor_01", "concrete_floor", "concrete_001"],
+  metal: ["metal_plate", "metal_plate_02", "painted_metal_shutter"],
+  steel: ["metal_plate_02", "blue_metal_plate", "brushed_concrete_03"],
+  snow: ["snow_01", "snow_02", "asphalt_snow"],
+  asphalt: ["asphalt_01", "asphalt_floor", "clean_asphalt"],
 };
 
 async function getJson(path) {

@@ -315,8 +315,8 @@ export function CarActor({
   // Randomized natural blink every 3 to 6 seconds
   useEffect(() => {
     if (reducedMotion || !isInView || safeMood === 'sleepy') {
-      setIsBlinking(false);
-      return undefined;
+      const resetTimer = window.setTimeout(() => setIsBlinking(false), 0);
+      return () => window.clearTimeout(resetTimer);
     }
 
     let blinkTimer = null;

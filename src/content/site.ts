@@ -135,6 +135,17 @@ export const site = {
     socials: ["GitHub", "LinkedIn"],
     resumeUrl: "#resume",
   },
+  // DEMO / TODO(owner): Replace this fallback once the owner supplies profile details. It prevents bracketed brief placeholders from appearing in the hero.
+  demoProfile: {
+    name: "Sunny",
+    role: "IT fresher / product-minded developer",
+    location: "Punjab, India",
+    statement: "I build small, useful tools with a sharp eye for how they feel to use.",
+    availability: "Open to roles from July 2026",
+    email: "sunny.dev@example.com",
+    socials: ["GitHub", "LinkedIn"],
+    resumeUrl: "#resume",
+  },
   about: {
     paragraphs: [
       "I like the part of software where a rough idea becomes a dependable, legible tool.",
