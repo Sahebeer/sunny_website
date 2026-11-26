@@ -72,9 +72,15 @@ function Model({ path, name, ...props }: { path: string; name: string; position?
         object.material = new THREE.MeshBasicMaterial({ color: "#ff6338" });
       } else if (object.material instanceof THREE.MeshStandardMaterial) {
         object.material.envMapIntensity = 1.2;
-        if (name === "car" && !materialName.includes("GLASS") && !materialName.includes("WHEEL") && !materialLabel.includes("RUBBER")) object.material.color.set("#245b64");
+        if (name === "car" && !materialName.includes("GLASS") && !materialName.includes("WHEEL") && !materialLabel.includes("RUBBER")) {
+          // Keep the homepage hero white while retaining geometry, normals, and the authored orange trim.
+          object.material.color.set("#eef1eb");
+          object.material.roughness = 0.28;
+          object.material.metalness = 0.62;
+          object.material.map = null;
+        }
         else if (name === "station" && !materialName.includes("SNOW")) object.material.color.set("#3a5d61");
-        if (materialName.includes("CAR_WEDGE") || materialLabel.includes("CAR DARK")) object.material.color.set("#1b4a52");
+        if (materialName.includes("CAR_WEDGE") || materialLabel.includes("CAR DARK")) object.material.color.set("#d8ded9");
         else if (materialName.includes("CAR_GLASS") || materialLabel.includes("SMOKED GLASS")) { object.material.color.set("#76bac4"); object.material.transparent = true; object.material.opacity = 0.65; object.material.roughness = 0.08; }
         else if (materialName.includes("CAR_RECESSED") || materialName.includes("CAR_WHEEL")) object.material.color.set("#020708");
         else if (materialName.includes("CANOPY") || materialName.includes("PILLAR") || materialName.includes("JUNCTION")) object.material.color.set("#20383c");
