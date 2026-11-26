@@ -84,7 +84,8 @@ function DirectionSection({ direction }: { direction: Direction }) {
             <p>Featured work / {featuredProject.code}</p>
             <span>{featuredProject.year}</span>
           </div>
-          <article className={styles.projectSheet}>
+          <DeveloperWorkbench direction={direction.id} />
+          <article className={`${styles.projectSheet} ${styles.projectSheetSecondary}`}>
             <div className={`${styles.projectPlate} ${styles[`plate-${featuredProject.cover}`]}`} role="img" aria-label={featuredProject.coverAlt}>
               <span>{featuredProject.code}</span>
               <strong>{featuredProject.title}</strong>
@@ -107,7 +108,6 @@ function DirectionSection({ direction }: { direction: Direction }) {
               </dl>
             </div>
           </article>
-          <DeveloperWorkbench direction={direction.id} />
         </div>
 
         <div className={styles.prototypeBlock}>
