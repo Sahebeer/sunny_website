@@ -86,6 +86,29 @@ function Model({ path, name, ...props }: { path: string; name: string; position?
   return <primitive object={clone} {...props} />;
 }
 
+function ImportedAsset({ path, targetSize, position, rotation }: { path: string; targetSize: number; position: [number, number, number]; rotation?: [number, number, number] }) {
+  const { scene } = useGLTF(path);
+  const clone = useMemo(() => {
+    const next = scene.clone(true);
+    const bounds = new THREE.Box3().setFromObject(next);
+    const size = bounds.getSize(new THREE.Vector3());
+    const center = bounds.getCenter(new THREE.Vector3());
+    next.position.sub(center);
+    next.scale.setScalar(targetSize / Math.max(size.x, size.z, 0.001));
+    const normalizedBounds = new THREE.Box3().setFromObject(next);
+    next.position.y -= normalizedBounds.min.y;
+    next.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      object.castShadow = true;
+      object.receiveShadow = true;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      materials.forEach((material) => normalizeTextureChannels(material));
+    });
+    return next;
+  }, [scene, targetSize]);
+  return <primitive object={clone} position={position} rotation={rotation} />;
+}
+
 function Snow({ reducedMotion }: { reducedMotion: boolean }) {
   const { viewport } = useThree();
   const count = viewport.width < 6 ? 180 : 520;
@@ -167,7 +190,7 @@ function Scene({ view, reducedMotion, pointer, onReady }: { view: Section; reduc
     const timer = window.setTimeout(onReady, reducedMotion ? 120 : 1050);
     return () => window.clearTimeout(timer);
   }, [onReady, reducedMotion]);
-  return <><Environment files="/assets/hdri-moonlit_golf.hdr" background={false} /><color attach="background" args={["#030708"]} /><fog attach="fog" args={["#071013", 10, 33]} /><CameraRig view={view} reducedMotion={reducedMotion} pointer={pointer} /><LightRig reducedMotion={reducedMotion} /><Model path="/models/station.glb" name="station" position={[0, -0.35, -1.5]} scale={0.82} /><Model path="/models/car.glb" name="car" position={[2.25, 0.12, 6]} rotation={[0, -0.38, 0]} scale={1.05} /><Ground /><Snow reducedMotion={reducedMotion} /><EffectComposer multisampling={0}><Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.9} radius={0.62} /><Vignette eskil={false} offset={0.18} darkness={0.84} /><Noise premultiply opacity={0.1} /><ChromaticAberration offset={new THREE.Vector2(0.00045, 0.00045)} radialModulation modulationOffset={0.35} /></EffectComposer><Preload all /></>;
+  return <><Environment files="/assets/hdri-moonlit_golf.hdr" background={false} /><color attach="background" args={["#030708"]} /><fog attach="fog" args={["#071013", 10, 33]} /><CameraRig view={view} reducedMotion={reducedMotion} pointer={pointer} /><LightRig reducedMotion={reducedMotion} /><Model path="/models/station.glb" name="station" position={[0, -0.35, -1.5]} scale={0.82} /><Model path="/models/car.glb" name="car" position={[2.25, 0.12, 6]} rotation={[0, -0.38, 0]} scale={1.05} />{view === "projects" && <ImportedAsset path="/models/extra_glbs/free_sci-fi_vehicle_007_-_public_domain_cc0.glb" targetSize={4.2} position={[-3.6, -0.32, 3.05]} rotation={[0, -Math.PI * 0.5, 0]} />}<Ground /><Snow reducedMotion={reducedMotion} /><EffectComposer multisampling={0}><Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.9} radius={0.62} /><Vignette eskil={false} offset={0.18} darkness={0.84} /><Noise premultiply opacity={0.1} /><ChromaticAberration offset={new THREE.Vector2(0.00045, 0.00045)} radialModulation modulationOffset={0.35} /></EffectComposer><Preload all /></>;
 }
 
 function TerminalTrace() {
