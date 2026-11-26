@@ -70,7 +70,9 @@ export type WorldCopy = {
   contactTitle: string;
   contactNote: string;
   backLabel: string;
+  closeLabel: string;
   specLabels: { stack: string; role: string; email: string; social: string; resume: string };
+  palettes: Array<{ id: "signal" | "paper" | "acid"; label: string; note: string }>;
 };
 
 export const site = {
@@ -114,7 +116,13 @@ export const site = {
     contactTitle: "Open channel",
     contactNote: "Available for a first role where useful software matters.",
     backLabel: "Back to the bay",
+    closeLabel: "Close panel",
     specLabels: { stack: "Stack", role: "Role", email: "Email", social: "Social", resume: "Resume" },
+    palettes: [
+      { id: "signal", label: "01 / Signal", note: "The current black, cyan, and orange telemetry palette." },
+      { id: "paper", label: "02 / Paper", note: "Warm stock and clay red for a quieter editorial read." },
+      { id: "acid", label: "03 / Acid", note: "A bolder chartreuse signal for a more technical, experimental edge." },
+    ],
   } satisfies WorldCopy,
   profile: {
     // DEMO / TODO(owner): Replace the Phase 1 placeholders with real profile data.

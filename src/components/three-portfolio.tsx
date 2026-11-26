@@ -1,11 +1,19 @@
 "use client";
 
 import * as THREE from "three";
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { site, type Project } from "@site";
 import styles from "./three-portfolio.module.css";
 
 type Section = "home" | "projects" | "about" | "contact";
+type Palette = "signal" | "paper" | "acid";
+
+type RouteState = {
+  portfolioRoute: true;
+  view: Section;
+  project: number;
+  scrollY: number;
+};
 
 type ProjectEntry = {
   group: THREE.Group;
@@ -24,14 +32,28 @@ const accent = 0xff6338;
 const pale = 0xd5e5e5;
 const dark = 0x081010;
 
+function routeFromLocation() {
+  if (typeof window === "undefined") return { view: "home" as Section, project: 0 };
+  const params = new URLSearchParams(window.location.search);
+  const view = params.get("view");
+  const project = Number(params.get("project"));
+  return {
+    view: view === "projects" || view === "about" || view === "contact" ? view : "home",
+    project: Number.isInteger(project) && project >= 0 && project < site.projects.length ? project : 0,
+  };
+}
+
 export function ThreePortfolio() {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<SceneRefs | null>(null);
   const activeSectionRef = useRef<Section>("home");
   const selectedProjectRef = useRef(0);
+  const panelRef = useRef<HTMLElement | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
   const [started, setStarted] = useState(false);
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [selectedProject, setSelectedProject] = useState(0);
+  const [palette, setPalette] = useState<Palette>("signal");
 
   useEffect(() => {
     activeSectionRef.current = activeSection;
@@ -42,6 +64,58 @@ export function ThreePortfolio() {
   }, [selectedProject]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const initial = routeFromLocation();
+    activeSectionRef.current = initial.view;
+    selectedProjectRef.current = initial.project;
+    setActiveSection(initial.view);
+    setSelectedProject(initial.project);
+    window.history.scrollRestoration = "manual";
+    const state: RouteState = {
+      portfolioRoute: true,
+      view: initial.view,
+      project: initial.project,
+      scrollY: window.scrollY,
+    };
+    window.history.replaceState(state, "", window.location.href);
+
+    function handlePopState(event: PopStateEvent) {
+      const next = routeFromLocation();
+      activeSectionRef.current = next.view;
+      selectedProjectRef.current = next.project;
+      setActiveSection(next.view);
+      setSelectedProject(next.project);
+      window.requestAnimationFrame(() => window.scrollTo(0, typeof event.state?.scrollY === "number" ? event.state.scrollY : 0));
+    }
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (activeSection === "home") {
+      window.requestAnimationFrame(() => {
+        openerRef.current?.focus({ preventScroll: true });
+        openerRef.current = null;
+      });
+      return;
+    }
+    window.requestAnimationFrame(() => panelRef.current?.focus({ preventScroll: true }));
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (activeSection === "home") return;
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      closePanel();
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (!started) return;
     const mount = mountRef.current;
     if (!mount) return;
     const container = mount;
@@ -263,24 +337,50 @@ export function ThreePortfolio() {
       container.removeChild(renderer.domElement);
       sceneRef.current = null;
     };
-  }, []);
+  }, [started]);
 
-  function changeSection(section: Section) {
-    activeSectionRef.current = section;
-    setActiveSection(section);
+  function changeSection(section: Section, project = selectedProjectRef.current, replace = false) {
+    const sameView = section === activeSectionRef.current && (section !== "projects" || project === selectedProjectRef.current);
+    if (sameView) return;
+    if (section !== "home" && activeSectionRef.current === "home") {
+      openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    }
+    const applyRoute = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("view", section);
+      if (section === "projects") url.searchParams.set("project", String(project));
+      else url.searchParams.delete("project");
+      const nextState: RouteState = { portfolioRoute: true, view: section, project, scrollY: window.scrollY };
+      if (replace) window.history.replaceState(nextState, "", url.toString());
+      else window.history.pushState(nextState, "", url.toString());
+      activeSectionRef.current = section;
+      selectedProjectRef.current = project;
+      setActiveSection(section);
+      setSelectedProject(project);
+    };
+    const documentWithTransitions = document as Document & { startViewTransition?: (update: () => void) => void };
+    if (documentWithTransitions.startViewTransition) documentWithTransitions.startViewTransition(applyRoute);
+    else applyRoute();
+  }
+
+  function closePanel() {
+    if (activeSectionRef.current === "home") return;
+    if (window.history.state?.portfolioRoute && window.history.state.view !== "home") {
+      window.history.back();
+      return;
+    }
+    changeSection("home", selectedProjectRef.current, true);
   }
 
   function chooseProject(index: number) {
-    selectedProjectRef.current = index;
-    setSelectedProject(index);
-    changeSection("projects");
+    changeSection("projects", index);
   }
 
   const selected = site.projects[selectedProject];
   const world = site.world;
 
   return (
-    <main className={styles.world} data-started={started ? "true" : "false"}>
+    <main className={`${styles.world} ${styles[`palette-${palette}`]}`} data-started={started ? "true" : "false"}>
       <div ref={mountRef} className={styles.canvas} aria-label={world.sceneLabel} />
 
       {!started ? (
@@ -307,6 +407,8 @@ export function ThreePortfolio() {
             <span className={styles.status}>{world.sceneStatus}</span>
           </header>
 
+          <PaletteSwitcher palette={palette} onChange={setPalette} />
+
           <section className={styles.identity} aria-labelledby="identity-title">
             <p>{site.profile.role}</p>
             <h1 id="identity-title">{site.profile.name}</h1>
@@ -315,11 +417,12 @@ export function ThreePortfolio() {
 
           <p className={styles.sceneHint}>{world.sceneHint}</p>
 
+          {activeSection !== "home" ? <button className={styles.panelScrim} type="button" aria-label={world.closeLabel} onClick={closePanel} /> : null}
           {activeSection === "projects" ? (
-            <ProjectPanel selected={selected} selectedIndex={selectedProject} onChoose={chooseProject} />
+            <ProjectPanel panelRef={panelRef} selected={selected} selectedIndex={selectedProject} onChoose={chooseProject} onClose={closePanel} />
           ) : null}
-          {activeSection === "about" ? <AboutPanel /> : null}
-          {activeSection === "contact" ? <ContactPanel /> : null}
+          {activeSection === "about" ? <AboutPanel panelRef={panelRef} onClose={closePanel} /> : null}
+          {activeSection === "contact" ? <ContactPanel panelRef={panelRef} onClose={closePanel} /> : null}
 
           <div className={styles.bottomBar}>
             <span>{site.profile.availability}</span>
@@ -340,13 +443,43 @@ function NavButton({ label, active, onClick }: { label: string; active: boolean;
   );
 }
 
-function ProjectPanel({ selected, selectedIndex, onChoose }: { selected: Project; selectedIndex: number; onChoose: (index: number) => void }) {
+function PaletteSwitcher({ palette, onChange }: { palette: Palette; onChange: (palette: Palette) => void }) {
+  return (
+    <aside className={styles.paletteSwitcher} aria-label={site.world.sceneLabel}>
+      <span>{site.world.palettes.find((option) => option.id === palette)?.note}</span>
+      <div>
+        {site.world.palettes.map((option) => (
+          <button key={option.id} type="button" aria-pressed={option.id === palette} onClick={() => onChange(option.id)}>
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+type PanelProps = {
+  panelRef: RefObject<HTMLElement | null>;
+  onClose: () => void;
+};
+
+function PanelActions({ onClose }: { onClose: () => void }) {
+  return (
+    <div className={styles.panelActions}>
+      <button type="button" onClick={onClose}>{site.world.backLabel}</button>
+      <button type="button" onClick={onClose} aria-label={site.world.closeLabel}>{site.world.closeLabel}</button>
+    </div>
+  );
+}
+
+function ProjectPanel({ panelRef, selected, selectedIndex, onChoose, onClose }: PanelProps & { selected: Project; selectedIndex: number; onChoose: (index: number) => void }) {
   const world = site.world;
   return (
-    <aside className={`${styles.panel} ${styles.pumpPanel}`} aria-labelledby="projects-title">
+    <aside ref={panelRef} className={`${styles.panel} ${styles.pumpPanel}`} tabIndex={-1} aria-labelledby="projects-title">
       <div className={styles.pumpTop}>
         <span>{site.entryConsole.stationLabel}</span>
         <span>{site.entryConsole.stationStatus}</span>
+        <button className={styles.panelClose} type="button" onClick={onClose} aria-label={world.closeLabel}>{world.closeLabel}</button>
       </div>
       <div className={styles.pumpScreen}>
         <div className={styles.panelHeader}>
@@ -374,6 +507,7 @@ function ProjectPanel({ selected, selectedIndex, onChoose }: { selected: Project
             <div><dt>{world.specLabels.role}</dt><dd>{selected.role}</dd></div>
             <div><dt>{selected.metric.label}</dt><dd>{selected.metric.value}</dd></div>
           </dl>
+          <TerminalTrace projectCode={selected.code} />
         </article>
       </div>
       <div className={styles.pumpNozzles} aria-hidden="true">
@@ -384,10 +518,11 @@ function ProjectPanel({ selected, selectedIndex, onChoose }: { selected: Project
   );
 }
 
-function AboutPanel() {
+function AboutPanel({ panelRef, onClose }: PanelProps) {
   const world = site.world;
   return (
-    <aside className={styles.panel} aria-labelledby="about-title">
+    <aside ref={panelRef} className={styles.panel} tabIndex={-1} aria-labelledby="about-title">
+      <PanelActions onClose={onClose} />
       <div className={styles.panelHeader}>
         <div><p>{site.profile.role}</p><h2 id="about-title">{world.aboutTitle}</h2></div>
         <span>{site.profile.location}</span>
@@ -404,10 +539,11 @@ function AboutPanel() {
   );
 }
 
-function ContactPanel() {
+function ContactPanel({ panelRef, onClose }: PanelProps) {
   const world = site.world;
   return (
-    <aside className={styles.panel} aria-labelledby="contact-title">
+    <aside ref={panelRef} className={styles.panel} tabIndex={-1} aria-labelledby="contact-title">
+      <PanelActions onClose={onClose} />
       <div className={styles.panelHeader}>
         <div><p>{site.profile.availability}</p><h2 id="contact-title">{world.contactTitle}</h2></div>
         <span>{site.profile.email}</span>
