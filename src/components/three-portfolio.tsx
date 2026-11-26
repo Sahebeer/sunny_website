@@ -51,11 +51,13 @@ export function ThreePortfolio() {
     scene.background = new THREE.Color(dark);
 
     const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-    camera.position.set(11, 6.5, 15);
+    camera.position.set(-11, 6.5, 15);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
@@ -96,31 +98,56 @@ export function ThreePortfolio() {
     world.add(grid);
 
     const canopy = new THREE.Group();
-    canopy.position.y = 6.6;
+    canopy.position.y = 6.8;
     world.add(canopy);
-    addBox(canopy, [18, 0.3, 7], [0, 0, 0], 0x101718, { metalness: 0.35 });
-    addBox(canopy, [18.2, 0.08, 0.12], [0, -0.15, 3.45], accent, { roughness: 0.45, metalness: 0.2 });
-    [-5, 0, 5].forEach((x) => addBox(canopy, [3.3, 0.05, 0.55], [x, -0.2, 0], pale, { roughness: 0.4 }));
-    [-7.8, 7.8].forEach((x) => {
-      addBox(world, [0.34, 6.6, 0.34], [x, 3.2, 0], 0x263536, { metalness: 0.35 });
-      addBox(world, [0.48, 0.08, 0.48], [x, 0.05, 0], accent, { roughness: 0.5 });
+    addBox(canopy, [19, 0.34, 8], [0, 0, 0], 0x182526, { metalness: 0.38, roughness: 0.54 });
+    addBox(canopy, [19.2, 0.1, 0.16], [0, -0.2, 3.96], accent, { roughness: 0.45, metalness: 0.24 });
+    addBox(canopy, [19.2, 0.1, 0.16], [0, -0.2, -3.96], accent, { roughness: 0.45, metalness: 0.24 });
+    addBox(canopy, [18.4, 0.58, 0.22], [0, -0.44, 3.78], 0x2b4141, { metalness: 0.34 });
+    const stationSign = new THREE.Mesh(
+      new THREE.BoxGeometry(7.2, 0.42, 0.05),
+      new THREE.MeshBasicMaterial({ map: makeStationTexture(site.entryConsole.stationLabel) }),
+    );
+    stationSign.position.set(0, -0.42, 3.91);
+    canopy.add(stationSign);
+    [-5.5, 0, 5.5].forEach((x) => {
+      addBox(canopy, [3.6, 0.06, 0.7], [x, -0.22, 0], pale, { roughness: 0.34 });
+      const canopyLight = new THREE.PointLight(0xcfe4e5, 3.4, 8);
+      canopyLight.position.set(x, -0.65, 0.5);
+      canopy.add(canopyLight);
+    });
+    [-7.9, 7.9].forEach((x) => {
+      [-3.4, 3.4].forEach((z) => {
+        addBox(world, [0.38, 6.8, 0.38], [x, 3.3, z], 0x2d4041, { metalness: 0.44, roughness: 0.56 });
+        addBox(world, [0.56, 0.1, 0.56], [x, 0.06, z], accent, { roughness: 0.48 });
+      });
     });
 
-    const pump = new THREE.Group();
-    pump.position.set(-4.3, 1.75, -0.25);
-    world.add(pump);
-    addBox(pump, [2.3, 3.5, 1.45], [0, 0, 0], 0x2b3a3b, { metalness: 0.28 });
-    addBox(pump, [1.3, 0.95, 0.08], [0, 0.8, 0.75], 0x071010, { metalness: 0.1 });
-    addBox(pump, [1.05, 0.06, 0.08], [0, 0.8, 0.8], accent, { roughness: 0.35 });
-    [-0.38, 0, 0.38].forEach((x) => addBox(pump, [0.14, 0.95, 0.12], [x, -0.65, 0.76], 0x9bb6b7));
-    addBox(pump, [2.7, 0.18, 1.8], [0, -1.8, 0], 0x142122);
-    const pumpCable = new THREE.Mesh(
-      new THREE.TorusGeometry(0.7, 0.035, 6, 24, Math.PI * 1.25),
-      makeMaterial(accent, 0.55, 0.1),
-    );
-    pumpCable.rotation.x = Math.PI / 2;
-    pumpCable.position.set(1.22, -0.2, 0.7);
-    pump.add(pumpCable);
+    const island = new THREE.Group();
+    island.position.set(0, 0.25, -0.8);
+    world.add(island);
+    addBox(island, [9.4, 0.32, 2.65], [0, 0, 0], 0x263b3c, { metalness: 0.34, roughness: 0.48 });
+    addBox(island, [9.1, 0.08, 2.34], [0, 0.21, 0], accent, { metalness: 0.1, roughness: 0.46 });
+    addBox(island, [8.9, 0.12, 2.12], [0, 0.28, 0], 0x162324, { metalness: 0.28 });
+
+    [-2.55, 2.55].forEach((x) => {
+      const dispenser = new THREE.Group();
+      dispenser.position.set(x, 2.0, -0.05);
+      island.add(dispenser);
+      addBox(dispenser, [1.7, 3.2, 1.2], [0, 0, 0], 0x789395, { metalness: 0.32, roughness: 0.52 });
+      addBox(dispenser, [1.38, 1.02, 0.08], [0, 0.8, 0.64], 0x0b1718, { metalness: 0.2 });
+      addBox(dispenser, [1.06, 0.06, 0.08], [0, 0.84, 0.7], accent, { roughness: 0.38 });
+      [-0.34, 0, 0.34].forEach((nozzleX) => {
+        addBox(dispenser, [0.13, 0.92, 0.12], [nozzleX, -0.64, 0.65], 0x172324, { metalness: 0.44 });
+        addBox(dispenser, [0.08, 0.3, 0.07], [nozzleX, -0.18, 0.7], pale, { roughness: 0.38 });
+      });
+      const hosePath = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0.68, 0.42, 0.7),
+        new THREE.Vector3(1.08, -0.08, 0.72),
+        new THREE.Vector3(0.82, -0.65, 0.72),
+      ]);
+      dispenser.add(new THREE.Mesh(new THREE.TubeGeometry(hosePath, 18, 0.045, 8, false), makeMaterial(accent, 0.58, 0.18)));
+    });
 
     const posterEntries: ProjectEntry[] = [];
     const posterColors = [0x243031, 0x203436, 0x2c2c2a];
@@ -149,16 +176,16 @@ export function ThreePortfolio() {
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const cameraTargets: Record<Section, THREE.Vector3> = {
-      home: new THREE.Vector3(11, 6.5, 15),
-      projects: new THREE.Vector3(8.5, 4.8, 11),
-      about: new THREE.Vector3(-10, 5.8, 13),
-      contact: new THREE.Vector3(0, 7.5, 17),
+      home: new THREE.Vector3(-11, 6.2, 15),
+      projects: new THREE.Vector3(-8.5, 4.9, 11),
+      about: new THREE.Vector3(-13, 5.8, 13),
+      contact: new THREE.Vector3(-3, 7.5, 17),
     };
     const lookTargets: Record<Section, THREE.Vector3> = {
-      home: new THREE.Vector3(0, 2.5, 0),
-      projects: new THREE.Vector3(2, 2.7, -0.5),
-      about: new THREE.Vector3(-2.5, 2.5, 0),
-      contact: new THREE.Vector3(0, 2.5, 0),
+      home: new THREE.Vector3(-0.5, 2.4, 0.8),
+      projects: new THREE.Vector3(-0.2, 2.7, -0.5),
+      about: new THREE.Vector3(-2.8, 2.5, 0),
+      contact: new THREE.Vector3(-0.5, 2.5, 0),
     };
 
     function resize() {
@@ -316,33 +343,43 @@ function NavButton({ label, active, onClick }: { label: string; active: boolean;
 function ProjectPanel({ selected, selectedIndex, onChoose }: { selected: Project; selectedIndex: number; onChoose: (index: number) => void }) {
   const world = site.world;
   return (
-    <aside className={styles.panel} aria-labelledby="projects-title">
-      <div className={styles.panelHeader}>
-        <div>
-          <p>{world.sceneLabel}</p>
-          <h2 id="projects-title">{world.projectsTitle}</h2>
+    <aside className={`${styles.panel} ${styles.pumpPanel}`} aria-labelledby="projects-title">
+      <div className={styles.pumpTop}>
+        <span>{site.entryConsole.stationLabel}</span>
+        <span>{site.entryConsole.stationStatus}</span>
+      </div>
+      <div className={styles.pumpScreen}>
+        <div className={styles.panelHeader}>
+          <div>
+            <p>{world.sceneLabel}</p>
+            <h2 id="projects-title">{world.projectsTitle}</h2>
+          </div>
+          <span>{world.projectsNote}</span>
         </div>
-        <span>{world.projectsNote}</span>
+        <div className={styles.projectList} role="list" aria-label={world.projectsTitle}>
+          {site.projects.map((project, index) => (
+            <button className={selectedIndex === index ? styles.projectActive : undefined} key={project.slug} type="button" onClick={() => onChoose(index)}>
+              <span>{project.code}</span>
+              <strong>{project.title}</strong>
+              <small>{project.status}</small>
+            </button>
+          ))}
+        </div>
+        <article className={styles.projectDetail} aria-live="polite">
+          <p>{selected.code} / {selected.year}</p>
+          <h3>{selected.title}</h3>
+          <p>{selected.summary}</p>
+          <dl>
+            <div><dt>{world.specLabels.stack}</dt><dd>{selected.stack.join(" · ")}</dd></div>
+            <div><dt>{world.specLabels.role}</dt><dd>{selected.role}</dd></div>
+            <div><dt>{selected.metric.label}</dt><dd>{selected.metric.value}</dd></div>
+          </dl>
+        </article>
       </div>
-      <div className={styles.projectList} role="list" aria-label={world.projectsTitle}>
-        {site.projects.map((project, index) => (
-          <button className={selectedIndex === index ? styles.projectActive : undefined} key={project.slug} type="button" onClick={() => onChoose(index)}>
-            <span>{project.code}</span>
-            <strong>{project.title}</strong>
-            <small>{project.status}</small>
-          </button>
-        ))}
+      <div className={styles.pumpNozzles} aria-hidden="true">
+        <i /><i /><i />
       </div>
-      <article className={styles.projectDetail} aria-live="polite">
-        <p>{selected.code} / {selected.year}</p>
-        <h3>{selected.title}</h3>
-        <p>{selected.summary}</p>
-        <dl>
-          <div><dt>{world.specLabels.stack}</dt><dd>{selected.stack.join(" · ")}</dd></div>
-          <div><dt>{world.specLabels.role}</dt><dd>{selected.role}</dd></div>
-          <div><dt>{selected.metric.label}</dt><dd>{selected.metric.value}</dd></div>
-        </dl>
-      </article>
+      <div className={styles.pumpBase} aria-hidden="true" />
     </aside>
   );
 }
@@ -412,10 +449,28 @@ function makePosterTexture(project: Project, background: number) {
   return texture;
 }
 
+function makeStationTexture(label: string) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 100;
+  const context = canvas.getContext("2d");
+  if (!context) return new THREE.CanvasTexture(canvas);
+  context.fillStyle = "#172526";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "#ff6338";
+  context.fillRect(0, 0, canvas.width, 5);
+  context.fillStyle = "#d5e5e5";
+  context.font = "600 34px monospace";
+  context.fillText(label.toUpperCase(), 46, 64);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
 function createProjectCar() {
   const car = new THREE.Group();
-  const material = new THREE.MeshStandardMaterial({ color: 0x1b2c2d, roughness: 0.25, metalness: 0.68 });
-  const glassMaterial = new THREE.MeshStandardMaterial({ color: 0x315052, roughness: 0.14, metalness: 0.45 });
+  const material = new THREE.MeshPhysicalMaterial({ color: 0x1d3435, roughness: 0.25, metalness: 0.62, clearcoat: 0.58, clearcoatRoughness: 0.16 });
+  const glassMaterial = new THREE.MeshPhysicalMaterial({ color: 0x2d5355, roughness: 0.16, metalness: 0.42, clearcoat: 0.7, clearcoatRoughness: 0.12 });
   const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x050707, roughness: 0.82, metalness: 0.2 });
   const rimMaterial = new THREE.MeshStandardMaterial({ color: 0x91a8a9, roughness: 0.33, metalness: 0.7 });
   const lightMaterial = new THREE.MeshStandardMaterial({ color: 0xd5e5e5, roughness: 0.28, metalness: 0.18 });
@@ -435,6 +490,9 @@ function createProjectCar() {
   const body = extrudeCarShape(bodyShape, 2.5, material);
   body.position.y = 0.25;
   car.add(body);
+  const frontSplitter = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.11, 2.72), accentMaterial);
+  frontSplitter.position.set(-3.4, 0.29, 0);
+  car.add(frontSplitter);
 
   const cabinShape = new THREE.Shape();
   cabinShape.moveTo(-1.14, 0.98);
@@ -470,6 +528,10 @@ function createProjectCar() {
     light.rotation.z = -0.12;
     car.add(light);
   });
+  const frontLightBar = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.14, 1.82), lightMaterial);
+  frontLightBar.position.set(-3.46, 0.58, 0);
+  frontLightBar.rotation.z = -0.06;
+  car.add(frontLightBar);
   const tail = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.16, 1.7), accentMaterial);
   tail.position.set(3.42, 0.62, 0);
   car.add(tail);

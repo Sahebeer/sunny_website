@@ -244,6 +244,100 @@
   box-shadow: 0.7rem 0.7rem 0 rgba(5, 7, 7, 0.8);
 }
 
+.pumpPanel {
+  overflow: visible;
+  padding: 0.8rem 0.8rem 0;
+  border: 1px solid #536d6e;
+  border-top: 0;
+  border-left: 1px solid #536d6e;
+  background: #2b3b3c;
+  box-shadow: 0.7rem 0.7rem 0 rgba(5, 7, 7, 0.82);
+}
+
+.pumpPanel::before {
+  position: absolute;
+  top: -1.35rem;
+  right: 7%;
+  left: 7%;
+  height: 1.35rem;
+  border: 1px solid #536d6e;
+  border-bottom: 0;
+  border-radius: 1.1rem 1.1rem 0 0;
+  background: #2b3b3c;
+  content: "";
+}
+
+.pumpPanel::after {
+  position: absolute;
+  right: -0.45rem;
+  bottom: -0.75rem;
+  left: -0.45rem;
+  height: 0.75rem;
+  border: 1px solid #536d6e;
+  border-top: 0;
+  background: #172526;
+  content: "";
+}
+
+.pumpTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.2rem 0.55rem 0.75rem;
+  color: #d5e5e5;
+  font-family: var(--font-mono);
+  font-size: 0.61rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pumpTop span:last-child {
+  color: #ff6338;
+}
+
+.pumpScreen {
+  max-height: calc(100svh - 17rem);
+  overflow-y: auto;
+  padding: 1rem;
+  border: 0.5rem solid #132021;
+  background: #0b1212;
+  scrollbar-color: #ff6338 #132021;
+  scrollbar-width: thin;
+}
+
+.pumpScreen .panelHeader {
+  padding-bottom: 0.85rem;
+}
+
+.pumpNozzles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  width: 62%;
+  margin: 0.85rem auto 0;
+  padding: 0.7rem 1rem 0;
+  border-top: 1px solid #536d6e;
+}
+
+.pumpNozzles i {
+  display: block;
+  height: 2.75rem;
+  border: 1px solid #9bb6b7;
+  background: #172526;
+}
+
+.pumpNozzles i:nth-child(2) {
+  height: 3.3rem;
+  margin-top: -0.55rem;
+}
+
+.pumpBase {
+  height: 0.55rem;
+  margin: 0.75rem -0.8rem 0;
+  border-top: 1px solid #7c9697;
+  background: #172526;
+}
+
 .panelHeader {
   display: flex;
   justify-content: space-between;
@@ -448,6 +542,15 @@
     width: calc(100% - 2rem);
     max-height: none;
     margin: 64svh 1rem 6rem;
+  }
+
+  .pumpPanel {
+    margin-top: calc(64svh + 1.4rem);
+    padding-top: 0.7rem;
+  }
+
+  .pumpScreen {
+    max-height: 52svh;
   }
 
   .bottomBar {
