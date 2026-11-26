@@ -17,8 +17,8 @@ The site should feel authored by a developer with a strong visual point of view:
 ## Experience map
 
 1. Intro: black screen, real asset loading progress, a brief light-up/flicker, and a camera dolly into the station.
-2. Home: owner identity and a concise positioning statement layered over the scene. No visible bracket placeholders.
-3. Projects: camera moves toward the pump/screen area. Project cards behave like instrument panels and open a routed project bay/spec sheet.
+2. Home: owner identity and a concise positioning statement lead the page, followed by a compact working-stack readout and CLI trace. No visible bracket placeholders.
+3. Projects: camera moves toward the pump/screen area. Project cards behave like instrument panels and open a routed project bay/spec sheet. Keep the CLI trace as part of the developer texture.
 4. About: the camera moves to a quieter inspection angle for profile, skills, education, and working style.
 5. Contact: the camera rises toward the station signage and exposes the contact action.
 

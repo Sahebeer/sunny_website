@@ -156,6 +156,7 @@ export const site = {
       building: "A calmer personal finance tracker",
       reading: "Notes on industrial design",
     },
+    techStack: ["TypeScript", "Next.js", "React", "Node.js", "SQL", "Three.js"],
   },
   projects: [
     // DEMO

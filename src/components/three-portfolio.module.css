@@ -47,6 +47,15 @@
 .identity h2 { margin: 0.7rem 0 0.4rem; font-family: var(--font-fraunces); font-size: clamp(4.2rem, 12vw, 11rem); font-weight: 500; letter-spacing: -0.11em; line-height: 0.78; }
 .identity > p { margin: 0; }
 .statement { max-width: 26rem; margin-top: 1.8rem !important; color: var(--ink); font-size: clamp(1rem, 1.5vw, 1.25rem); line-height: 1.35; }
+.homeWorkbench { position: fixed; z-index: 3; top: clamp(22rem, 48vh, 30rem); right: clamp(4.5rem, 8vw, 8rem); display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(15rem, 1.1fr); gap: 1rem; width: min(42rem, 46vw); padding: 0.9rem; border: 1px solid var(--line); border-left: 2px solid var(--signal); background: rgba(4, 9, 9, 0.78); box-shadow: 0.9rem 0.9rem 0 rgba(1, 3, 3, 0.38); backdrop-filter: blur(8px); }
+.homeWorkbenchCopy { min-width: 0; }
+.homeWorkbenchKicker, .stackBlock > span { display: block; color: var(--signal); font-family: var(--font-ibm-mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.homeWorkbench h3 { max-width: 13ch; margin: 0.8rem 0 0.7rem; font-family: var(--font-space-grotesk); font-size: clamp(1.2rem, 2vw, 1.8rem); line-height: 0.98; }
+.homeWorkbenchCopy > p { margin: 0; color: var(--muted); font-size: 0.75rem; line-height: 1.45; }
+.stackBlock { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--line); }
+.stackList { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
+.stackList span { padding: 0.32rem 0.42rem; border: 1px solid var(--line); color: var(--ink); font-family: var(--font-ibm-mono); font-size: 0.56rem; }
+.homeWorkbench .terminal { margin-top: 0; align-self: stretch; }
 .sectionLabel { right: clamp(1rem, 4vw, 4rem); bottom: 8.4rem; display: grid; grid-template-columns: auto auto; gap: 0.2rem 0.65rem; align-items: baseline; max-width: 16rem; text-align: right; text-transform: uppercase; }
 .sectionLabel span { color: var(--signal); font-size: 0.75rem; }
 .sectionLabel strong { font-size: 0.72rem; font-weight: 400; letter-spacing: 0.12em; }
@@ -96,6 +105,12 @@
   .identity { top: 10.8rem; }
   .identity h2 { font-size: clamp(4.4rem, 22vw, 7rem); }
   .identity .statement { max-width: 19rem; font-size: 0.9rem; }
+  .homeWorkbench { top: 25.5rem; right: 1rem; left: 1rem; display: block; width: auto; padding: 0.8rem; }
+  .homeWorkbench h3 { max-width: 18ch; font-size: 1.25rem; }
+  .homeWorkbenchCopy > p { max-width: 25rem; }
+  .homeWorkbench .terminal { margin-top: 0.9rem; }
+  .homeWorkbench .terminalLog { max-height: 5rem; line-height: 1.55; }
+  .homeView .sectionLabel { display: none; }
   .paletteSwitcher { top: 6.9rem; left: 1rem; right: auto; }
   .sectionLabel { right: 1rem; bottom: 7rem; }
   .scrollRail { display: none; }

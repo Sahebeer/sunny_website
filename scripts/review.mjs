@@ -9,6 +9,7 @@ const round = Number(process.env.REVIEW_ROUND || 1);
 const output = join(root, "review", `round-${round}`);
 const port = Number(process.env.REVIEW_PORT || 3100);
 const base = `http://127.0.0.1:${port}/lab/`;
+const widths = (process.env.REVIEW_WIDTHS || "1440,390").split(",").map(Number).filter((width) => Number.isFinite(width) && width > 0);
 
 async function waitForServer(url) {
   for (let attempt = 0; attempt < 60; attempt += 1) {
@@ -27,8 +28,8 @@ async function main() {
   try {
     await waitForServer(base);
     const browser = await chromium.launch({ headless: true });
-    for (const width of [1440, 390]) {
-      const page = await browser.newPage({ viewport: { width, height: width === 390 ? 844 : 900 }, deviceScaleFactor: 1 });
+    for (const width of widths) {
+      const page = await browser.newPage({ viewport: { width, height: width <= 768 ? 844 : 900 }, deviceScaleFactor: 1 });
       for (const view of ["home", "projects", "about", "contact"]) {
         await page.goto(`${base}${view === "home" ? "" : `?view=${view}`}`, { waitUntil: "networkidle" });
         const start = page.getByRole("button", { name: "Start", exact: true });
