@@ -39,6 +39,10 @@ export function DeveloperWorkbench({ direction }: { direction: Direction["id"] }
                   <span>{project.code}</span>
                   <span>{project.year}</span>
                 </div>
+                <div className={`${styles.posterVisual} ${styles[`visual-${project.cover}`]}`} aria-hidden="true">
+                  <span>{project.code}</span>
+                  <strong>{project.metric.value}</strong>
+                </div>
                 <h4>{project.title}</h4>
                 <p>{project.summary}</p>
                 <div className={styles.posterFooter}>

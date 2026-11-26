@@ -1,0 +1,378 @@
+.sceneFigure {
+  width: min(100% - 3rem, 88rem);
+  margin: 0 auto;
+  padding: clamp(2rem, 4vw, 3.5rem) 0 0;
+}
+
+.sceneHud,
+.sceneCaption,
+.sceneCoordinates {
+  color: #8a928d;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sceneHud {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(240, 238, 231, 0.2);
+}
+
+.sceneHud span:first-child {
+  color: #ff6338;
+}
+
+.sceneViewport {
+  position: relative;
+  min-height: clamp(22rem, 46vw, 42rem);
+  overflow: hidden;
+  perspective: 1100px;
+  background: #050707;
+  cursor: crosshair;
+  isolation: isolate;
+}
+
+.sceneViewport::before,
+.sceneViewport::after {
+  position: absolute;
+  z-index: 5;
+  content: "";
+  pointer-events: none;
+}
+
+.sceneViewport::before {
+  inset: 0;
+  border: 1px solid rgba(240, 238, 231, 0.24);
+}
+
+.sceneViewport::after {
+  right: 1.3rem;
+  bottom: 1.3rem;
+  left: 1.3rem;
+  height: 1px;
+  background: rgba(240, 238, 231, 0.22);
+}
+
+.sceneCamera,
+.sceneWorld {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.sceneCamera {
+  transform: rotateX(0deg) rotateY(0deg);
+}
+
+.sceneWorld {
+  transform: translate3d(0, 1rem, 0) rotateX(9deg) rotateY(-6deg);
+}
+
+.sceneSky {
+  position: absolute;
+  inset: 0;
+  background: #070909;
+}
+
+.sceneSky::before,
+.sceneSky::after {
+  position: absolute;
+  content: "";
+}
+
+.sceneSky::before {
+  top: 18%;
+  left: 8%;
+  width: 56%;
+  height: 1px;
+  background: rgba(240, 238, 231, 0.2);
+  transform: rotate(-12deg) translateZ(10px);
+}
+
+.sceneSky::after {
+  top: 25%;
+  right: 11%;
+  width: 24%;
+  height: 1px;
+  background: rgba(240, 238, 231, 0.16);
+  transform: rotate(16deg) translateZ(10px);
+}
+
+.canopy {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  width: 76%;
+  height: 34%;
+  border: 1px solid rgba(240, 238, 231, 0.35);
+  background: #111717;
+  transform: translate3d(-50%, 0, 120px) rotateX(62deg);
+  transform-origin: center bottom;
+}
+
+.canopyEdge {
+  position: absolute;
+  top: -0.6rem;
+  right: -1rem;
+  left: -1rem;
+  height: 0.18rem;
+  background: #ff6338;
+}
+
+.canopyLight {
+  position: absolute;
+  top: 22%;
+  width: 23%;
+  height: 0.28rem;
+  background: #b8d3d5;
+}
+
+.canopyLight:nth-child(2) {
+  left: 11%;
+}
+
+.canopyLight:nth-child(3) {
+  left: 39%;
+}
+
+.canopyLight:nth-child(4) {
+  right: 11%;
+}
+
+.stationColumn {
+  position: absolute;
+  top: 23%;
+  width: 1.6rem;
+  height: 56%;
+  border: 1px solid rgba(184, 211, 213, 0.6);
+  background: #1c2b2c;
+  transform: translateZ(60px);
+}
+
+.columnLeft {
+  left: 17%;
+}
+
+.columnRight {
+  right: 17%;
+}
+
+.pumpUnit {
+  position: absolute;
+  top: 48%;
+  left: 31%;
+  display: grid;
+  width: clamp(8rem, 15vw, 12rem);
+  min-height: 12rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(184, 211, 213, 0.62);
+  background: #243234;
+  box-shadow: 0.8rem 0.8rem 0 #0b1010;
+  transform: translate3d(-50%, -50%, 96px) rotateY(7deg);
+}
+
+.pumpUnit::after {
+  position: absolute;
+  right: -1rem;
+  bottom: 1.5rem;
+  width: 1rem;
+  height: 5rem;
+  border: 1px solid #ff6338;
+  border-left: 0;
+  border-radius: 0 1rem 1rem 0;
+  content: "";
+}
+
+.pumpTop,
+.pumpReadout {
+  color: #8a928d;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pumpUnit strong {
+  align-self: center;
+  color: #f0eee7;
+  font-family: var(--font-space-grotesk);
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  font-weight: 500;
+  letter-spacing: -0.1em;
+  line-height: 0.7;
+}
+
+.pumpReadout {
+  margin-top: 0.8rem;
+  color: #ff6338;
+}
+
+.pumpSlot {
+  display: block;
+  width: 1rem;
+  height: 0.3rem;
+  margin-top: 0.35rem;
+  border: 1px solid rgba(240, 238, 231, 0.36);
+}
+
+.projectCapsule {
+  position: absolute;
+  top: 57%;
+  right: 17%;
+  display: grid;
+  gap: 0.35rem;
+  width: clamp(10rem, 20vw, 17rem);
+  padding: 1rem;
+  border: 1px solid rgba(240, 238, 231, 0.3);
+  background: #0f1515;
+  transform: translate3d(0, -50%, 115px) rotateY(-12deg);
+}
+
+.projectCapsule::before {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  left: 1rem;
+  height: 0.12rem;
+  background: #ff6338;
+  content: "";
+}
+
+.projectCapsule span,
+.projectCapsule small {
+  color: #8a928d;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.projectCapsule strong {
+  max-width: 7ch;
+  color: #f0eee7;
+  font-family: var(--font-fraunces);
+  font-size: clamp(1.4rem, 3vw, 2.8rem);
+  font-weight: 500;
+  letter-spacing: -0.08em;
+  line-height: 0.85;
+}
+
+.groundPlane {
+  position: absolute;
+  right: -15%;
+  bottom: -31%;
+  left: -15%;
+  height: 62%;
+  border-top: 1px solid rgba(184, 211, 213, 0.52);
+  background: #101b1c;
+  transform: translateZ(-20px) rotateX(64deg);
+  transform-origin: top center;
+}
+
+.groundPlane::before,
+.groundPlane::after {
+  position: absolute;
+  top: 25%;
+  width: 36%;
+  height: 1px;
+  background: rgba(184, 211, 213, 0.3);
+  content: "";
+}
+
+.groundPlane::before {
+  left: 9%;
+  transform: rotate(-8deg);
+}
+
+.groundPlane::after {
+  right: 8%;
+  transform: rotate(8deg);
+}
+
+.sceneCrosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(240, 238, 231, 0.34);
+  transform: translate(-50%, -50%);
+}
+
+.sceneCrosshair::before,
+.sceneCrosshair::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgba(240, 238, 231, 0.44);
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.sceneCrosshair::before {
+  width: 3rem;
+  height: 1px;
+}
+
+.sceneCrosshair::after {
+  width: 1px;
+  height: 3rem;
+}
+
+.sceneCoordinates {
+  position: absolute;
+  right: 1.3rem;
+  bottom: 1.7rem;
+  z-index: 6;
+  color: #ff6338;
+}
+
+.sceneCaption {
+  margin: 0;
+  padding-top: 0.65rem;
+}
+
+@media (max-width: 700px) {
+  .sceneFigure {
+    width: min(100% - 2rem, 88rem);
+  }
+
+  .sceneViewport {
+    min-height: 26rem;
+  }
+
+  .sceneWorld {
+    transform: translate3d(0, 1rem, 0) rotateX(7deg) rotateY(-4deg) scale(1.12);
+  }
+
+  .canopy {
+    width: 105%;
+  }
+
+  .columnLeft {
+    left: 6%;
+  }
+
+  .columnRight {
+    right: 6%;
+  }
+
+  .pumpUnit {
+    left: 27%;
+  }
+
+  .projectCapsule {
+    right: 6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sceneViewport {
+    cursor: default;
+  }
+}

@@ -1,4 +1,5 @@
 import { site, featuredProject, type Direction } from "@site";
+import { EntryConsole } from "@/components/entry-console";
 import { DeveloperWorkbench } from "@/components/developer-workbench";
 import { InteractionPrototypes } from "@/components/interaction-prototypes";
 import styles from "./lab.module.css";
@@ -18,6 +19,7 @@ export default function LabPage() {
         </div>
       </header>
       <div id="top" className={styles.labBody}>
+        <EntryConsole />
         {site.directions.map((direction) => (
           <DirectionSection direction={direction} key={direction.id} />
         ))}

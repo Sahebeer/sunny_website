@@ -40,6 +40,21 @@ export type DeveloperArtifact = {
   wallNote: string;
 };
 
+export type EntryConsole = {
+  eyebrow: string;
+  title: string;
+  body: string;
+  prompt: string;
+  stationLabel: string;
+  stationStatus: string;
+  displayLabel: string;
+  displayValue: string;
+  displayNote: string;
+  sceneLabel: string;
+  sceneNote: string;
+  footnote: string;
+};
+
 export const site = {
   metadata: {
     title: "Direction Lab — Sunny Portfolio",
@@ -52,6 +67,20 @@ export const site = {
     scrollHint: "Scroll to compare",
     footerNote: "Phase 01 · Direction lab",
   },
+  entryConsole: {
+    eyebrow: "Phase 01 / direction lab",
+    title: "Start with the workbench.",
+    body: "Choose a visual route, then inspect the same developer through three different design studios.",
+    prompt: "Select a direction",
+    stationLabel: "Route console / S-01",
+    stationStatus: "Systems ready",
+    displayLabel: "Available routes",
+    displayValue: "03",
+    displayNote: "Each route has its own language.",
+    sceneLabel: "Scene study / nocturne bay",
+    sceneNote: "A spatial interface for the workbench.",
+    footnote: "The game layer is only the way in. The work stays visible.",
+  } satisfies EntryConsole,
   profile: {
     // DEMO / TODO(owner): Replace the Phase 1 placeholders with real profile data.
     name: "[Your Name]",

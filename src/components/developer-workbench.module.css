@@ -214,6 +214,70 @@
   margin: 0;
 }
 
+.posterVisual {
+  position: relative;
+  display: flex;
+  min-height: 7rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 0.9rem 0 0;
+  padding: 0.7rem;
+  border: 1px solid currentColor;
+  overflow: hidden;
+  color: var(--poster-ink);
+}
+
+.posterVisual::before,
+.posterVisual::after {
+  position: absolute;
+  border: 1px solid currentColor;
+  content: "";
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.posterVisual::before {
+  inset: 0.7rem;
+}
+
+.posterVisual::after {
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 3rem;
+  height: 3rem;
+  transform: rotate(45deg);
+}
+
+.visual-ledgerline {
+  background: #c8bca9;
+}
+
+.visual-fieldnote {
+  background: #b7c8c8;
+}
+
+.visual-signal-api {
+  background: #4e5d59;
+}
+
+.posterVisual span,
+.posterVisual strong {
+  position: relative;
+  z-index: 1;
+  font-family: var(--direction-detail);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.posterVisual strong {
+  max-width: 8ch;
+  color: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  text-align: right;
+}
+
 .poster h4 {
   margin-top: 2.5rem;
   font-family: var(--direction-display);
