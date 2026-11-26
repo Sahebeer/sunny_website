@@ -6,7 +6,7 @@ import { Environment, Html, MeshReflectorMaterial, Preload, useGLTF, useProgress
 import gsap from "gsap";
 import dynamic from "next/dynamic";
 import * as THREE from "three";
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject, type WheelEvent as ReactWheelEvent } from "react";
+import { Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject, type WheelEvent as ReactWheelEvent } from "react";
 import { site, type Project } from "@site";
 import styles from "./three-portfolio.module.css";
 
@@ -91,8 +91,10 @@ function ImportedAsset({ path, targetSize, position, rotation = [0, 0, 0], activ
   const groupRef = useRef<THREE.Group>(null);
   const [positionX, positionY, positionZ] = position;
   const [rotationX, rotationY, rotationZ] = rotation;
-  const exitPosition = useMemo<[number, number, number]>(() => [positionX - 4.2, positionY + 1.15, positionZ + 2.1], [positionX, positionY, positionZ]);
-  const exitRotation = useMemo<[number, number, number]>(() => [rotationX + 0.12, rotationY + 0.5, rotationZ - 0.08], [rotationX, rotationY, rotationZ]);
+  const entryPosition = useMemo<[number, number, number]>(() => [positionX, positionY - 0.28, positionZ + 0.2], [positionX, positionY, positionZ]);
+  const entryRotation = useMemo<[number, number, number]>(() => [rotationX + 0.04, rotationY - 0.12, rotationZ], [rotationX, rotationY, rotationZ]);
+  const exitPosition = useMemo<[number, number, number]>(() => [positionX - 4.4, positionY + 0.08, positionZ + 2], [positionX, positionY, positionZ]);
+  const exitRotation = useMemo<[number, number, number]>(() => [rotationX + 0.02, rotationY + 0.26, rotationZ - 0.03], [rotationX, rotationY, rotationZ]);
   const clone = useMemo(() => {
     const next = scene.clone(true);
     const bounds = new THREE.Box3().setFromObject(next);
@@ -107,29 +109,64 @@ function ImportedAsset({ path, targetSize, position, rotation = [0, 0, 0], activ
       object.castShadow = true;
       object.receiveShadow = true;
       const materials = Array.isArray(object.material) ? object.material : [object.material];
-      materials.forEach((material) => normalizeTextureChannels(material));
+      const animatedMaterials = materials.map((material) => {
+        if (!(material instanceof THREE.Material)) return material;
+        const copy = material.clone();
+        copy.transparent = true;
+        copy.opacity = 1;
+        normalizeTextureChannels(copy);
+        return copy;
+      });
+      object.material = Array.isArray(object.material) ? animatedMaterials : animatedMaterials[0];
     });
     return next;
   }, [scene, targetSize]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const group = groupRef.current;
     if (!group) return;
-    const targetPosition = active ? position : exitPosition;
-    const targetRotation = active ? rotation : exitRotation;
-    const targetScale = active ? 1 : 0.72;
+    const setOpacity = (opacity: number) => {
+      clone.traverse((object) => {
+        if (!(object instanceof THREE.Mesh)) return;
+        const materials = Array.isArray(object.material) ? object.material : [object.material];
+        materials.forEach((material) => {
+          if (material instanceof THREE.Material) material.opacity = opacity;
+        });
+      });
+    };
     if (reducedMotion) {
-      group.position.set(...targetPosition);
-      group.rotation.set(...targetRotation);
-      group.scale.setScalar(targetScale);
+      group.position.set(...(active ? position : exitPosition));
+      group.rotation.set(...(active ? rotation : exitRotation));
+      group.scale.setScalar(active ? 1 : 0.72);
+      setOpacity(active ? 1 : 0);
       return;
     }
-    const tween = gsap.timeline({ defaults: { duration: 0.82, ease: "power3.inOut" } });
-    tween.to(group.position, { x: targetPosition[0], y: targetPosition[1], z: targetPosition[2] }, 0);
-    tween.to(group.rotation, { x: targetRotation[0], y: targetRotation[1], z: targetRotation[2] }, 0);
-    tween.to(group.scale, { x: targetScale, y: targetScale, z: targetScale }, 0);
+    const tween = gsap.timeline();
+    if (active) {
+      gsap.set(group.position, { x: entryPosition[0], y: entryPosition[1], z: entryPosition[2] });
+      gsap.set(group.rotation, { x: entryRotation[0], y: entryRotation[1], z: entryRotation[2] });
+      gsap.set(group.scale, { x: 0.9, y: 0.9, z: 0.9 });
+      setOpacity(0);
+      tween.to(group.position, { x: position[0], y: position[1], z: position[2], duration: 0.9, ease: "power3.out" }, 0);
+      tween.to(group.rotation, { x: rotation[0], y: rotation[1], z: rotation[2], duration: 0.9, ease: "power2.out" }, 0);
+      tween.to(group.scale, { x: 1, y: 1, z: 1, duration: 0.8, ease: "back.out(1.2)" }, 0.08);
+      const opacity = { value: 0 };
+      tween.to(opacity, { value: 1, duration: 0.55, ease: "power2.out", onUpdate: () => setOpacity(opacity.value) }, 0.14);
+    } else {
+      tween.to(group.position, { x: position[0] - 0.5, y: position[1] + 0.16, z: position[2] + 0.28, duration: 0.24, ease: "power2.out" }, 0);
+      tween.to(group.position, { x: exitPosition[0], y: exitPosition[1], z: exitPosition[2], duration: 1.22, ease: "power3.in" }, 0.22);
+      tween.to(group.rotation, { x: exitRotation[0], y: exitRotation[1], z: exitRotation[2], duration: 1.34, ease: "power2.inOut" }, 0);
+      tween.to(group.scale, { x: 0.84, y: 0.84, z: 0.84, duration: 1.34, ease: "power2.in" }, 0.04);
+      const opacity = { value: 1 };
+      tween.to(opacity, { value: 0, duration: 0.46, ease: "power2.in", onUpdate: () => setOpacity(opacity.value) }, 1.02);
+    }
     return () => { tween.kill(); };
-  }, [active, exitPosition, exitRotation, position, reducedMotion, rotation]);
-  return <group ref={groupRef} position={active ? position : exitPosition} rotation={active ? rotation : exitRotation} scale={active ? 1 : 0.72}><primitive object={clone} /></group>;
+  }, [active, clone, entryPosition, entryRotation, exitPosition, exitRotation, position, reducedMotion, rotation]);
+  const [initialTransform] = useState(() => ({
+    position: active ? entryPosition : exitPosition,
+    rotation: active ? entryRotation : exitRotation,
+    scale: active ? 0.9 : 0.78,
+  }));
+  return <group ref={groupRef} position={initialTransform.position} rotation={initialTransform.rotation} scale={initialTransform.scale}><primitive object={clone} /></group>;
 }
 
 function Snow({ reducedMotion }: { reducedMotion: boolean }) {
@@ -219,7 +256,7 @@ function Scene({ view, reducedMotion, pointer, onReady }: { view: Section; reduc
       const frame = window.requestAnimationFrame(() => setShowPrototype(true));
       return () => window.cancelAnimationFrame(frame);
     }
-    const timer = window.setTimeout(() => setShowPrototype(false), reducedMotion ? 0 : 900);
+    const timer = window.setTimeout(() => setShowPrototype(false), reducedMotion ? 0 : 1600);
     return () => window.clearTimeout(timer);
   }, [reducedMotion, view]);
   return <><Environment files="/assets/hdri-moonlit_golf.hdr" background={false} /><color attach="background" args={["#030708"]} /><fog attach="fog" args={["#071013", 10, 33]} /><CameraRig view={view} reducedMotion={reducedMotion} pointer={pointer} /><LightRig reducedMotion={reducedMotion} /><Model path="/models/station.glb" name="station" position={[0, -0.35, -1.5]} scale={0.82} /><Model path="/models/car.glb" name="car" position={[2.25, 0.12, 6]} rotation={[0, -0.38, 0]} scale={1.05} />{showPrototype && <ImportedAsset path="/models/extra_glbs/free_sci-fi_vehicle_007_-_public_domain_cc0.glb" targetSize={4.2} position={[-3.6, -0.32, 3.05]} rotation={[0, -Math.PI * 0.5, 0]} active={view === "projects"} reducedMotion={reducedMotion} />}<Ground /><Snow reducedMotion={reducedMotion} /><EffectComposer multisampling={0}><Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.9} radius={0.62} /><Vignette eskil={false} offset={0.18} darkness={0.84} /><Noise premultiply opacity={0.1} /><ChromaticAberration offset={new THREE.Vector2(0.00045, 0.00045)} radialModulation modulationOffset={0.35} /></EffectComposer><Preload all /></>;
