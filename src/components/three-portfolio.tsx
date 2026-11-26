@@ -62,32 +62,24 @@ function Model({ path, name, ...props }: { path: string; name: string; position?
       object.castShadow = true;
       object.receiveShadow = true;
       const materialName = object.name.toUpperCase();
-      const materialLabel = object.material instanceof THREE.Material ? object.material.name.toUpperCase() : "";
-      if (object.material instanceof THREE.MeshStandardMaterial) normalizeTextureChannels(object.material);
-      if (materialName.includes("COLD_EMISSIVE") || materialName.includes("CAR_NOSE_LIGHT") || materialLabel.includes("COLD FLUORESCENT")) {
-        object.material = new THREE.MeshBasicMaterial({ color: "#c9f5ff" });
-      } else if (materialName.includes("CAR_REAR_LIGHT") || materialLabel.includes("REAR RED")) {
-        object.material = new THREE.MeshBasicMaterial({ color: "#ff402b" });
-      } else if (materialName.includes("ORANGE_EDGE") || materialName.includes("SIDE_LIVERY") || materialLabel.includes("WARM ORANGE") || materialLabel.includes("CAR ORANGE")) {
-        object.material = new THREE.MeshBasicMaterial({ color: "#ff6338" });
-      } else if (object.material instanceof THREE.MeshStandardMaterial) {
-        object.material.envMapIntensity = 1.2;
-        if (name === "car" && !materialName.includes("GLASS") && !materialName.includes("WHEEL") && !materialLabel.includes("RUBBER")) {
-          // Keep the homepage hero white while retaining geometry, normals, and the authored orange trim.
-          object.material.color.set("#eef1eb");
-          object.material.roughness = 0.28;
-          object.material.metalness = 0.62;
-          object.material.map = null;
+      const sourceMaterials = Array.isArray(object.material) ? object.material : [object.material];
+      const styledMaterials = sourceMaterials.map((material) => {
+        const materialLabel = material instanceof THREE.Material ? material.name.toUpperCase() : "";
+        if (name !== "car" && (materialName.includes("COLD_EMISSIVE") || materialLabel.includes("COLD FLUORESCENT"))) return new THREE.MeshBasicMaterial({ color: "#c9f5ff" });
+        if (name !== "car" && (materialName.includes("CAR_REAR_LIGHT") || materialLabel.includes("REAR RED"))) return new THREE.MeshBasicMaterial({ color: "#ff402b" });
+        if (name !== "car" && (materialName.includes("ORANGE_EDGE") || materialName.includes("SIDE_LIVERY") || materialLabel.includes("WARM ORANGE") || materialLabel.includes("CAR ORANGE"))) return new THREE.MeshBasicMaterial({ color: "#ff6338" });
+        if (!(material instanceof THREE.MeshStandardMaterial)) return material;
+        normalizeTextureChannels(material);
+        if (name === "station") {
+          material.envMapIntensity = 1.2;
+          if (!materialName.includes("SNOW")) material.color.set("#3a5d61");
+          if (materialName.includes("CANOPY") || materialName.includes("PILLAR") || materialName.includes("JUNCTION")) material.color.set("#20383c");
+          else if (materialName.includes("PUMP") || materialName.includes("BOLLARD")) material.color.set("#496b6d");
+          else material.color.multiplyScalar(1.45);
         }
-        else if (name === "station" && !materialName.includes("SNOW")) object.material.color.set("#3a5d61");
-        if (materialName.includes("CAR_WEDGE") || materialLabel.includes("CAR DARK")) object.material.color.set("#d8ded9");
-        else if (materialName.includes("CAR_GLASS") || materialLabel.includes("SMOKED GLASS")) { object.material.color.set("#76bac4"); object.material.transparent = true; object.material.opacity = 0.65; object.material.roughness = 0.08; }
-        else if (materialName.includes("CAR_RECESSED") || materialName.includes("CAR_WHEEL")) object.material.color.set("#020708");
-        else if (materialName.includes("CANOPY") || materialName.includes("PILLAR") || materialName.includes("JUNCTION")) object.material.color.set("#20383c");
-        else if (materialName.includes("PUMP") || materialName.includes("BOLLARD")) object.material.color.set("#496b6d");
-        else object.material.color.multiplyScalar(1.45);
-      }
-      if (object.material instanceof THREE.Material) object.material.side = THREE.DoubleSide;
+        return material;
+      });
+      object.material = Array.isArray(object.material) ? styledMaterials : styledMaterials[0];
     });
     return next;
   }, [name, scene]);

@@ -44,24 +44,10 @@ function CarModel({ targetLane, groupRef, reducedMotion }: { targetLane: Mutable
       object.receiveShadow = true;
       if (Array.isArray(object.material)) object.material = object.material.map((material) => material.clone());
       else object.material = object.material.clone();
-      const objectName = object.name.toUpperCase();
       const materials = Array.isArray(object.material) ? object.material : [object.material];
       materials.forEach((material) => {
         if (!(material instanceof THREE.MeshStandardMaterial)) return;
         normalizeTextureChannels(material);
-        material.envMapIntensity = 1.8;
-        if (objectName.includes("GLASS")) {
-          material.color.set("#62c5cf");
-          material.roughness = 0.12;
-          material.metalness = 0.2;
-        } else if (objectName.includes("WHEEL") || objectName.includes("RUBBER")) {
-          material.color.set("#152426");
-          material.roughness = 0.52;
-        } else {
-          material.color.set("#2d7077");
-          material.roughness = 0.3;
-          material.metalness = 0.65;
-        }
       });
     });
     return clone;

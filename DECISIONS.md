@@ -8,3 +8,4 @@
 - Blender source sketches use Y as the design-height axis, so the export pipeline applies a documented X-axis rotation before GLB export to present the assets upright in the Y-up web runtime.
 - Review rounds 1–6 were kept as evidence. The current build is functional and visually coherent, but the generated car/station meshes remain the largest gap to a true award-site finish.
 - The bottom-of-page game is a separate lazy-mounted R3F canvas. It reuses the dedicated car GLB, permits primitive road/obstacle geometry because that is the requested gameplay layer, pauses the main scene while active, and stores only the best score in localStorage.
+- The car remains stock-material at runtime by owner request; the loader only normalizes invalid GLB texture channels so the supplied asset renders without shader errors.
