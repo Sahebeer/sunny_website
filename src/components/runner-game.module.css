@@ -4,12 +4,16 @@
 .gameHeader h2 { max-width: 34rem; margin: 0.65rem 0 0; font-family: var(--font-space-grotesk); font-size: clamp(1.3rem, 3vw, 2.4rem); font-weight: 500; line-height: 1.05; }
 .gameClose { width: 2.35rem; height: 2.35rem; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; font-size: 1.35rem; }
 .gameClose:hover, .gameClose:focus-visible { border-color: var(--signal); color: var(--signal); }
-.gameHud { display: flex; gap: 1.5rem; max-width: 72rem; margin: 0 auto 0.45rem; color: var(--muted); }
+.gameHud { display: flex; flex-wrap: wrap; gap: 0.45rem 1.5rem; max-width: 72rem; margin: 0 auto 0.45rem; color: var(--muted); }
 .gameHud strong { color: var(--signal); font-weight: 400; }
 .gameCanvas { position: relative; width: min(100%, 80rem); height: min(450px, 58vw); min-height: 19rem; margin: 0 auto; overflow: hidden; border: 1px solid var(--line); background: #040809; touch-action: manipulation; }
+.gameCanvas::before { position: absolute; z-index: 1; inset: 0; pointer-events: none; border: 1px solid rgba(117, 203, 208, 0.12); content: ""; }
+.gameCanvas::after { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 0%, transparent 80%, rgba(3, 7, 8, 0.24) 100%); content: ""; }
+.impact { animation: impact-flash 650ms cubic-bezier(0.22, 1, 0.36, 1); }
 .gameCanvas canvas { display: block; width: 100%; height: 100%; }
 .gameOver { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 0.75rem; background: rgba(3, 7, 8, 0.7); backdrop-filter: blur(4px); }
 .gameOver strong { font-family: var(--font-space-grotesk); font-size: clamp(3rem, 10vw, 7rem); font-weight: 500; line-height: 0.8; }
+.gameCallout { position: absolute; top: 1rem; left: 50%; padding: 0.5rem 0.7rem; border: 1px solid var(--signal); background: rgba(4, 9, 9, 0.82); color: var(--signal); font-family: var(--font-ibm-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; transform: translateX(-50%); }
 .gameOver button { border: 1px solid var(--signal); padding: 0.7rem 0.9rem; background: var(--signal); color: #071011; cursor: pointer; font-family: var(--font-ibm-mono); font-size: 0.62rem; text-transform: uppercase; }
 .gameOver button:hover, .gameOver button:focus-visible { background: transparent; color: var(--signal); }
 .gameControls { display: flex; justify-content: space-between; align-items: center; width: min(100%, 80rem); margin: 0.65rem auto 0; color: var(--muted); }
@@ -17,10 +21,17 @@
 .gameControls button { width: 2.5rem; height: 2rem; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; font-size: 1rem; }
 .gameControls button:hover, .gameControls button:focus-visible { border-color: var(--signal); color: var(--signal); }
 
+@keyframes impact-flash {
+  0%, 100% { border-color: var(--line); }
+  18% { border-color: var(--signal); box-shadow: inset 0 0 0 2px rgba(255, 99, 56, 0.32); }
+}
+
 @media (max-width: 700px) {
   .game { min-height: 28rem; padding: 1.3rem 1rem 2rem; }
   .gameHeader { gap: 1rem; }
   .gameCanvas { height: 72vw; min-height: 16rem; }
+  .gameControls { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 0.75rem; }
+  .gameControls > span { max-width: none; line-height: 1.45; }
 }
 
 @media (prefers-reduced-motion: reduce) {

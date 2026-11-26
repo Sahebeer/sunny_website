@@ -45,6 +45,13 @@ function ProgressReporter({ onProgress }: { onProgress: (value: number) => void 
   return null;
 }
 
+function normalizeTextureChannels(material: THREE.Material) {
+  if (!(material instanceof THREE.MeshStandardMaterial)) return;
+  [material.map, material.normalMap, material.roughnessMap, material.metalnessMap, material.aoMap, material.emissiveMap, material.bumpMap, material.displacementMap, material.alphaMap, material.lightMap].forEach((texture) => {
+    if (texture) texture.channel = 0;
+  });
+}
+
 function Model({ path, name, ...props }: { path: string; name: string; position?: [number, number, number]; rotation?: [number, number, number]; scale?: number }) {
   const { scene } = useGLTF(path);
   const clone = useMemo(() => {
@@ -56,6 +63,7 @@ function Model({ path, name, ...props }: { path: string; name: string; position?
       object.receiveShadow = true;
       const materialName = object.name.toUpperCase();
       const materialLabel = object.material instanceof THREE.Material ? object.material.name.toUpperCase() : "";
+      if (object.material instanceof THREE.MeshStandardMaterial) normalizeTextureChannels(object.material);
       if (materialName.includes("COLD_EMISSIVE") || materialName.includes("CAR_NOSE_LIGHT") || materialLabel.includes("COLD FLUORESCENT")) {
         object.material = new THREE.MeshBasicMaterial({ color: "#c9f5ff" });
       } else if (materialName.includes("CAR_REAR_LIGHT") || materialLabel.includes("REAR RED")) {

@@ -83,6 +83,12 @@ export type MiniGameCopy = {
   body: string;
   scoreLabel: string;
   bestLabel: string;
+  laneLabel: string;
+  speedLabel: string;
+  passLabel: string;
+  nearMissLabel: string;
+  signalLabel: string;
+  phaseLabels: [string, string, string];
   restartLabel: string;
   closeLabel: string;
   gameOverLabel: string;
@@ -148,6 +154,12 @@ export const site = {
     body: "Keep the car moving through the service lanes. Use the keyboard or tap a side of the road.",
     scoreLabel: "Score",
     bestLabel: "Best",
+    laneLabel: "Lane",
+    speedLabel: "Rate",
+    passLabel: "Pass",
+    nearMissLabel: "Near pass",
+    signalLabel: "Signal stays live while the run holds.",
+    phaseLabels: ["ROLL OUT", "PRESSURE", "REDLINE"],
     restartLabel: "Restart run",
     closeLabel: "Close mini-game",
     gameOverLabel: "Run ended",
