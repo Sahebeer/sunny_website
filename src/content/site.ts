@@ -75,6 +75,22 @@ export type WorldCopy = {
   palettes: Array<{ id: "signal" | "paper" | "acid"; label: string; note: string }>;
 };
 
+export type MiniGameCopy = {
+  modelPath: string;
+  prompt: string;
+  openLabel: string;
+  title: string;
+  body: string;
+  scoreLabel: string;
+  bestLabel: string;
+  restartLabel: string;
+  closeLabel: string;
+  gameOverLabel: string;
+  controlsLabel: string;
+  leftLabel: string;
+  rightLabel: string;
+};
+
 export const site = {
   metadata: {
     title: "Sunny — Interactive Portfolio",
@@ -124,6 +140,21 @@ export const site = {
       { id: "acid", label: "03 / Acid", note: "A bolder chartreuse signal for a more technical, experimental edge." },
     ],
   } satisfies WorldCopy,
+  miniGame: {
+    modelPath: "/models/car.glb",
+    prompt: "Reached the service exit?",
+    openLabel: "Play lane run",
+    title: "Night shift / lane run",
+    body: "Keep the car moving through the service lanes. Use the keyboard or tap a side of the road.",
+    scoreLabel: "Score",
+    bestLabel: "Best",
+    restartLabel: "Restart run",
+    closeLabel: "Close mini-game",
+    gameOverLabel: "Run ended",
+    controlsLabel: "Lane controls",
+    leftLabel: "Move left",
+    rightLabel: "Move right",
+  } satisfies MiniGameCopy,
   profile: {
     // DEMO / TODO(owner): Replace the Phase 1 placeholders with real profile data.
     name: "[Your Name]",

@@ -47,6 +47,12 @@
 .identity h2 { margin: 0.7rem 0 0.4rem; font-family: var(--font-fraunces); font-size: clamp(4.2rem, 12vw, 11rem); font-weight: 500; letter-spacing: -0.11em; line-height: 0.78; }
 .identity > p { margin: 0; }
 .statement { max-width: 26rem; margin-top: 1.8rem !important; color: var(--ink); font-size: clamp(1rem, 1.5vw, 1.25rem); line-height: 1.35; }
+.gameTriggerSpace { height: calc(400svh - 1px); }
+.gameSentinel { width: 1px; height: 1px; }
+.gameMount { position: relative; z-index: 3; }
+.gamePrompt { position: fixed; right: clamp(1rem, 4vw, 4rem); bottom: 4.3rem; z-index: 6; display: flex; align-items: center; gap: 0.8rem; padding: 0.55rem 0.65rem 0.55rem 0.8rem; border: 1px solid var(--line); border-left: 2px solid var(--signal); background: rgba(4, 9, 9, 0.9); color: var(--ink); font-family: var(--font-ibm-mono); font-size: 0.62rem; letter-spacing: 0.05em; }
+.gamePrompt button { border: 1px solid var(--signal); padding: 0.5rem 0.65rem; background: var(--signal); color: #071011; cursor: pointer; font: inherit; font-size: 0.58rem; text-transform: uppercase; }
+.gamePrompt button:hover, .gamePrompt button:focus-visible { background: transparent; color: var(--signal); }
 .homeWorkbench { position: fixed; z-index: 3; top: clamp(22rem, 48vh, 30rem); right: clamp(4.5rem, 8vw, 8rem); display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(15rem, 1.1fr); gap: 1rem; width: min(42rem, 46vw); padding: 0.9rem; border: 1px solid var(--line); border-left: 2px solid var(--signal); background: rgba(4, 9, 9, 0.78); box-shadow: 0.9rem 0.9rem 0 rgba(1, 3, 3, 0.38); backdrop-filter: blur(8px); }
 .homeWorkbenchCopy { min-width: 0; }
 .homeWorkbenchKicker, .stackBlock > span { display: block; color: var(--signal); font-family: var(--font-ibm-mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -111,6 +117,7 @@
   .homeWorkbench .terminal { margin-top: 0.9rem; }
   .homeWorkbench .terminalLog { max-height: 5rem; line-height: 1.55; }
   .homeView .sectionLabel { display: none; }
+  .gamePrompt { right: 1rem; bottom: 4.2rem; left: 1rem; justify-content: space-between; }
   .paletteSwitcher { top: 6.9rem; left: 1rem; right: auto; }
   .sectionLabel { right: 1rem; bottom: 7rem; }
   .scrollRail { display: none; }

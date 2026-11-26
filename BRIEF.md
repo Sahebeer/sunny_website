@@ -21,6 +21,7 @@ The site should feel authored by a developer with a strong visual point of view:
 3. Projects: camera moves toward the pump/screen area. Project cards behave like instrument panels and open a routed project bay/spec sheet. Keep the CLI trace as part of the developer texture.
 4. About: the camera moves to a quieter inspection angle for profile, skills, education, and working style.
 5. Contact: the camera rises toward the station signage and exposes the contact action.
+6. Service exit: when the footer sentinel enters view, offer a quiet lane-run mini-game. It uses the car GLB, a generated road, keyboard/touch lane controls, a persistent best score, and an explicit close path. The game is lazy-mounted only after the trigger and must not hijack normal portfolio scrolling.
 
 Browser history is part of the experience. Navigation and project bays use URL state, browser back returns to the previous view and scroll position, Escape/outside click close overlays, and focus returns to the element that opened an overlay.
 
@@ -30,6 +31,7 @@ Browser history is part of the experience. Navigation and project bays use URL s
 - The first frame must be useful while heavier assets load. Progress is real, not a fake timer.
 - Reduced motion removes camera animation, flicker, snow movement, and non-essential transitions while preserving content and controls.
 - Hidden tabs pause expensive animation. Mobile uses fewer particles and avoids the reflector-heavy path.
+- The lane-run canvas is mounted only after the footer trigger, pauses the main scene while active, and unmounts when closed or when the visitor scrolls far back into the portfolio.
 - Use `motion`, GSAP/ScrollTrigger, Lenis, or another dependency only when it improves the scene and keeps the existing interaction correct. Do not stack effects for decoration.
 
 ## Asset pipeline

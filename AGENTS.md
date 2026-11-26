@@ -28,6 +28,7 @@ This is a personal portfolio for an IT fresher. The portfolio is a cinematic int
 - The intro fades from black, flickers the station lights, then dollies in. Pointer parallax is gentle.
 - Navigation and scroll move the camera between scene stations. Project screens open a spec panel with a visible close button, Escape close, outside-click close, focus return, and browser-history support.
 - The terminal log must auto-scroll to new output while remaining manually scrollable with mouse, touch, and keyboard.
+- The service-exit lane-run mini-game is a lazy, separate canvas: it triggers from a footer sentinel, pauses the main scene while active, supports keyboard/touch lane changes, persists only the best score, and unmounts on close or when the visitor scrolls away.
 - Use deliberate 200–600ms easing. Respect `prefers-reduced-motion`: static camera, no animated snow, and no non-essential transitions.
 - Pause or reduce work when the document is hidden. Cap pixel ratio at 2. Lazy-load the heavy scene. Mobile uses fewer snow particles and no reflector.
 

@@ -4,10 +4,13 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from "@react-three/postprocessing";
 import { Environment, Html, MeshReflectorMaterial, Preload, useGLTF, useProgress } from "@react-three/drei";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 import * as THREE from "three";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject, type WheelEvent as ReactWheelEvent } from "react";
 import { site, type Project } from "@site";
 import styles from "./three-portfolio.module.css";
+
+const RunnerGame = dynamic(() => import("./runner-game"), { ssr: false });
 
 type Section = "home" | "projects" | "about" | "contact";
 type Palette = "signal" | "paper" | "acid";
@@ -202,8 +205,15 @@ export function ThreePortfolio() {
   const [view, setView] = useState<Section>(() => readRoute().view);
   const [project, setProject] = useState(() => readRoute().project);
   const [palette, setPalette] = useState<Palette>("signal");
+  const [gamePromptVisible, setGamePromptVisible] = useState(false);
+  const [gameOpen, setGameOpen] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+  const gameSentinelRef = useRef<HTMLDivElement>(null);
+  const gameSectionRef = useRef<HTMLDivElement>(null);
+  const gameStartRef = useRef(0);
+  const gameOpenRef = useRef(false);
+  const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const pointer = useRef({ x: 0, y: 0 });
   const wheelLock = useRef(false);
   const scrollSync = useRef(false);
@@ -251,7 +261,7 @@ export function ThreePortfolio() {
   useEffect(() => {
     const onPointer = (event: PointerEvent) => { pointer.current.x = event.clientX / window.innerWidth * 2 - 1; pointer.current.y = -(event.clientY / window.innerHeight * 2 - 1); };
     const onScroll = () => {
-      if (wheelLock.current || scrollSync.current || project >= 0) return;
+      if (wheelLock.current || scrollSync.current || project >= 0 || gameOpenRef.current) return;
       const index = Math.round(window.scrollY / Math.max(window.innerHeight, 1));
       const nextView = sections[Math.max(0, Math.min(sections.length - 1, index))];
       if (nextView !== view) navigate(nextView);
@@ -259,7 +269,35 @@ export function ThreePortfolio() {
     window.addEventListener("pointermove", onPointer, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => { window.removeEventListener("pointermove", onPointer); window.removeEventListener("scroll", onScroll); };
-  }, [navigate, project, view]);
+  }, [gameOpen, navigate, project, view]);
+
+  useEffect(() => {
+    const sentinel = gameSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(([entry]) => setGamePromptVisible(entry.isIntersecting && !gameOpen), { rootMargin: "0px 0px 320px 0px" });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [gameOpen, ready]);
+
+  useEffect(() => {
+    if (!gameOpen) return;
+    gameStartRef.current = window.scrollY;
+    let revealed = false;
+    const revealGame = () => {
+      if (revealed || !gameSectionRef.current || gameSectionRef.current.offsetHeight === 0) return;
+      revealed = true;
+      gameSectionRef.current.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+      resizeObserver.disconnect();
+    };
+    const resizeObserver = new ResizeObserver(revealGame);
+    if (gameSectionRef.current) resizeObserver.observe(gameSectionRef.current);
+    const revealTimer = window.setTimeout(revealGame, 1200);
+    const onScroll = () => {
+      if (window.scrollY + window.innerHeight * 1.5 < gameStartRef.current) setGameOpen(false);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.clearTimeout(revealTimer); resizeObserver.disconnect(); window.removeEventListener("scroll", onScroll); };
+  }, [gameOpen, reducedMotion]);
 
   const openProject = (index: number, target: HTMLElement) => { openerRef.current = target; navigate("projects", index); };
   const onWheel = (event: ReactWheelEvent<HTMLElement>) => {
@@ -272,9 +310,10 @@ export function ThreePortfolio() {
     navigate(sections[next]);
     window.setTimeout(() => { wheelLock.current = false; }, 700);
   };
-  const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const activeProject = project >= 0 ? site.projects[project] : null;
+  const openGame = () => { gameOpenRef.current = true; setGameOpen(true); setGamePromptVisible(false); };
+  const closeGame = () => { gameOpenRef.current = false; setGameOpen(false); };
 
-  return <main className={`${styles.world} ${styles[palette]} ${view === "home" ? styles.homeView : ""}`} onWheel={onWheel}><div className={styles.canvas} aria-hidden="true">{started && <Canvas dpr={[1, 2]} shadows gl={{ antialias: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.5 }} camera={{ fov: 35, near: 0.1, far: 100, position: cameraTargets.home.position }} onCreated={({ gl }) => { gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)); }}><Suspense fallback={null}><ProgressReporter onProgress={setProgress} /><Scene view={view} reducedMotion={reducedMotion} pointer={pointer} onReady={() => setReady(true)} />{view === "projects" && site.projects.map((item, index) => <ProjectScreen key={item.slug} project={item} index={index} onOpen={openProject} />)}</Suspense></Canvas>}</div><Boot started={started} progress={progress} onStart={() => setStarted(true)} ready={ready} />{ready && <><header className={styles.header}><button type="button" className={styles.mark} onClick={() => navigate("home")}>{site.navigation.mark}</button><nav aria-label="Primary navigation">{sections.map((item) => <button key={item} type="button" className={item === view ? styles.activeNav : ""} onClick={() => navigate(item)}>{site.world.nav[item]}</button>)}</nav><span className={styles.status}><i />{site.world.sceneStatus}</span></header><section className={styles.identity} aria-labelledby="portfolio-name"><span>{site.world.sceneLabel}</span><h2 id="portfolio-name">{fallbackProfile.name}</h2><p>{fallbackProfile.role} / {fallbackProfile.location}</p><p className={styles.statement}>{fallbackProfile.statement}</p></section>{view === "home" && <HomeWorkbench />}<div className={styles.sectionLabel}><span>0{sections.indexOf(view) + 1}</span><strong>{site.world.nav[view]}</strong><small>{site.world.sceneHint}</small></div><div className={styles.paletteSwitcher} aria-label="Temporary palette comparison">{site.world.palettes.map((item) => <button key={item.id} type="button" className={palette === item.id ? styles.paletteActive : ""} onClick={() => setPalette(item.id)} aria-label={item.note}>{item.label}</button>)}</div><footer className={styles.footer}><span>{fallbackProfile.availability}</span><span>{fallbackProfile.email}</span></footer><div className={styles.scrollRail} aria-hidden="true">{sections.map((item, index) => <span key={item} className={index === sections.indexOf(view) ? styles.railActive : ""}>0{index + 1}</span>)}</div></>}{activeProject && <><button type="button" className={styles.scrim} aria-label={site.world.closeLabel} onClick={closePanel} /><aside className={styles.panel} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="project-panel-title"><div className={styles.panelHeader}><span>{site.world.projectsTitle} / {activeProject.code}</span><button type="button" onClick={closePanel} aria-label={`${site.world.closeLabel}: ${activeProject.title}`}>×</button></div><h1 id="project-panel-title">{activeProject.title}</h1><p>{activeProject.summary}</p><ProjectSpec project={activeProject} /><TerminalTrace /><button type="button" className={styles.backButton} onClick={closePanel}>{site.world.backLabel}</button></aside></>}</main>;
+  return <main className={`${styles.world} ${styles[palette]} ${view === "home" ? styles.homeView : ""}`} onWheel={onWheel}><div className={styles.canvas} aria-hidden="true">{started && <Canvas frameloop={gameOpen ? "demand" : "always"} dpr={[1, 2]} shadows gl={{ antialias: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.5 }} camera={{ fov: 35, near: 0.1, far: 100, position: cameraTargets.home.position }} onCreated={({ gl }) => { gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)); }}><Suspense fallback={null}><ProgressReporter onProgress={setProgress} /><Scene view={view} reducedMotion={reducedMotion} pointer={pointer} onReady={() => setReady(true)} />{view === "projects" && site.projects.map((item, index) => <ProjectScreen key={item.slug} project={item} index={index} onOpen={openProject} />)}</Suspense></Canvas>}</div><Boot started={started} progress={progress} onStart={() => setStarted(true)} ready={ready} />{ready && <><header className={styles.header}><button type="button" className={styles.mark} onClick={() => navigate("home")}>{site.navigation.mark}</button><nav aria-label="Primary navigation">{sections.map((item) => <button key={item} type="button" className={item === view ? styles.activeNav : ""} onClick={() => navigate(item)}>{site.world.nav[item]}</button>)}</nav><span className={styles.status}><i />{site.world.sceneStatus}</span></header><section className={styles.identity} aria-labelledby="portfolio-name"><span>{site.world.sceneLabel}</span><h2 id="portfolio-name">{fallbackProfile.name}</h2><p>{fallbackProfile.role} / {fallbackProfile.location}</p><p className={styles.statement}>{fallbackProfile.statement}</p></section>{view === "home" && <HomeWorkbench />}<div className={styles.sectionLabel}><span>0{sections.indexOf(view) + 1}</span><strong>{site.world.nav[view]}</strong><small>{site.world.sceneHint}</small></div><div className={styles.paletteSwitcher} aria-label="Temporary palette comparison">{site.world.palettes.map((item) => <button key={item.id} type="button" className={palette === item.id ? styles.paletteActive : ""} onClick={() => setPalette(item.id)} aria-label={item.note}>{item.label}</button>)}</div><footer className={styles.footer}><span>{fallbackProfile.availability}</span><span>{fallbackProfile.email}</span></footer><div className={styles.gameTriggerSpace} aria-hidden="true" /><div ref={gameSentinelRef} className={styles.gameSentinel} aria-hidden="true" />{gamePromptVisible && <div className={styles.gamePrompt}><span>{site.miniGame.prompt}</span><button type="button" onClick={openGame}>{site.miniGame.openLabel}</button></div>}{gameOpen && <div ref={gameSectionRef} className={styles.gameMount}><RunnerGame onClose={closeGame} /></div>}<div className={styles.scrollRail} aria-hidden="true">{sections.map((item, index) => <span key={item} className={index === sections.indexOf(view) ? styles.railActive : ""}>0{index + 1}</span>)}</div></>}{activeProject && <><button type="button" className={styles.scrim} aria-label={site.world.closeLabel} onClick={closePanel} /><aside className={styles.panel} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="project-panel-title"><div className={styles.panelHeader}><span>{site.world.projectsTitle} / {activeProject.code}</span><button type="button" onClick={closePanel} aria-label={`${site.world.closeLabel}: ${activeProject.title}`}>×</button></div><h1 id="project-panel-title">{activeProject.title}</h1><p>{activeProject.summary}</p><ProjectSpec project={activeProject} /><TerminalTrace /><button type="button" className={styles.backButton} onClick={closePanel}>{site.world.backLabel}</button></aside></>}</main>;
 }
 
